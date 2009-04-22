@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include <math.h>
+#include "menu.h"
 #include "gestionCircuit.h"
 #include "physique.h"
 
@@ -19,8 +20,8 @@ Vecteur somme(Vecteur a,Vecteur b,Vecteur c){
 	return c;
 }
 int initialisationVoitures (Voiture *voiture) {
-	strcpy_s(voiture->nom,11,"Voitures 1");
-	strcpy_s(voiture->cheminImage,19,"bitmaps\\car000.bmp");
+	strcpy(voiture->nom,"Voitures 1");
+	strcpy(voiture->cheminImage,"bitmaps/car000.bmp");
 	voiture->image=NULL;
 	voiture->masse=1;
 	voiture->position.x = 400;
@@ -48,7 +49,7 @@ void projeter(Vecteur *vecteur, int choix){
 void deplacer(Voiture *car){
 	//tests
 	char text[33];
-	itoa((int)(car->vitesse.val), text, 10);
+	sprintf(text,"%d",(int)(car->vitesse.val));
 	SDL_WM_SetCaption(text, NULL);
 	//Etat des touches
 	if(car->haut==1)car->fMoteur.val=2;
