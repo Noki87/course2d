@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <SDL/SDL.h>
-#include "camera.h"
+#include "menu.h"
 #include "gestionCircuit.h"
+#include "camera.h"
 
-void camera (SDL_Surface *ecran, char ***circuit1, SDL_Rect *position, int x, int y, int coin[],int coinprec[], SDL_Surface *fond[]) {
+
+void camera (SDL_Surface *ecran, Circuit circuit, SDL_Rect *position, int x, int y, int coin[],int coinprec[], SDL_Surface *fond[]) {
 	SDL_Rect position_00, position_01, position_10 , position_11;	
 	
-	int largeurI = 1024;
-	int hauteurI = 768;
+	int largeurI = circuit.largeurImage;
+	int hauteurI = circuit.hauteurImage;
 	int largeurS = 800;
 	int hauteurS = 600;
 	
@@ -53,10 +55,10 @@ void camera (SDL_Surface *ecran, char ***circuit1, SDL_Rect *position, int x, in
 	}
 	
 	if (coin[0] != coinprec[0] && coin[1] != coinprec[1]) {
-		fond[0] = SDL_LoadBMP(circuit1[coin[0]-1][coin[1]-1]);
-		fond[1] = SDL_LoadBMP(circuit1[coin[0]-1][coin[1]]);
-		fond[2] = SDL_LoadBMP(circuit1[coin[0]][coin[1]-1]);
-		fond[3] = SDL_LoadBMP(circuit1[coin[0]][coin[1]]);
+		fond[0] = SDL_LoadBMP(circuit.image[coin[0]-1][coin[1]-1]);
+		fond[1] = SDL_LoadBMP(circuit.image[coin[0]-1][coin[1]]);
+		fond[2] = SDL_LoadBMP(circuit.image[coin[0]][coin[1]-1]);
+		fond[3] = SDL_LoadBMP(circuit.image[coin[0]][coin[1]]);
 		coinprec[0] = coin[0];
 		coinprec[1] = coin[1];
 	}

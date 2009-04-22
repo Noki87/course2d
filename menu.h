@@ -1,12 +1,3 @@
-/*
- *  menu.h
- *  Micromachine
- *
- *  Created by Pablo on 10/04/09.
- *  Copyright 2009 __MyCompanyName__. All rights reserved.
- *
- */
-
 typedef struct partie {
 	char nomJoueur1;
 	int voiture1;

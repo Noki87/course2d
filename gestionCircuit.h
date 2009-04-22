@@ -1,11 +1,10 @@
-/* gestionCircuit.h */
-
 typedef struct vecteur{
 	double x;
 	double y;
 	double val;
 	double alpha;
 } Vecteur;
+
 typedef struct voiture{
 	SDL_Surface	*image;
 	SDL_Rect position;
@@ -19,6 +18,7 @@ typedef struct voiture{
 	char nom[20];
 	char cheminImage[25]; 
 } Voiture;
+
 typedef struct circuit {
 	int nbrImageX;
 	int nbrImageY;
@@ -26,3 +26,5 @@ typedef struct circuit {
 	int hauteurImage;
 	char ***image;
 } Circuit;
+
+int gestionCircuit( SDL_Surface *ecran, Partie *partie) ;

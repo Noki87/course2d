@@ -1,17 +1,8 @@
-/*
- *  menu.c
- *  Micromachine
- *
- *  Created by Pablo on 10/04/09.
- *  Copyright 2009 __MyCompanyName__. All rights reserved.
- *
- */
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL/SDL.h>
-#include "gestionCircuit.h"
 #include "menu.h"
+#include "gestionCircuit.h"
 
 void menuAccueil(SDL_Surface *ecran, Partie *partie){
 	int continuer = 1;
