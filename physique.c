@@ -1,4 +1,3 @@
-/*physique.c*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL/SDL.h>
@@ -46,12 +45,12 @@ void projeter(Vecteur *vecteur, int choix){
 		vecteur->alpha=(atan(vecteur->y/vecteur->x));
 	}
 }
-
 void deplacer(Voiture *car){
 	//tests
 	char text[33];
 	itoa((int)(car->vitesse.val), text, 10);
 	SDL_WM_SetCaption(text, NULL);
+	//Etat des touches
 	if(car->haut==1)car->fMoteur.val=2;
 	if(car->bas==1)car->fMoteur.val=-1;
 	if(car->haut==0 && car->bas==0)car->fMoteur.val=0;
@@ -78,9 +77,9 @@ void deplacer(Voiture *car){
 	//if(car->vitesse>20)car->vitesse=20;//limite la vitesse
 	//Angle en degré compris entre 0 et 360
 	car->angle =(int)((car->angleD)*32/360);
-	//la suite est temporaire, sera géré par collisions.c	
-	/*if(car->position.y>600-100) car->position.y=600-100;
+	//collisions avec le bord de l'écran	
+	if(car->position.y>600-100)car->position.y=600-100;
 	if(car->position.x>800-100)car->position.x=800-100;
 	if(car->position.y<30)car->position.y=30;
-	if(car->position.x<30)car->position.x=30;*/
+	if(car->position.x<30)car->position.x=30;
 }
