@@ -74,7 +74,6 @@ void deplacer(Voiture *car){
 	projeter(&car->vitesse,1);
 	if(car->angleD>=360)car->angleD-=360;
 	if(car->angleD<0)car->angleD+=360;
-	//if(car->vitesse>20)car->vitesse=20;//limite la vitesse
 	//Angle en degré compris entre 0 et 360
 	car->angle =(int)((car->angleD)*32/360);
 	//collisions avec le bord de l'écran	
