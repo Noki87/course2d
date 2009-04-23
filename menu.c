@@ -13,7 +13,7 @@ void menuAccueil(SDL_Surface *ecran, Partie *partie){
 	positionFond.x = 0;
 	positionFond.y = 0;
 	
-	imageDeFond = SDL_LoadBMP("menuAccueil.bmp");
+	imageDeFond = SDL_LoadBMP("bitmaps/menuAccueil.bmp");
 	SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
 	
 	SDL_Flip(ecran);
@@ -50,7 +50,7 @@ void menuScores (SDL_Surface *ecran, Partie *partie){
 	positionFond.x = 0;
 	positionFond.y = 0;
 	
-	imageDeFond = SDL_LoadBMP("menuScores.bmp");
+	imageDeFond = SDL_LoadBMP("bitmap/menuScores.bmp");
 	SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
 	
 	SDL_Flip(ecran);
@@ -82,7 +82,7 @@ void menuJouer1 (SDL_Surface *ecran, Partie *partie){
 	positionFond.x = 0;
 	positionFond.y = 0;
 	
-	imageDeFond = SDL_LoadBMP("menuJouer1.bmp");
+	imageDeFond = SDL_LoadBMP("bitmap/menuJouer1.bmp");
 	SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
 	
 	SDL_Flip(ecran);
@@ -119,7 +119,7 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
 	positionFond.x = 0;
 	positionFond.y = 0;
 	
-	imageDeFond = SDL_LoadBMP("menuJouer2.bmp");
+	imageDeFond = SDL_LoadBMP("bitmap/menuJouer2.bmp");
 	SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
 	
 	SDL_Flip(ecran);
@@ -159,7 +159,7 @@ void menuJouer3 (SDL_Surface *ecran, Partie *partie){
 	positionFond.x = 0;
 	positionFond.y = 0;
 	
-	imageDeFond = SDL_LoadBMP("menuJouer3.bmp");
+	imageDeFond = SDL_LoadBMP("bitmap/menuJouer3.bmp");
 	SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
 	
 	SDL_Flip(ecran);
@@ -195,7 +195,7 @@ void menuJouer4 (SDL_Surface *ecran, Partie *partie){
 	positionFond.x = 0;
 	positionFond.y = 0;
 	
-	imageDeFond = SDL_LoadBMP("menuJouer4.bmp");
+	imageDeFond = SDL_LoadBMP("bitmap/menuJouer4.bmp");
 	SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
 	
 	SDL_Flip(ecran);
@@ -234,7 +234,7 @@ void menuOptions (SDL_Surface *ecran, Partie *partie){
 	positionFond.x = 0;
 	positionFond.y = 0;
 	
-	imageDeFond = SDL_LoadBMP("menuOptions.bmp");
+	imageDeFond = SDL_LoadBMP("bitmap/menuOptions.bmp");
 	SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
 	
 	SDL_Flip(ecran);
