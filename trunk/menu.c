@@ -270,3 +270,17 @@ void menuOptions (SDL_Surface *ecran, Partie *partie){
 	}
 }
 
+int initialiserPartie(Partie *partie){
+	partie->nomJoueur1="Joueur1";
+	partie->voiture1=1;
+	partie->joueur2=0;
+	partie->nomJoueur2="Joueur2";
+	partie->voiture2=1;
+	partie->circuit=1;
+	partie->menu=0;
+	partie->pause=0;
+	partie->affichage=0;
+	partie->musique=0;
+	partie->bruitage=0;
+	return 0;
+}

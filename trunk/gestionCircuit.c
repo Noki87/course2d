@@ -106,6 +106,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 				if((event.key.keysym.sym)==SDLK_DOWN) voitures[0].bas=1;
 				if((event.key.keysym.sym)==SDLK_LEFT) voitures[0].gauche=1;
 				if((event.key.keysym.sym)==SDLK_RIGHT) voitures[0].droite=1;
+				if((event.key.keysym.sym)==SDLK_ESCAPE)done = 1;
 			}
 			if(event.type==SDL_KEYUP){
 				if((event.key.keysym.sym)==SDLK_UP)voitures[0].haut=0;
