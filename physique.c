@@ -55,8 +55,8 @@ void deplacer(Voiture *car){
 	if(car->haut==1)car->fMoteur.val=2;
 	if(car->bas==1)car->fMoteur.val=-1;
 	if(car->haut==0 && car->bas==0)car->fMoteur.val=0;
-	if(car->gauche==1)car->angleD-=car->vitesse.val/3;
-	if(car->droite==1)car->angleD+=car->vitesse.val/3;
+	if(car->gauche==1)car->angleD-=(int)(car->vitesse.val/3);
+	if(car->droite==1)car->angleD+=(int)(car->vitesse.val/3);
 	car->fMoteur.alpha=car->angleD;
 	projeter(&car->fMoteur,0);
 	//Calcul des frottements
