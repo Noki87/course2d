@@ -9,7 +9,7 @@
 int main(int argc, char *argv[]) {
 	Uint32 initflags = SDL_INIT_VIDEO;  //See documentation for details
 	SDL_Surface *ecran;
-	Partie *partie;
+	Partie *partie=NULL;
 	Uint8  video_bpp = 32;
 	Uint32 videoflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 	
 	SDL_WM_SetCaption("Jeu de course de voitures en 2D !", NULL);
 	
-	
+//	initialiserPartie(partie);
 	gestionCircuit(ecran, partie);
 	//menuAccueil(ecran, partie);
 		
