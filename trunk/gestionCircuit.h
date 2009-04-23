@@ -1,3 +1,9 @@
+#ifndef GESTIONCIRCUIT_H
+#define GESTIONCIRCUIT_H
+
+#include <SDL/SDL.H>
+#include "menu.h"
+
 typedef struct vecteur{
 	double x;
 	double y;
@@ -28,3 +34,5 @@ typedef struct circuit {
 } Circuit;
 
 int gestionCircuit( SDL_Surface *ecran, Partie *partie) ;
+
+#endif

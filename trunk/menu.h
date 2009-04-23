@@ -1,4 +1,7 @@
-typedef struct partie {
+#ifndef MENU_H
+#define MENU_H
+
+typedef struct partie{
 	char nomJoueur1;
 	int voiture1;
 	int joueur2;
@@ -19,3 +22,5 @@ void menuJouer2(SDL_Surface *ecran, Partie *partie);
 void menuJouer3(SDL_Surface *ecran, Partie *partie);
 void menuJouer4(SDL_Surface *ecran, Partie *partie);
 void menuOptions(SDL_Surface *ecran, Partie *partie);
+
+#endif
