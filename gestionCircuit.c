@@ -92,6 +92,8 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 		return 4;
 	}
 	
+	menuAccueil(ecran,partie);
+
 	SDL_EnableKeyRepeat(10, 10);
 	done = 0;
 	while ( !done ) {
