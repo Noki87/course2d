@@ -41,7 +41,7 @@ int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit 
 	//initialisation du circuit
 
 	circuit->nbrImageX=2;
-	circuit->nbrImageY=2;
+	circuit->nbrImageY=3;
 	circuit->largeurImage=1024;
 	circuit->hauteurImage=768;
 	
@@ -75,7 +75,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	SDL_Event event;
 
 	int nbrDeJoueurs = 1;
-	SDL_Surface * fond[4];
+	SDL_Surface * fond[4] = {NULL, NULL, NULL, NULL};
 	SDL_Surface *** sprite = malloc(nbrDeJoueurs * sizeof(SDL_Surface **));
 	Voiture voitures[1];
 	Circuit circuit;
@@ -92,7 +92,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 		return 4;
 	}
 	
-	menuAccueil(ecran,partie);
+	//menuAccueil(ecran,partie);
 
 	SDL_EnableKeyRepeat(10, 10);
 	done = 0;
@@ -100,7 +100,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 		tempsActuel = SDL_GetTicks();
 		if (tempsActuel - tempsPrecedent > 30){
 			tempsPrecedent = tempsActuel;
-			deplacer(voitures);
+			deplacer(voitures,circuit);
 			affichage(ecran,voitures[0],sprite[0],circuit,coin,coinprec,&position,fond);
 			SDL_PollEvent(&event);
 			if(event.type==SDL_KEYDOWN){
