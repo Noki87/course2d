@@ -24,8 +24,8 @@ int initialisationVoitures (Voiture *voiture) {
 	strcpy(voiture->cheminImage,"bitmaps/car000.bmp");
 	voiture->image=NULL;
 	voiture->masse=1;
-	voiture->position.x = 400;
-	voiture->position.y = 300;
+	voiture->position.x = 1200;
+	voiture->position.y = 800;
 	initVecteur(&voiture->vitesse);
 	initVecteur(&voiture->fFrot);
 	initVecteur(&voiture->acceleration);
@@ -37,16 +37,16 @@ int initialisationVoitures (Voiture *voiture) {
 	return 0;
 }
 void projeter(Vecteur *vecteur, int choix){
-	if(choix==0){//polaire->cartésien
+	if(choix==0){//polaire->cartÃˆsien
 		vecteur->x=(vecteur->val*cos((vecteur->alpha)*6.2831/360));
 		vecteur->y=(vecteur->val*sin((vecteur->alpha)*6.2831/360));
 	}
-	if(choix==1){//cartésien->polaire
+	if(choix==1){//cartÃˆsien->polaire
 		vecteur->val=(sqrt((vecteur->x)*(vecteur->x)+(vecteur->y)*(vecteur->y)));
 		vecteur->alpha=(atan(vecteur->y/vecteur->x));
 	}
 }
-void deplacer(Voiture *car){
+void deplacer(Voiture *car, Circuit circuit){
 	//tests
 	char text[33];
 	sprintf(text,"%d",(int)(car->vitesse.val));
@@ -62,24 +62,26 @@ void deplacer(Voiture *car){
 	//Calcul des frottements
 	car->fFrot.x=-0.1*car->vitesse.x;
 	car->fFrot.y=-0.1*car->vitesse.y;
-	//Calcul de l'accélération, principe fondamental de la dynamique
+	//Calcul de l'accÃˆlÃˆration, principe fondamental de la dynamique
 	car->acceleration.x=((car->fMoteur.x)+(car->fFrot.x))/car->masse;
 	car->acceleration.y=((car->fMoteur.y)+(car->fFrot.y))/car->masse;
-	//Vitesse(n)=Vitesse(n-1)+Accélération(n)
+	//Vitesse(n)=Vitesse(n-1)+AccÃˆlÃˆration(n)
 	car->vitesse.x+=car->acceleration.x;
 	car->vitesse.y+=car->acceleration.y;
 	//Position(n)=Position(n-1)+Vitesse(n)
 	car->position.x+=(int)(car->vitesse.x);
 	car->position.y+=(int)(car->vitesse.y);
-	//Conversion du vecteur vitesse en coordonnées polaires (norme utilisée pour la rotation du véhicule)
+	//Conversion du vecteur vitesse en coordonnÃˆes polaires (norme utilisÃˆe pour la rotation du vÃˆhicule)
 	projeter(&car->vitesse,1);
 	if(car->angleD>=360)car->angleD-=360;
 	if(car->angleD<0)car->angleD+=360;
-	//Angle en degré compris entre 0 et 360
+	//Angle en degrÃˆ compris entre 0 et 360
 	car->angle =(int)((car->angleD)*32/360);
-	//collisions avec le bord de l'écran	
-	if(car->position.y>600-100)car->position.y=600-100;
-	if(car->position.x>800-100)car->position.x=800-100;
+	//collisions avec le bord de l'Ãˆcran
+	
+	if(car->position.y>circuit.nbrImageY*circuit.hauteurImage-100)car->position.y=circuit.nbrImageY*circuit.hauteurImage-100;
+	if(car->position.x>circuit.nbrImageX*circuit.largeurImage-100)car->position.x=circuit.nbrImageX*circuit.largeurImage-100;
 	if(car->position.y<30)car->position.y=30;
 	if(car->position.x<30)car->position.x=30;
+	
 }
