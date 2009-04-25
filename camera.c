@@ -7,10 +7,7 @@
 void camera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, SDL_Surface *fond[], int coin[],int coinprec[], SDL_Rect *position) {
 	SDL_Rect position_00, position_01, position_10 , position_11;
 	int i, j, positionRelativeX, positionRelativeY, positionCameraX, positionCameraY;
-	
-	//position->x=400;
-	//position->y=300;
-	
+
 	i = voiture.position.x / circuit.largeurImage;
 	j = voiture.position.y / circuit.hauteurImage;
 	positionRelativeX = voiture.position.x % circuit.largeurImage;
@@ -72,14 +69,6 @@ void camera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, SDL_Surface *
 		coinprec[0] = coin[0];
 		coinprec[1] = coin[1];
 	}
-	
-	
-	printf ("positionRelativeX : %d\n",positionRelativeX);
-	printf ("positionCameraX : %d\n",positionCameraX);
-	printf ("coin[0] : %d\n",coin[0]);
-	printf ("coin[1] : %d\n",coin[1]);
-	printf ("positionRelativeY : %d\n",positionRelativeY);
-	printf ("positionCameraY : %d\n",positionCameraY);
 	
 	
 	position_00.x = positionCameraX - circuit.largeurImage;

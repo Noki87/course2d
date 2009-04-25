@@ -34,5 +34,6 @@ typedef struct circuit {
 } Circuit;
 
 int gestionCircuit( SDL_Surface *ecran, Partie *partie) ;
-
+int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit * circuit, int nbrDeJoueurs, int coin[], int coinprec[]) ;
+int allocationVoiture (SDL_Surface ***surface, char nomVoiture[]);
 #endif
