@@ -8,7 +8,6 @@
 
 
 void affichage(SDL_Surface *ecran, Voiture voiture, SDL_Surface **sprite, Circuit circuit,int coin[],int coinprec[], SDL_Rect *position, SDL_Surface *fond[]){
-	
 	voiture.image=sprite[(voiture.angle)];	
 	camera (ecran, circuit, voiture, fond, coin, coinprec, position);
 	SDL_BlitSurface(voiture.image, NULL, ecran, position);
