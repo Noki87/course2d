@@ -102,6 +102,8 @@ void menuJouer1 (SDL_Surface *ecran, Partie *partie){
 				{partie->joueur2=1; menuJouer2(ecran, partie);}
 				if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
 					menuJouer1(ecran, partie);
+				if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
+					menuAccueil(ecran, partie);
 				if ((event.button.x <=767)&(event.button.x >=635)&(event.button.y <=577)&(event.button.y >=528))
 					SDL_Quit();
 				break;
