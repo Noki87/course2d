@@ -41,9 +41,9 @@ int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit 
 	//initialisation du circuit
 
 	circuit->nbrImageX=2;
-	circuit->nbrImageY=3;
-	circuit->largeurImage=1024;
-	circuit->hauteurImage=768;
+	circuit->nbrImageY=2;
+	circuit->largeurImage=1500;
+	circuit->hauteurImage=1000;
 	
 	tab=(char ***)calloc(circuit->nbrImageX,sizeof(char**)); 
 
@@ -51,9 +51,13 @@ int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit 
 		tab[i]=(char **) calloc( circuit->nbrImageY ,sizeof(char*));
 		for(j=0;j<circuit->nbrImageY;j++) {
 			tab[i][j]=(char *) calloc( 1024 ,sizeof(char));
-			strcpy(tab[i][j],"Circuit/3.bmp");
+			//strcpy(tab[i][j],"Circuit/1.bmp");
 		}
 	}
+		strcpy(tab[0][0],"Circuit/10.bmp");
+		strcpy(tab[0][1],"Circuit/11.bmp");
+		strcpy(tab[1][0],"Circuit/12.bmp");
+		strcpy(tab[1][1],"Circuit/13.bmp");
 	circuit->image=tab;
 	
 	
