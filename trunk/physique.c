@@ -5,6 +5,7 @@
 #include "menu.h"
 #include "gestionCircuit.h"
 #include "physique.h"
+#include "collisions.h"
 
 
 void initVecteur(Vecteur *vecteur){
@@ -25,7 +26,7 @@ int initialisationVoitures (Voiture *voiture) {
 	voiture->image=NULL;
 	voiture->masse=1;
 	voiture->position.x = 1200;
-	voiture->position.y = 800;
+	voiture->position.y = 600;
 	initVecteur(&voiture->vitesse);
 	initVecteur(&voiture->fFrot);
 	initVecteur(&voiture->acceleration);
@@ -46,10 +47,15 @@ void projeter(Vecteur *vecteur, int choix){
 		vecteur->alpha=(atan(vecteur->y/vecteur->x));
 	}
 }
-void deplacer(Voiture *car, Circuit circuit){
-	//tests
+void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	char text[33];
-	sprintf(text,"%d",(int)(car->vitesse.val));
+	int x,y;
+	unsigned char pixel[3];
+	SDL_Rect pos;
+	pos.x=2;
+	pos.y=2;
+	lectureCouleur ("Circuit/test_masque.bmp", car->position, pixel);
+	sprintf(text,"%d",pixel[0]);
 	SDL_WM_SetCaption(text, NULL);
 	//Etat des touches
 	if(car->haut==1)car->fMoteur.val=2;
@@ -62,15 +68,26 @@ void deplacer(Voiture *car, Circuit circuit){
 	//Calcul des frottements
 	car->fFrot.x=-0.1*car->vitesse.x;
 	car->fFrot.y=-0.1*car->vitesse.y;
-	//Calcul de l'accÈlÈration, principe fondamental de la dynamique
+	//Calcul de l'acceleration, principe fondamental de la dynamique
 	car->acceleration.x=((car->fMoteur.x)+(car->fFrot.x))/car->masse;
 	car->acceleration.y=((car->fMoteur.y)+(car->fFrot.y))/car->masse;
 	//Vitesse(n)=Vitesse(n-1)+AccÈlÈration(n)
 	car->vitesse.x+=car->acceleration.x;
 	car->vitesse.y+=car->acceleration.y;
+	//sauvegarde ancienne position
+	x=car->position.x;
+	y=car->position.y;
 	//Position(n)=Position(n-1)+Vitesse(n)
 	car->position.x+=(int)(car->vitesse.x);
 	car->position.y+=(int)(car->vitesse.y);
+	if(testerCollision(car->position,car->angle)==1){
+		car->vitesse.x*=-1;
+		car->vitesse.y*=-1;
+		car->position.x=x;
+		car->position.y=y;
+		car->position.x+=(int)(car->vitesse.x);
+		car->position.y+=(int)(car->vitesse.y);
+	}
 	//Conversion du vecteur vitesse en coordonnÈes polaires (norme utilisÈe pour la rotation du vÈhicule)
 	projeter(&car->vitesse,1);
 	if(car->angleD>=360)car->angleD-=360;
@@ -84,4 +101,7 @@ void deplacer(Voiture *car, Circuit circuit){
 	if(car->position.y<30)car->position.y=30;
 	if(car->position.x<30)car->position.x=30;
 	
+	
+	//projeter(&car->vitesse,0);
+
 }
