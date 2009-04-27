@@ -97,15 +97,13 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 		return 4;
 	}
 	
-	//menuAccueil(ecran,partie);
-
 	SDL_EnableKeyRepeat(10, 10);
 	done = 0;
 	while ( !done ) {
 		tempsActuel = SDL_GetTicks();
 		if (tempsActuel - tempsPrecedent > 30){
 			tempsPrecedent = tempsActuel;
-			deplacer(voitures,circuit);
+			deplacer(voitures,circuit,sprite[0]);
 			affichage(ecran,voitures[0],sprite[0],circuit,coin,coinprec,&position,fond);
 			SDL_PollEvent(&event);
 			if(event.type==SDL_KEYDOWN){
