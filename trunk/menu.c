@@ -120,20 +120,24 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
         TTF_Font *police = NULL;
 		SDL_Color couleurNoire = {0, 0, 0};
 
-        SDL_Surface *imageDeFond = NULL, *texte = NULL;
+		SDL_Surface *imageDeFond = NULL, *texte = {NULL};
         SDL_Rect positionFond, position;
         positionFond.x = 0;
         positionFond.y = 0;
        
         imageDeFond = SDL_LoadBMP("bitmaps/menuJouer2.bmp");
+		//texte=malloc(sizeof(SDL_Surface *));
+		//texte->format=malloc(sizeof(SDL_PixelFormat *));
+		//texte->format->palette=malloc(sizeof(SDL_Palette *));
+		texte = SDL_LoadBMP("bitmaps/menuJouer2.bmp");
         SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
        
 		/* Chargement de la police */
 		police = TTF_OpenFont("comic.ttf", 18);
 
-        /* Position texte */
+        /* Position texte 
 		//texte->w = 230;
-		//texte->h = 30; 
+		//texte->h = 30; */
 
 		position.x = 270;
 		position.y = 207;
@@ -425,7 +429,7 @@ int i;
 SDL_Event event;
 SDL_Color couleurNoire = {0, 0, 0};
 SDL_Color couleurBlanc = {255, 255, 255};
-
+SDL_WaitEvent(&event);
 while (event.type != SDL_MOUSEBUTTONUP){
     
 	for (i=0; i<26; i++){
