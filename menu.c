@@ -126,10 +126,10 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
         positionFond.y = 0;
        
         imageDeFond = SDL_LoadBMP("bitmaps/menuJouer2.bmp");
-		//texte=malloc(sizeof(SDL_Surface *));
-		//texte->format=malloc(sizeof(SDL_PixelFormat *));
-		//texte->format->palette=malloc(sizeof(SDL_Palette *));
-		texte = SDL_LoadBMP("bitmaps/menuJouer2.bmp");
+		texte=malloc(sizeof(SDL_Surface *));
+		texte->format=malloc(sizeof(SDL_PixelFormat *));
+		texte->format->palette=malloc(sizeof(SDL_Palette *));
+		//texte = SDL_LoadBMP("bitmaps/menuJouer2.bmp");
         SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
        
 		/* Chargement de la police */
@@ -154,7 +154,7 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
                                 break;
                         case SDL_MOUSEBUTTONUP:
 								if ((event.button.x <=510)&(event.button.x >=264)&(event.button.y <=240)&(event.button.y >=200))
-                                {SDL_FillRect(texte, NULL, SDL_MapRGB(ecran->format, 214, 222, 226));
+                                {//SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 214, 222, 226));
 								SDL_BlitSurface(texte, NULL, ecran, &position); /* Blit de la couleur par-dessus */
 								SDL_Flip(ecran);
 								
