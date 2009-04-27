@@ -87,8 +87,8 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	int coin[2];
 	int coinprec[2];
 	
-	position.x = 280;
-	position.y = 280;
+	position.x = 400;
+	position.y = 300;
 	
 	
 	
