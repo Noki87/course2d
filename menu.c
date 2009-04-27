@@ -1,9 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL/SDL.h>
-//#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_ttf.h>
 #include "menu.h"
 #include "gestionCircuit.h"
+
+#define NB_LIGNES 2
+#define NB_COLONNES 26
 
 void menuAccueil(SDL_Surface *ecran, Partie *partie){
         int continuer = 1;
@@ -19,7 +22,7 @@ void menuAccueil(SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer && partie->menu)
+        while ((continuer)&&(partie->menu))
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -56,7 +59,7 @@ void menuScores (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer && partie->menu)
+        while ((continuer)&&(partie->menu))
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -77,7 +80,7 @@ void menuScores (SDL_Surface *ecran, Partie *partie){
 void menuJouer1 (SDL_Surface *ecran, Partie *partie){
         int continuer = 1;
         SDL_Event event;
-       
+
         SDL_Surface *imageDeFond = NULL;
         SDL_Rect positionFond;
         positionFond.x = 0;
@@ -85,10 +88,10 @@ void menuJouer1 (SDL_Surface *ecran, Partie *partie){
        
         imageDeFond = SDL_LoadBMP("bitmaps/menuJouer1.bmp");
         SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
-       
+
         SDL_Flip(ecran);
        
-        while (continuer && partie->menu)
+        while ((continuer)&&(partie->menu))
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -114,18 +117,30 @@ void menuJouer1 (SDL_Surface *ecran, Partie *partie){
 void menuJouer2 (SDL_Surface *ecran, Partie *partie){
         int continuer = 1;
         SDL_Event event;
-       
-        SDL_Surface *imageDeFond = NULL;
-        SDL_Rect positionFond;
+        TTF_Font *police = NULL;
+		SDL_Color couleurNoire = {0, 0, 0};
+
+        SDL_Surface *imageDeFond = NULL, *texte = NULL;
+        SDL_Rect positionFond, position;
         positionFond.x = 0;
         positionFond.y = 0;
        
         imageDeFond = SDL_LoadBMP("bitmaps/menuJouer2.bmp");
         SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
        
+		/* Chargement de la police */
+		police = TTF_OpenFont("comic.ttf", 18);
+
+        /* Position texte */
+		texte->w = 230;
+		texte->h = 30; 
+
+		position.x = 270;
+		position.y = 207;
+
         SDL_Flip(ecran);
        
-        while (continuer && partie->menu)
+        while ((continuer)&&(partie->menu))
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -134,6 +149,17 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
                                 continuer = 0;
                                 break;
                         case SDL_MOUSEBUTTONUP:
+								if ((event.button.x <=510)&(event.button.x >=264)&(event.button.y <=240)&(event.button.y >=200))
+                                {SDL_FillRect(texte, NULL, SDL_MapRGB(ecran->format, 214, 222, 226));
+								SDL_BlitSurface(texte, NULL, ecran, &position); /* Blit de la couleur par-dessus */
+								SDL_Flip(ecran);
+								
+								saisir (partie->nomJoueur1, texte, police, ecran, position);
+
+								SDL_FillRect(texte, NULL, SDL_MapRGB(ecran->format, 255, 255, 255));
+								SDL_BlitSurface(texte, NULL, ecran, &position); /* Blit du texte par-dessus */
+								SDL_Flip(ecran);}
+
                                 if ((event.button.x <=320)&(event.button.x >=180)&(event.button.y <=460)&(event.button.y >=350))
                                 {partie->voiture1=1;
                                         if (partie->joueur2==1) menuJouer3(ecran, partie);
@@ -149,6 +175,9 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
                                 break;
                 }
         }
+		TTF_CloseFont(police); /* Fermeture de la police */
+		SDL_FreeSurface(texte);
+
 }
 
 void menuJouer3 (SDL_Surface *ecran, Partie *partie){
@@ -165,7 +194,7 @@ void menuJouer3 (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer && partie->menu)
+        while (continuer)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -201,7 +230,7 @@ void menuJouer4 (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer && partie->menu)
+        while ((continuer)&&(partie->menu))
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -241,7 +270,7 @@ void menuOptions (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer && partie->menu)
+        while ((continuer)&&(partie->menu))
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -287,7 +316,7 @@ void menuPause (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer && partie->menu)
+        while ((continuer)&&(partie->pause))
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -322,7 +351,7 @@ void menuFinA (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer && partie->menu)
+        while ((continuer)&&(partie->menu))
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -353,7 +382,7 @@ void menuFinB (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer && partie->menu)
+        while ((continuer)&&(partie->menu))
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -383,4 +412,28 @@ int initialiserPartie(Partie *partie){
         partie->musique=0;
         partie->bruitage=0;
         return 0;
+}
+
+
+
+char saisir (char mot, SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position){
+
+char t[NB_LIGNES][NB_COLONNES] = {{"SDLK_a", "SDLK_b", "SDLK_c", "SDLK_d", "SDLK_e", "SDLK_f", "SDLK_g", "SDLK_h", "SDLK_i", "SDLK_j", "SDLK_k", "SDLK_l", "SDLK_m", "SDLK_n", "SDLK_o", "SDLK_p", "SDLK_q", "SDLK_r", "SDLK_s", "SDLK_t", "SDLK_u", "SDLK_v", "SDLK_w", "SDLK_x", "SDLK_y", "SDLK_z"},
+{"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"}};
+
+int i;
+SDL_Event event;
+SDL_Color couleurNoire = {0, 0, 0};
+
+while (event.type != SDL_MOUSEBUTTONUP){
+    
+	for (i=0; i<26; i++){
+		if(event.key.keysym.sym==t[0][i]){
+            sprintf_s(mot,"%s%s",mot,t[1][i]);
+			zone = TTF_RenderText_Shaded(police, mot, couleurNoire);																	SDL_BlitSurface(texte, NULL, ecran, &position);
+			SDL_Flip(ecran);
+		}
+
+	}
+}
 }
