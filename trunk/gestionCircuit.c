@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
 #include "menu.h"
 #include "gestionCircuit.h"
 #include "physique.h"
@@ -54,10 +55,10 @@ int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit 
 			//strcpy(tab[i][j],"Circuit/1.bmp");
 		}
 	}
-		strcpy(tab[0][0],"Circuit/10.bmp");
-		strcpy(tab[0][1],"Circuit/11.bmp");
-		strcpy(tab[1][0],"Circuit/12.bmp");
-		strcpy(tab[1][1],"Circuit/13.bmp");
+	strcpy(tab[0][0],"Circuit/test00.bmp");
+	strcpy(tab[0][1],"Circuit/test01.bmp");
+	strcpy(tab[1][0],"Circuit/test10.bmp");
+	strcpy(tab[1][1],"Circuit/test11.bmp");
 	circuit->image=tab;
 	
 	
