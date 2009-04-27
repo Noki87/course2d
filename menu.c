@@ -19,7 +19,7 @@ void menuAccueil(SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer)
+        while (continuer && partie->menu)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -56,7 +56,7 @@ void menuScores (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer)
+        while (continuer && partie->menu)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -88,7 +88,7 @@ void menuJouer1 (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer)
+        while (continuer && partie->menu)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -125,7 +125,7 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer)
+        while (continuer && partie->menu)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -165,7 +165,7 @@ void menuJouer3 (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer)
+        while (continuer && partie->menu)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -201,7 +201,7 @@ void menuJouer4 (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer)
+        while (continuer && partie->menu)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -241,7 +241,7 @@ void menuOptions (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer)
+        while (continuer && partie->menu)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -287,7 +287,7 @@ void menuPause (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer)
+        while (continuer && partie->menu)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -322,7 +322,7 @@ void menuFinA (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer)
+        while (continuer && partie->menu)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)
@@ -353,7 +353,7 @@ void menuFinB (SDL_Surface *ecran, Partie *partie){
        
         SDL_Flip(ecran);
        
-        while (continuer)
+        while (continuer && partie->menu)
         {
                 SDL_WaitEvent(&event);
                 switch(event.type)

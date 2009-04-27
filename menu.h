@@ -23,5 +23,6 @@ void menuJouer3(SDL_Surface *ecran, Partie *partie);
 void menuJouer4(SDL_Surface *ecran, Partie *partie);
 void menuOptions(SDL_Surface *ecran, Partie *partie);
 int initialiserPartie(Partie *partie);
+void menuPause (SDL_Surface *ecran, Partie *partie);
 
 #endif
