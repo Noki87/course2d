@@ -46,9 +46,10 @@ int main(int argc, char *argv[]) {
         SDL_WM_SetCaption("Jeu de course de voitures en 2D !", NULL);
         
         initialiserPartie(partie);
-        //gestionCircuit(ecran, partie);
+        
         menuAccueil(ecran, partie);
-                
+        gestionCircuit(ecran, partie);  
+
         SDL_FreeSurface(ecran);
         
 

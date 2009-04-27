@@ -1,61 +1,67 @@
 #include <stdio.h>
 #include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
 #include "menu.h"
 #include "gestionCircuit.h"
 #include "camera.h"
 
+void camera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, SDL_Surface *fond[], int coin[],int coinprec[], SDL_Rect *position) {
+        SDL_Rect position_00, position_01, position_10 , position_11;
+        int i, j, positionRelativeX, positionRelativeY, positionCameraX, positionCameraY;
 
-void camera (SDL_Surface *ecran, Circuit circuit, SDL_Rect *position, int x, int y, int coin[],int coinprec[], SDL_Surface *fond[]) {
-        SDL_Rect position_00, position_01, position_10 , position_11;   
-        
-        int largeurI = circuit.largeurImage;
-        int hauteurI = circuit.hauteurImage;
-        int largeurS = 800;
-        int hauteurS = 600;
-        
-        position->x += x;
-        position->y += y;
-        
-        
-        if(position->x < largeurS - largeurI) { 
-                if(coin[1] == 1) {
-                        position->x = largeurS - largeurI;
+        i = voiture.position.x / circuit.largeurImage;
+        j = voiture.position.y / circuit.hauteurImage;
+        positionRelativeX = voiture.position.x % circuit.largeurImage;
+        positionRelativeY = voiture.position.y % circuit.hauteurImage;
+       
+       
+        if(positionRelativeX > circuit.largeurImage - 400 || (i == 0 && positionRelativeX > 400)) {
+                if(i == circuit.nbrImageX - 1) {
+                        position->x= positionRelativeX - (circuit.largeurImage - 800);
+                        positionCameraX = 800 - circuit.largeurImage;
                 }
                 else {
-                        coin[1]++;
-                        position->x =  position->x + largeurI;
+                        positionCameraX =  circuit.largeurImage + 400 - positionRelativeX;
+                        coin[0]=i+1;
                 }
         }
-        if(position->x > largeurI) {
-                if(coin[1]-1 == 0) {
-                        position->x = largeurI;
+        else {
+                if(i == 0) {
+                        position->x= positionRelativeX;
+                        positionCameraX = circuit.largeurImage;
                 }
                 else {
-                        coin[1]--;
-                        position->x = position->x - largeurI;
+                        positionCameraX = 400 - positionRelativeX;
+                        coin[0]=i;
                 }
         }
-        if(position->y < hauteurS - hauteurI) { 
-                if(coin[0] == 1) {
-                        position->y = hauteurS - hauteurI;
+       
+       
+        if(positionRelativeY > circuit.hauteurImage - 300 || (j == 0 && positionRelativeY > 300)) {
+                if(j == circuit.nbrImageY - 1) {
+                        position->y= positionRelativeY - (circuit.hauteurImage - 600);
+                        positionCameraY = 600 - circuit.hauteurImage;
                 }
                 else {
-                        coin[0]++;
-                        position->y = position->y + hauteurI;
+                        positionCameraY =  circuit.hauteurImage + 300 - positionRelativeY;
+                        coin[1]=j+1;
                 }
         }
-        if(position->y > hauteurI) {
-                if(coin[0]-1 == 0) {
-                        position->y = hauteurI;
+        else {
+                if(j == 0) {
+                        position->y= positionRelativeY;
+                        positionCameraY = circuit.hauteurImage;
                 }
                 else {
-                        coin[0]--;
-                        position->y = position->y - hauteurI;
+                        positionCameraY = 300 - positionRelativeY;
+                        coin[1]=j;
                 }
         }
-        
+       
+       
+       
         if (coin[0] != coinprec[0] && coin[1] != coinprec[1]) {
+                for(i=0; i<4;i++)
+                        SDL_FreeSurface(fond[i]);
                 fond[0] = SDL_LoadBMP(circuit.image[coin[0]-1][coin[1]-1]);
                 fond[1] = SDL_LoadBMP(circuit.image[coin[0]-1][coin[1]]);
                 fond[2] = SDL_LoadBMP(circuit.image[coin[0]][coin[1]-1]);
@@ -63,20 +69,21 @@ void camera (SDL_Surface *ecran, Circuit circuit, SDL_Rect *position, int x, int
                 coinprec[0] = coin[0];
                 coinprec[1] = coin[1];
         }
-        
-        position_00.x = position->x - largeurI;
-        position_00.y = position->y - hauteurI;
-        position_01.x = position->x;
-        position_01.y = position->y - hauteurI;
-        position_10.x = position->x - largeurI;
-        position_10.y = position->y;
-        position_11.x = position->x;
-        position_11.y = position->y;
-        
+       
+       
+        position_00.x = positionCameraX - circuit.largeurImage;
+        position_00.y = positionCameraY - circuit.hauteurImage;
+        position_01.x = positionCameraX;
+        position_01.y = positionCameraY - circuit.hauteurImage;
+        position_10.x = positionCameraX - circuit.largeurImage;
+        position_10.y = positionCameraY;
+        position_11.x = positionCameraX;
+        position_11.y = positionCameraY;
+       
         SDL_BlitSurface(fond[0], NULL, ecran, &position_00);
         SDL_BlitSurface(fond[1], NULL, ecran, &position_01);
         SDL_BlitSurface(fond[2], NULL, ecran, &position_10);
         SDL_BlitSurface(fond[3], NULL, ecran, &position_11);
-         
+       
 }
 
