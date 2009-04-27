@@ -132,8 +132,8 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
 		police = TTF_OpenFont("comic.ttf", 18);
 
         /* Position texte */
-		texte->w = 230;
-		texte->h = 30; 
+		//texte->w = 230;
+		//texte->h = 30; 
 
 		position.x = 270;
 		position.y = 207;
@@ -400,10 +400,10 @@ void menuFinB (SDL_Surface *ecran, Partie *partie){
         }
 }
 int initialiserPartie(Partie *partie){
-        partie->nomJoueur1="Joueur1";
+        strcpy(partie->nomJoueur1,"Joueur1");
         partie->voiture1=1;
         partie->joueur2=0;
-        partie->nomJoueur2="Joueur2";
+        strcpy(partie->nomJoueur2,"Joueur2");
         partie->voiture2=1;
         partie->circuit=1;
         partie->menu=1;
@@ -416,21 +416,24 @@ int initialiserPartie(Partie *partie){
 
 
 
-char saisir (char mot, SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position){
+char saisir (char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position){
 
-char t[NB_LIGNES][NB_COLONNES] = {{"SDLK_a", "SDLK_b", "SDLK_c", "SDLK_d", "SDLK_e", "SDLK_f", "SDLK_g", "SDLK_h", "SDLK_i", "SDLK_j", "SDLK_k", "SDLK_l", "SDLK_m", "SDLK_n", "SDLK_o", "SDLK_p", "SDLK_q", "SDLK_r", "SDLK_s", "SDLK_t", "SDLK_u", "SDLK_v", "SDLK_w", "SDLK_x", "SDLK_y", "SDLK_z"},
+char *t[NB_LIGNES][NB_COLONNES]= {{"SDLK_a", "SDLK_b", "SDLK_c", "SDLK_d", "SDLK_e", "SDLK_f", "SDLK_g", "SDLK_h", "SDLK_i", "SDLK_j", "SDLK_k", "SDLK_l", "SDLK_m", "SDLK_n", "SDLK_o", "SDLK_p", "SDLK_q", "SDLK_r", "SDLK_s", "SDLK_t", "SDLK_u", "SDLK_v", "SDLK_w", "SDLK_x", "SDLK_y", "SDLK_z"},
 {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"}};
-
+char text;
 int i;
 SDL_Event event;
 SDL_Color couleurNoire = {0, 0, 0};
+SDL_Color couleurBlanc = {255, 255, 255};
 
 while (event.type != SDL_MOUSEBUTTONUP){
     
 	for (i=0; i<26; i++){
-		if(event.key.keysym.sym==t[0][i]){
-            sprintf_s(mot,"%s%s",mot,t[1][i]);
-			zone = TTF_RenderText_Shaded(police, mot, couleurNoire);																	SDL_BlitSurface(texte, NULL, ecran, &position);
+		if(event.key.keysym.sym==*t[0][i]){
+			text=t[1][i];
+            sprintf_s(mot,"%s%s",mot,text);
+			zone = TTF_RenderText_Shaded(police, mot, couleurNoire, couleurBlanc);
+			//SDL_BlitSurface(texte, NULL, ecran, &position);
 			SDL_Flip(ecran);
 		}
 
