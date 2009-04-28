@@ -75,10 +75,10 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	
 	SDL_Rect position;
 	int    done,i;
-	int tempsPrecedent = 0, tempsActuel = 0;
+	int tempsPrecedent = 0, tempsActuel = 0, tempsDebutCourse;
 	
 	SDL_Event event;
-
+	
 	int nbrDeJoueurs = 1;
 	SDL_Surface * fond[4] = {NULL, NULL, NULL, NULL};
 	SDL_Surface *** sprite = malloc(nbrDeJoueurs * sizeof(SDL_Surface **));
@@ -87,15 +87,54 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	int coin[2];
 	int coinprec[2];
 	
+	SDL_Color couleurBlanc = {255, 255, 255};
+	SDL_Rect positionTexte;
+	char phrase[10];
+	TTF_Font *police = NULL;
+	SDL_Surface *texte = NULL;
 	position.x = 400;
 	position.y = 300;
 	
-	
-	
+	positionTexte.x = 400;
+	positionTexte.y = 200;
 	
 	if(initialisation(sprite, voitures, &circuit, nbrDeJoueurs, coin, coinprec)==1){
 		return 4;
 	}
+	
+	police = TTF_OpenFont("comic.ttf", 50);
+	tempsActuel = SDL_GetTicks();
+	tempsPrecedent = tempsActuel - 2001;
+	done = 0;
+	i = 3;
+	while ( !done) {
+		tempsActuel = SDL_GetTicks();
+		if(tempsActuel - tempsPrecedent > 1000) {
+			if(i == -1) {
+				done = 1;
+			}
+			else {
+				voitures[0].image = sprite[0][(voitures[0].angle)];  
+				camera (ecran, circuit, voitures[0], fond, coin, coinprec, position);
+				SDL_BlitSurface(voitures[0].image, NULL, ecran, &position);
+				sprintf(phrase, "%d",i);
+				texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+				SDL_Flip(ecran);
+				i--;
+				tempsPrecedent = tempsActuel;
+			}
+		}
+		else {
+			SDL_Delay(30);
+		}
+	}
+	TTF_CloseFont(police);
+	
+	tempsDebutCourse = SDL_GetTicks();
+	police = TTF_OpenFont("comic.ttf", 20);
+	positionTexte.x = 30;
+	positionTexte.y = 30;
 	
 	SDL_EnableKeyRepeat(10, 10);
 	done = 0;
@@ -105,6 +144,10 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 			tempsPrecedent = tempsActuel;
 			deplacer(voitures,circuit,sprite[0]);
 			affichage(ecran,voitures[0],sprite[0],circuit,coin,coinprec,&position,fond);
+			sprintf(phrase, "%d:%02d:%02d",(tempsActuel - tempsDebutCourse)/60000,(tempsActuel - tempsDebutCourse)/1000 % 60, (tempsActuel - tempsDebutCourse)/10 % 100);
+			texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+			SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+			SDL_Flip(ecran);
 			SDL_PollEvent(&event);
 			if(event.type==SDL_KEYDOWN){
 				if((event.key.keysym.sym)==SDLK_UP) voitures[0].haut=1;
