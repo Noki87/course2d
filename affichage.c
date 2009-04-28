@@ -12,7 +12,7 @@ void affichage(SDL_Surface *ecran, Voiture voiture, SDL_Surface **sprite, Circui
         voiture.image=sprite[(voiture.angle)];  
         camera (ecran, circuit, voiture, fond, coin, coinprec, position);
         SDL_BlitSurface(voiture.image, NULL, ecran, position);
-        SDL_Flip(ecran);
+       // SDL_Flip(ecran);
 
 }
 
