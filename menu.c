@@ -126,18 +126,16 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
         positionFond.y = 0;
        
         imageDeFond = SDL_LoadBMP("bitmaps/menuJouer2.bmp");
-		texte=malloc(sizeof(SDL_Surface *));
-		texte->format=malloc(sizeof(SDL_PixelFormat *));
-		texte->format->palette=malloc(sizeof(SDL_Palette *));
-		//texte = SDL_LoadBMP("bitmaps/menuJouer2.bmp");
-        SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
+		texte = SDL_LoadBMP("bitmaps/menuJouer2.bmp");
+		
+		SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
        
 		/* Chargement de la police */
 		police = TTF_OpenFont("comic.ttf", 18);
 
-        /* Position texte 
-		//texte->w = 230;
-		//texte->h = 30; */
+        /* Position texte */
+		texte->w = 230;
+		texte->h = 30;
 
 		position.x = 270;
 		position.y = 207;
@@ -154,15 +152,15 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
                                 break;
                         case SDL_MOUSEBUTTONUP:
 								if ((event.button.x <=510)&(event.button.x >=264)&(event.button.y <=240)&(event.button.y >=200))
-                                {//SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 214, 222, 226));
+                                {SDL_FillRect(texte, NULL, SDL_MapRGB(texte->format, 214, 222, 226));
 								SDL_BlitSurface(texte, NULL, ecran, &position); /* Blit de la couleur par-dessus */
 								SDL_Flip(ecran);
 								
-								saisir (partie->nomJoueur1, texte, police, ecran, position);
-
-								SDL_FillRect(texte, NULL, SDL_MapRGB(ecran->format, 255, 255, 255));
+								saisir (partie->nomJoueur1, texte, police, ecran, positionFond, imageDeFond);
+								
+								SDL_FillRect(texte, NULL, SDL_MapRGB(texte->format, 255, 255, 255));
 								SDL_BlitSurface(texte, NULL, ecran, &position); /* Blit du texte par-dessus */
-								SDL_Flip(ecran);}
+								SDL_Flip(ecran);								}
 
                                 if ((event.button.x <=320)&(event.button.x >=180)&(event.button.y <=460)&(event.button.y >=350))
                                 {partie->voiture1=1;
@@ -420,27 +418,53 @@ int initialiserPartie(Partie *partie){
 
 
 
-char saisir (char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position){
+char saisir (char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Surface *imageDeFond){
 
 char *t[NB_LIGNES][NB_COLONNES]= {{"SDLK_a", "SDLK_b", "SDLK_c", "SDLK_d", "SDLK_e", "SDLK_f", "SDLK_g", "SDLK_h", "SDLK_i", "SDLK_j", "SDLK_k", "SDLK_l", "SDLK_m", "SDLK_n", "SDLK_o", "SDLK_p", "SDLK_q", "SDLK_r", "SDLK_s", "SDLK_t", "SDLK_u", "SDLK_v", "SDLK_w", "SDLK_x", "SDLK_y", "SDLK_z"},
 {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"}};
-char text;
+char touche;
 int i;
-SDL_Event event;
-SDL_Color couleurNoire = {0, 0, 0};
-SDL_Color couleurBlanc = {255, 255, 255};
-SDL_WaitEvent(&event);
-while (event.type != SDL_MOUSEBUTTONUP){
-    
-	for (i=0; i<26; i++){
-		if(event.key.keysym.sym==*t[0][i]){
-			text=t[1][i];
-            sprintf_s(mot,"%s%s",mot,text);
-			zone = TTF_RenderText_Shaded(police, mot, couleurNoire, couleurBlanc);
-			//SDL_BlitSurface(texte, NULL, ecran, &position);
-			SDL_Flip(ecran);
-		}
 
-	}
+int continuer = 1;
+SDL_Event event;
+
+SDL_Color couleurNoire = {0, 0, 0};
+
+while (continuer){
+        SDL_WaitEvent(&event);
+        switch(event.type){
+            case SDL_QUIT:
+                continuer = 0;
+			break;
+
+            case SDL_MOUSEMOTION:
+				if  ((event.motion.x <=500)&(event.motion.x >=271)&(event.motion.y <=237)&(event.motion.y >=207))
+					continuer = 0;
+            break;
+
+			case SDL_KEYDOWN:
+				for (i=0; i<26; i++){
+					if(event.key.keysym.sym==*t[0][i]){
+						touche=t[1][i];
+						sprintf_s(mot,"%s%s",mot,touche);
+						zone = TTF_RenderText_Blended(police, mot, couleurNoire);
+						SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
+
+						SDL_BlitSurface(zone, NULL, ecran, &position);
+						SDL_Flip(ecran);
+					}
+				}
+
+/*if(event.key.keysym.sym==SDLK_a){ 
+zone = TTF_RenderText_Blended(police, "a", couleurNoire);
+						SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
+
+						SDL_BlitSurface(zone, NULL, ecran, &position);
+						SDL_Flip(ecran);
+					}*/
+
+
+			break;
+		}
 }
 }
