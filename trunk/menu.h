@@ -27,6 +27,6 @@ void menuPause(SDL_Surface *ecran, Partie *partie);
 void menuFinA(SDL_Surface *ecran, Partie *partie);
 void menuFinB(SDL_Surface *ecran, Partie *partie);
 int initialiserPartie(Partie *partie);
-char saisir (char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position);
+char saisir (char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Surface *imageDeFond);
 
 #endif
