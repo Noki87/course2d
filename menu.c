@@ -131,7 +131,7 @@ void menuJouer2 (SDL_Surface *ecran, Partie *partie){
 	SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
 	
 	/* Chargement de la police */
-	police = TTF_OpenFont("comic.ttf", 18);
+	police = TTF_OpenFont("Prototype.ttf", 18);
 	
 	/* Position texte */
 	texte->w = 230;
