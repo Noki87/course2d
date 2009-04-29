@@ -7,6 +7,33 @@
 #include "collisions.h"
 #include "physique.h"
 
+Uint32 getpixel(SDL_Surface *surface, int x, int y)
+{
+    int bpp = surface->format->BytesPerPixel;
+    /* Here p is the address to the pixel we want to retrieve */
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+    switch(bpp) {
+    case 1:
+        return *p;
+
+    case 2:
+        return *(Uint16 *)p;
+
+    case 3:
+        if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+            return p[0] << 16 | p[1] << 8 | p[2];
+        else
+            return p[0] | p[1] << 8 | p[2] << 16;
+
+    case 4:
+        return *(Uint32 *)p;
+
+    default:
+        return 0;       /* shouldn't happen, but avoids warnings */
+    }
+}
+
 int lectureCouleur (char cheminImage[], SDL_Rect position,  unsigned char pixel[3]){
 	FILE *f;
 	char file_type[3];
@@ -48,7 +75,7 @@ int lectureCouleur (char cheminImage[], SDL_Rect position,  unsigned char pixel[
 
 
 	positionPixel = bitmap_offset;
-	positionPixel += 1 * ((height-position.y) * width + position.x);
+	positionPixel += 1 * ((height-position.y-1)*width + position.x);
 
 	fseek(f,positionPixel,SEEK_SET);
 	fread( pixel , 3 * sizeof(unsigned char), 1, f);
@@ -57,32 +84,48 @@ int lectureCouleur (char cheminImage[], SDL_Rect position,  unsigned char pixel[
 	return 0;
 }
 
-
-
-int testerCollision(SDL_Rect position,int angle){
-	//char text[33];
-	unsigned char pixel[3];
+int chargerMasque(int **tabMasque,int largeur, int hauteur){
+	unsigned char r,g,b;
 	char cheminMasque[] = "Circuit/test_masque.bmp";
-	char cheminVoiture[]="bitmaps/car000.bmp";
-	int collision=0;
-	SDL_Rect place,placeVoiture;
+	unsigned int x,y,pix;
+	SDL_Rect position;
+	SDL_Surface *surface;
+	surface = SDL_LoadBMP("Circuit/test_masque.bmp");
+	SDL_LockSurface(surface);
+	x=y=0;
+	for(y=0;y<(hauteur);y++){
+		for(x=0;x<(largeur);x++){
+			SDL_GetRGB(getpixel(surface,x,y),surface->format, &r, &g, &b);
+			if(r!=0 && g!=0 && b!=0)
+				tabMasque[x][y]=1;
+		}
+	}
+	SDL_UnlockSurface(surface);
+	return 0;
+}
 
+int testerCollision(SDL_Rect position,int angle,Circuit circuit){
+	//char text[33];
+	unsigned char r,g,b;
+	SDL_Surface *sVoiture;
+	int collision=0;
+	char cheminVoiture[]="bitmaps/car000.bmp";
+	SDL_Rect place,placeVoiture;
 	if(angle<10)sprintf(cheminVoiture,"bitmaps/car00%d.bmp",angle);
 	if(angle>=10)sprintf(cheminVoiture,"bitmaps/car0%d.bmp",angle);
-	position.x-=100;
+	sVoiture = SDL_LoadBMP(cheminVoiture);
+	SDL_LockSurface(sVoiture);
 	place.x=position.x;
 	place.y=position.y;
-
 	//fonction qui teste l'existence de collision et renvoie 0 ou 1
 	while ( collision == 0 && place.x < (position.x+96)){
 		place.y=position.y;
 		while ( collision == 0 && place.y < (position.y+96)){
-			lectureCouleur (cheminMasque, place, pixel);
-			if (pixel[0]==0 && pixel[1]==0 && pixel[2]==0){
+			if (circuit.tabMasque[place.x][place.y]==0){
 				placeVoiture.x=place.x-position.x;
 				placeVoiture.y=place.y-position.y;
-				lectureCouleur (cheminVoiture, placeVoiture, pixel);
-				if (pixel[0]!=68 && pixel[1]!=68 && pixel[2]!=68)
+				SDL_GetRGB(getpixel(sVoiture,placeVoiture.x,placeVoiture.y),sVoiture->format, &r, &g, &b);
+				if (r!=97 && g!=68 && b!=43)
 					collision=1;
 			}
 			place.y+=20;

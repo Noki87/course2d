@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
         
         initialiserPartie(partie);
         
-        menuAccueil(ecran, partie);
+        //menuAccueil(ecran, partie);
         gestionCircuit(ecran, partie);  
 
         SDL_FreeSurface(ecran);

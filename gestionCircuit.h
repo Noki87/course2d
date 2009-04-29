@@ -19,7 +19,7 @@ typedef struct voiture{
         int angleD;
         int vitessemax,masse;
         Vecteur vitesse,acceleration;
-        Vecteur fMoteur,fFrot;
+        Vecteur fMoteur,fFrot,frottements;
         int haut,bas,gauche,droite;
         int angle;
         char nom[20];
@@ -32,6 +32,7 @@ typedef struct circuit {
         int largeurImage;
         int hauteurImage;
         char ***image;
+		int **tabMasque;
 } Circuit;
 
 int gestionCircuit( SDL_Surface *ecran, Partie *partie) ;
