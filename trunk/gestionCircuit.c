@@ -52,7 +52,6 @@ int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit 
 		tab[i]=(char **) calloc( circuit->nbrImageY ,sizeof(char*));
 		for(j=0;j<circuit->nbrImageY;j++) {
 			tab[i][j]=(char *) calloc( 1024 ,sizeof(char));
-			//strcpy(tab[i][j],"Circuit/1.bmp");
 		}
 	}
 	strcpy(tab[0][0],"Circuit/test00.bmp");
@@ -66,8 +65,15 @@ int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit 
 	//initialisation camera
 	coin[0] =  coin[1] = 1;
 	coinprec[0] = coinprec[1] = 0;
-	
-	
+
+	//chargement du masque
+	circuit->tabMasque=malloc(circuit->hauteurImage*circuit->nbrImageX*sizeof(int *));
+	if(circuit->tabMasque==NULL)return 4;
+	for(j=0;j<circuit->largeurImage*circuit->nbrImageX;j++) {
+		circuit->tabMasque[j]=calloc(circuit->largeurImage*circuit->nbrImageX,sizeof(int));
+		if(circuit->tabMasque[j]==NULL)return 4;
+	}
+	chargerMasque(circuit->tabMasque,circuit->largeurImage*circuit->nbrImageX,circuit->hauteurImage*circuit->nbrImageX);
 	return 0;
 }
 
@@ -102,7 +108,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 		return 4;
 	}
 	
-	police = TTF_OpenFont("comic.ttf", 50);
+	police = TTF_OpenFont("Prototype.ttf", 50);
 	tempsActuel = SDL_GetTicks();
 	tempsPrecedent = tempsActuel - 2001;
 	done = 0;
@@ -132,7 +138,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	TTF_CloseFont(police);
 	
 	tempsDebutCourse = SDL_GetTicks();
-	police = TTF_OpenFont("comic.ttf", 20);
+	police = TTF_OpenFont("Prototype.ttf", 20);
 	positionTexte.x = 30;
 	positionTexte.y = 30;
 	
@@ -177,5 +183,8 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	for(i=0; i<4;i++)
 		SDL_FreeSurface(fond[i]);
 	
+	//free(circuit.tabMasque);
+	circuit.tabMasque = NULL;
+
 	return 0;
 }

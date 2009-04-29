@@ -31,6 +31,7 @@ int initialisationVoitures (Voiture *voiture) {
 	initVecteur(&voiture->vitesse);
 	initVecteur(&voiture->fFrot);
 	initVecteur(&voiture->acceleration);
+	initVecteur(&voiture->frottements);
 	voiture->angle=0;
 	voiture->angleD=0;
 	voiture->angleR=0;
@@ -56,7 +57,8 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	pos.x=2;
 	pos.y=2;
 	lectureCouleur ("Circuit/test_masque.bmp", car->position, pixel);
-	sprintf(text,"%d",pixel[0]);
+	//sprintf(text,"%d",circuit.tabMasque[car->position.x+48][car->position.y+48]);
+	sprintf(text,"%d",testerCollision(car->position,car->angle,circuit));
 	SDL_WM_SetCaption(text, NULL);
 	//Etat des touches
 	if(car->haut==1)car->fMoteur.val=2;
@@ -81,7 +83,7 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	//Position(n)=Position(n-1)+Vitesse(n)
 	car->position.x+=(int)(car->vitesse.x);
 	car->position.y+=(int)(car->vitesse.y);
-	if(testerCollision(car->position,car->angle)==1){
+	if(testerCollision(car->position,car->angle,circuit)==1){
 		car->vitesse.x*=-1;
 		car->vitesse.y*=-1;
 		car->position.x=x;
