@@ -438,7 +438,7 @@ char saisir (char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran
 				break;
 				
             case SDL_MOUSEMOTION:
-				if  ((event.motion.x <=500)&(event.motion.x >=271)&(event.motion.y <=237)&(event.motion.y >=207))
+				if  ((event.motion.x >500)&(event.motion.x <271)&(event.motion.y >237)&(event.motion.y <207))
 					continuer = 0;
 				break;
 				
