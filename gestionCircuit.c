@@ -74,6 +74,14 @@ int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit 
 		if(circuit->tabMasque[j]==NULL)return 4;
 	}
 	chargerMasque(circuit->tabMasque,circuit->largeurImage*circuit->nbrImageX,circuit->hauteurImage*circuit->nbrImageX);
+	//chargement du masque checkpoints
+	circuit->tabCheckpoints=malloc(circuit->hauteurImage*circuit->nbrImageX*sizeof(int *));
+	if(circuit->tabCheckpoints==NULL)return 4;
+	for(j=0;j<circuit->largeurImage*circuit->nbrImageX;j++) {
+		circuit->tabCheckpoints[j]=calloc(circuit->largeurImage*circuit->nbrImageX,sizeof(int));
+		if(circuit->tabCheckpoints[j]==NULL)return 4;
+	}
+	chargerMasque(circuit->tabCheckpoints,circuit->largeurImage*circuit->nbrImageX,circuit->hauteurImage*circuit->nbrImageX);
 	return 0;
 }
 

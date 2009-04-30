@@ -96,8 +96,12 @@ int chargerMasque(int **tabMasque,int largeur, int hauteur){
 	for(y=0;y<(hauteur);y++){
 		for(x=0;x<(largeur);x++){
 			SDL_GetRGB(getpixel(surface,x,y),surface->format, &r, &g, &b);
-			if(r!=0 && g!=0 && b!=0)
+			if(r==255 && g==255 && b==255)
 				tabMasque[x][y]=1;
+			if(r==0 && g==0 && b==255)
+				tabMasque[x][y]=2;
+			if(r==255 && g==0 && b==0)
+				tabMasque[x][y]=3;
 		}
 	}
 	SDL_UnlockSurface(surface);

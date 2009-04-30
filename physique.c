@@ -56,7 +56,7 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	SDL_Rect pos;
 	pos.x=2;
 	pos.y=2;
-	lectureCouleur ("Circuit/test_masque.bmp", car->position, pixel);
+	lectureCouleur ("Circuit/test_checkpoints.bmp", car->position, pixel);
 	//sprintf(text,"%d",circuit.tabMasque[car->position.x+48][car->position.y+48]);
 	sprintf(text,"%d",testerCollision(car->position,car->angle,circuit));
 	SDL_WM_SetCaption(text, NULL);
@@ -64,8 +64,10 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	if(car->haut==1)car->fMoteur.val=2;
 	if(car->bas==1)car->fMoteur.val=-1;
 	if(car->haut==0 && car->bas==0)car->fMoteur.val=0;
-	if(car->gauche==1)car->angleD-=(int)(car->vitesse.val/3);
-	if(car->droite==1)car->angleD+=(int)(car->vitesse.val/3);
+	if(car->vitesse.val>0||car->fMoteur.val>0){
+		if(car->gauche==1)car->angleD-=car->vitesse.val/3;
+		if(car->droite==1)car->angleD+=car->vitesse.val/3;
+	}
 	car->fMoteur.alpha=car->angleD;
 	projeter(&car->fMoteur,0);
 	//Calcul des frottements
@@ -104,7 +106,6 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	if(car->position.y<30)car->position.y=30;
 	if(car->position.x<30)car->position.x=30;
 	
-	
-	//projeter(&car->vitesse,0);
-
+	//Calcul checkpoints
+	//compterCheckpoints(circuit.tabCheckpoints,car->checkpoints,x,y,car->position);
 }

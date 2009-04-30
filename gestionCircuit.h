@@ -23,7 +23,8 @@ typedef struct voiture{
         int haut,bas,gauche,droite;
         int angle;
         char nom[20];
-        char cheminImage[25]; 
+        char cheminImage[25];
+		int checkpoints;
 } Voiture;
 
 typedef struct circuit {
@@ -33,6 +34,7 @@ typedef struct circuit {
         int hauteurImage;
         char ***image;
 		int **tabMasque;
+		int **tabCheckpoints;
 } Circuit;
 
 int gestionCircuit( SDL_Surface *ecran, Partie *partie) ;
