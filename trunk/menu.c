@@ -3,7 +3,7 @@
 #include <string.h>
 #include <SDL/SDL.h>
 #ifdef __APPLE__
-
+#include <SDL_ttf/SDL_ttf.h>
 #else
 #include <SDL/SDL_ttf.h>
 #endif
@@ -39,6 +39,7 @@ void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu *
 		SDL_Flip(ecran);
 		*menuPrecedent = partie.menu;
 	}
+	SDL_FreeSurface(imageDeFond);
 
 }
  

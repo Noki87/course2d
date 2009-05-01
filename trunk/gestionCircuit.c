@@ -12,37 +12,7 @@
 #include "physique.h"
 #include "affichage.h"
 
-/*
-typedef struct position {
-	int collision;
-	int position;
-} Position;
 
-int chargerPositionCicuit(Circuit circuit) {
-	Position ** matrice;
-	int nbrLigneMatrice;
-	int nbrColoneMatrice;
-	int i,j;
-	nbrLigneMatrice = circuit.nbrImageX * circuit.largeurImage / 5 + 1;
-	nbrColoneMatrice = circuit.nbrImageY * circuit.hauteurImage / 5 + 1;
-	
-	matrice = malloc(nbrLigneMatrice * sizeof(Position *));
-	for(i=0; i<nbrLigneMatrice; i++) 
-		matrice[i] = malloc(nbrColoneMatrice * sizeof(Position));
-	
-	
-	for(i=0; i<nbrLigneMatrice; i++)
-		for(j=0; j<nbrColoneMatrice; j++) 
-			determinerPositionCircuit(&matrice[i][j], )
-
-}
-
-
-int determinerPositionCircuit () {
-	
-	
-}
-*/
 
 int allocationVoiture (SDL_Surface ***surface, char nomVoiture[]) {
 	int i;
@@ -102,21 +72,21 @@ int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit 
 	coinprec[0] = coinprec[1] = 0;
 
 	//chargement du masque
-	circuit->tabMasque=malloc(circuit->hauteurImage*circuit->nbrImageX*sizeof(int *));
+	circuit->tabMasque=malloc(circuit->largeurImage*circuit->nbrImageX*sizeof(int *));
 	if(circuit->tabMasque==NULL)return 4;
-	for(j=0;j<circuit->largeurImage*circuit->nbrImageX;j++) {
-		circuit->tabMasque[j]=calloc(circuit->largeurImage*circuit->nbrImageX,sizeof(int));
-		if(circuit->tabMasque[j]==NULL)return 4;
+	for(i=0; i< circuit->largeurImage * circuit->nbrImageX; i++) {
+		circuit->tabMasque[i] = calloc(circuit->hauteurImage*circuit->nbrImageY,sizeof(int));
+		if(circuit->tabMasque[i]==NULL)return 4;
 	}
-	chargerMasque(circuit->tabMasque,circuit->largeurImage*circuit->nbrImageX,circuit->hauteurImage*circuit->nbrImageX);
+	chargerMasque(circuit->tabMasque, circuit->largeurImage * circuit->nbrImageX, circuit->hauteurImage * circuit->nbrImageY);
 	//chargement du masque checkpoints
-	circuit->tabCheckpoints=malloc(circuit->hauteurImage*circuit->nbrImageX*sizeof(int *));
+	circuit->tabCheckpoints=malloc(circuit->largeurImage*circuit->nbrImageX*sizeof(int *));
 	if(circuit->tabCheckpoints==NULL)return 4;
-	for(j=0;j<circuit->largeurImage*circuit->nbrImageX;j++) {
-		circuit->tabCheckpoints[j]=calloc(circuit->largeurImage*circuit->nbrImageX,sizeof(int));
-		if(circuit->tabCheckpoints[j]==NULL)return 4;
+	for(i=0; i < circuit->largeurImage * circuit->nbrImageX; i++) {
+		circuit->tabCheckpoints[i]=calloc(circuit->hauteurImage*circuit->nbrImageY,sizeof(int));
+		if(circuit->tabCheckpoints[i]==NULL)return 4;
 	}
-	chargerMasque(circuit->tabCheckpoints,circuit->largeurImage*circuit->nbrImageX,circuit->hauteurImage*circuit->nbrImageX);
+	chargerMasque(circuit->tabCheckpoints,circuit->largeurImage*circuit->nbrImageX,circuit->hauteurImage*circuit->nbrImageY);
 	return 0;
 }
 
@@ -226,8 +196,20 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	for(i=0; i<4;i++)
 		SDL_FreeSurface(fond[i]);
 	
+	SDL_FreeSurface(texte);
+	
 	//free(circuit.tabMasque);
-	circuit.tabMasque = NULL;
+	
+	for(i=0; i < circuit.largeurImage * circuit.nbrImageX; i++) {
+		free(circuit.tabCheckpoints[i]) ;
+	}
+	free (circuit.tabCheckpoints);
+	
+	for(i=0; i < circuit.largeurImage * circuit.nbrImageX; i++) {
+		free(circuit.tabCheckpoints[i]) ;
+	}
+	free (circuit.tabMasque);
+
 	TTF_CloseFont(police); // Fermeture de la police 
 
 	return 0;
