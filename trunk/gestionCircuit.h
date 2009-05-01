@@ -2,7 +2,11 @@
 #define GESTIONCIRCUIT_H
 
 #include <SDL/SDL.H>
+#ifdef __APPLE__
+#include <SDL_ttf/SDL_ttf.h>
+#else
 #include <SDL/SDL_ttf.h>
+#endif
 #include "menu.h"
 
 typedef struct vecteur{

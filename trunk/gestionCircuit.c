@@ -2,12 +2,47 @@
 #include <stdlib.h>
 #include <string.h>
 #include <SDL/SDL.h>
+#ifdef __APPLE__
+#include <SDL_ttf/SDL_ttf.h>
+#else
 #include <SDL/SDL_ttf.h>
+#endif
 #include "menu.h"
 #include "gestionCircuit.h"
 #include "physique.h"
 #include "affichage.h"
 
+/*
+typedef struct position {
+	int collision;
+	int position;
+} Position;
+
+int chargerPositionCicuit(Circuit circuit) {
+	Position ** matrice;
+	int nbrLigneMatrice;
+	int nbrColoneMatrice;
+	int i,j;
+	nbrLigneMatrice = circuit.nbrImageX * circuit.largeurImage / 5 + 1;
+	nbrColoneMatrice = circuit.nbrImageY * circuit.hauteurImage / 5 + 1;
+	
+	matrice = malloc(nbrLigneMatrice * sizeof(Position *));
+	for(i=0; i<nbrLigneMatrice; i++) 
+		matrice[i] = malloc(nbrColoneMatrice * sizeof(Position));
+	
+	
+	for(i=0; i<nbrLigneMatrice; i++)
+		for(j=0; j<nbrColoneMatrice; j++) 
+			determinerPositionCircuit(&matrice[i][j], )
+
+}
+
+
+int determinerPositionCircuit () {
+	
+	
+}
+*/
 
 int allocationVoiture (SDL_Surface ***surface, char nomVoiture[]) {
 	int i;
@@ -193,6 +228,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	
 	//free(circuit.tabMasque);
 	circuit.tabMasque = NULL;
+	TTF_CloseFont(police); // Fermeture de la police 
 
 	return 0;
 }

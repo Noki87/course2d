@@ -3,7 +3,11 @@
 #include <string.h>
 #include <math.h>
 #include <SDL/SDL.h>
+#ifdef __APPLE__
+#include <SDL_ttf/SDL_ttf.h>
+#else
 #include <SDL/SDL_ttf.h>
+#endif
 #include "collisions.h"
 #include "physique.h"
 
