@@ -109,6 +109,7 @@ int chargerMasque(int **tabMasque,int largeur, int hauteur){
 		}
 	}
 	SDL_UnlockSurface(surface);
+	SDL_FreeSurface(surface);
 	return 0;
 }
 
