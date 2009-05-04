@@ -111,17 +111,34 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	char phrase[10];
 	TTF_Font *police = NULL;
 	SDL_Surface *texte = NULL;
+	position.x = 0;
+	position.y = 0;
+	
+	positionTexte.x = 400;
+	positionTexte.y = 300;
+	
+	
+	fond[0] = SDL_CreateRGBSurface(SDL_HWSURFACE, 800, 600, 32, 0, 0, 0, 0);
+	SDL_FillRect(fond[0], NULL, SDL_MapRGB(fond[0]->format, 0, 0, 0));
+	SDL_BlitSurface(fond[0], NULL, ecran, &position);
+	
+	police = TTF_OpenFont("Prototype.ttf", 50);
+	sprintf(phrase, "Chargement");
+	texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+	SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+	
+	SDL_Flip(ecran);
+	
+	if(initialisation(sprite, voitures, &circuit, nbrDeJoueurs, coin, coinprec)==1){
+		return 4;
+	}
+	
 	position.x = 400;
 	position.y = 300;
 	
 	positionTexte.x = 400;
 	positionTexte.y = 200;
 	
-	if(initialisation(sprite, voitures, &circuit, nbrDeJoueurs, coin, coinprec)==1){
-		return 4;
-	}
-	
-	police = TTF_OpenFont("Prototype.ttf", 50);
 	tempsActuel = SDL_GetTicks();
 	tempsPrecedent = tempsActuel - 2001;
 	done = 0;
@@ -201,12 +218,12 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	//free(circuit.tabMasque);
 	
 	for(i=0; i < circuit.largeurImage * circuit.nbrImageX; i++) {
-		free(circuit.tabCheckpoints[i]) ;
+			free(circuit.tabCheckpoints[i]) ;
 	}
 	free (circuit.tabCheckpoints);
-	
+
 	for(i=0; i < circuit.largeurImage * circuit.nbrImageX; i++) {
-		free(circuit.tabCheckpoints[i]) ;
+		free(circuit.tabMasque[i]) ;
 	}
 	free (circuit.tabMasque);
 
