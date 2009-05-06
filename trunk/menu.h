@@ -17,7 +17,8 @@ typedef enum {
 	MenuPause = 7,
 	MenuFinA = 8,
 	MenuFinB = 9,
-	MenuJeu = 10
+	MenuJeu = 10,
+	MenuBateau = 15
 } Menu;
 
 typedef struct partie{
