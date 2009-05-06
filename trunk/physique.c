@@ -25,8 +25,11 @@ Vecteur somme(Vecteur a,Vecteur b,Vecteur c){
 	c.y=a.y+b.y;
 	return c;
 }
-int initialisationVoitures (Voiture *voiture) {
-	strcpy(voiture->nom,"Voitures 1");
+int initialisationVoitures (Voiture *voiture, Partie partie, int numeroJoueur) {
+	if (numeroJoueur == 1)
+		strcpy(voiture->nom, partie.nomJoueur1);
+	else
+		strcpy(voiture->nom, partie.nomJoueur2);
 	strcpy(voiture->cheminImage,"bitmaps/car000.bmp");
 	voiture->image=NULL;
 	voiture->masse=1;
