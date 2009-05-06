@@ -48,7 +48,7 @@ void gestionMenu (SDL_Surface *ecran, Partie *partie) {
 	int continuer = 1;
 	SDL_Event event;
 	
-	Menu menuPrecedent = -1;
+	Menu menuPrecedent = MenuBateau;
 	SDL_Rect positionFond;
 	positionFond.x = 0;
 	positionFond.y = 0;
@@ -268,8 +268,9 @@ void menuOptions (SDL_Event event, Partie *partie){
 void menuPause (SDL_Event event, Partie *partie){
 	if ((event.button.x <=465)&(event.button.x >=335)&(event.button.y <=576)&(event.button.y >=526))
 		partie->menu = MenuOptions;
-	if ((event.button.x <=165)&(event.button.x >=35)&(event.button.y <=576)&(event.button.y >=526))
-		partie->pause=0;
+	if ((event.button.x <=165)&(event.button.x >=35)&(event.button.y <=576)&(event.button.y >=526)) {
+		partie->menu = MenuJeu;
+	}
 	if ((event.button.x <=765)&(event.button.x >=635)&(event.button.y <=576)&(event.button.y >=526))
 		SDL_Quit();
 }

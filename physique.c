@@ -34,7 +34,10 @@ int initialisationVoitures (Voiture *voiture, Partie partie, int numeroJoueur) {
 	voiture->image=NULL;
 	voiture->masse=1;
 	voiture->position.x = 1200;
-	voiture->position.y = 600;
+	if(numeroJoueur == 1)
+		voiture->position.y = 600;
+	else
+		voiture->position.y = 650;
 	initVecteur(&voiture->vitesse);
 	initVecteur(&voiture->fFrot);
 	initVecteur(&voiture->acceleration);
