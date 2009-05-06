@@ -41,6 +41,18 @@ typedef struct circuit {
 		int **tabCheckpoints;
 } Circuit;
 
+typedef struct  camera {
+	SDL_Surface *fond[4];
+	int coin[2];
+	int coinprec[2];
+	SDL_Rect *positionVoitures;
+	SDL_Surface *** spriteVoiture;
+	int temps;
+	int nbrTour;
+	int tourActuel;
+} Camera;
+
+
 int gestionCircuit( SDL_Surface *ecran, Partie *partie) ;
 
 #endif

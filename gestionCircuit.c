@@ -30,19 +30,15 @@ int allocationVoiture (SDL_Surface ***surface, char nomVoiture[]) {
 }
 
 
-int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit * circuit, int nbrDeJoueurs, int coin[], int coinprec[]) {
+int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int nbrDeJoueurs, Partie partie) {
 	int i,j;
 	char *** tab;	
 	
+	
 	//initialisation des voitures 
 	for (i=0; i<nbrDeJoueurs; i++) 
-		initialisationVoitures (&voitures[i]);
+		initialisationVoitures (&voitures[i], partie, i+1);
 	
-	//allocation des voitures	
-	for (i=0; i<nbrDeJoueurs; i++) {
-		spriteVoitures[i] = malloc(32 * sizeof(SDL_Surface *));
-		allocationVoiture(&spriteVoitures[i], voitures[i].cheminImage);
-	}
 	
 	//initialisation du circuit
 
@@ -68,8 +64,18 @@ int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit 
 	
 	
 	//initialisation camera
-	coin[0] =  coin[1] = 1;
-	coinprec[0] = coinprec[1] = 0;
+	for (i=0; i<4; i++)
+		camera->fond[i] = NULL; 
+	camera->coin[0] =  camera->coin[1] = 1;
+	camera->coinprec[0] = camera->coinprec[1] = 0;
+	
+	//allocation des voitures	
+	camera->spriteVoiture = malloc(nbrDeJoueurs * sizeof(SDL_Surface **));
+	
+	for (i=0; i<nbrDeJoueurs; i++) {
+		camera->spriteVoiture[i] = malloc(32 * sizeof(SDL_Surface *));
+		allocationVoiture(&(camera->spriteVoiture[i]), voitures[i].cheminImage);
+	}
 
 	//chargement du masque
 	circuit->tabMasque=malloc(circuit->largeurImage*circuit->nbrImageX*sizeof(int *));
@@ -90,87 +96,71 @@ int initialisation (SDL_Surface *** spriteVoitures, Voiture voitures[], Circuit 
 	return 0;
 }
 
+
+int liberation(SDL_Surface **** sprite, SDL_Surface * fond[4], Circuit *circuit) {
+	int i;
+	
+	for(i=0; i<32;i++)
+		SDL_FreeSurface((*sprite)[0][i]);
+	
+	for(i=0; i<4;i++)
+		SDL_FreeSurface(fond[i]);
+	
+	
+	for(i=0; i < circuit->largeurImage * circuit->nbrImageX; i++) {
+		free(circuit->tabCheckpoints[i]) ;
+	}
+	free (circuit->tabCheckpoints);
+	
+	for(i=0; i < circuit->largeurImage * circuit->nbrImageX; i++) {
+		free(circuit->tabMasque[i]) ;
+	}
+	free (circuit->tabMasque);
+	
+	return 0;
+}
+ 
+
 int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	
-	SDL_Rect position;
-	int    done,i;
+	int done;
 	int tempsPrecedent = 0, tempsActuel = 0, tempsDebutCourse;
-	
+	int nbrDeJoueurs;
+
 	SDL_Event event;
-	
-	int nbrDeJoueurs = 1;
-	SDL_Surface * fond[4] = {NULL, NULL, NULL, NULL};
-	SDL_Surface *** sprite = malloc(nbrDeJoueurs * sizeof(SDL_Surface **));
-	Voiture voitures[1];
+
+	Voiture * voitures;
 	Circuit circuit;
-	int coin[2];
-	int coinprec[2];
-	
-	SDL_Color couleurBlanc = {255, 255, 255};
-	SDL_Rect positionTexte;
-	char phrase[10];
-	TTF_Font *police = NULL;
-	SDL_Surface *texte = NULL;
-	position.x = 0;
-	position.y = 0;
-	
-	positionTexte.x = 400;
-	positionTexte.y = 300;
+	Camera camera;
 	
 	
-	fond[0] = SDL_CreateRGBSurface(SDL_HWSURFACE, 800, 600, 32, 0, 0, 0, 0);
-	SDL_FillRect(fond[0], NULL, SDL_MapRGB(fond[0]->format, 0, 0, 0));
-	SDL_BlitSurface(fond[0], NULL, ecran, &position);
+	if(partie->joueur2 == 0)
+		nbrDeJoueurs = 1;
+	else
+		nbrDeJoueurs = 2;
 	
-	police = TTF_OpenFont("Prototype.ttf", 50);
-	sprintf(phrase, "Chargement");
-	texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
-	SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 	
-	SDL_Flip(ecran);
+
+	voitures = malloc(nbrDeJoueurs * sizeof(Voiture));
+	camera.positionVoitures = malloc(nbrDeJoueurs * sizeof(SDL_Rect));
 	
-	if(initialisation(sprite, voitures, &circuit, nbrDeJoueurs, coin, coinprec)==1){
+	ecranChargement (ecran);
+	
+	if(initialisation(&camera, voitures, &circuit, nbrDeJoueurs, *partie)==1){
 		return 4;
 	}
 	
-	position.x = 400;
-	position.y = 300;
 	
-	positionTexte.x = 400;
-	positionTexte.y = 200;
+	camera.positionVoitures[0].x = 400;
+	camera.positionVoitures[0].y = 300;
 	
-	tempsActuel = SDL_GetTicks();
-	tempsPrecedent = tempsActuel - 2001;
-	done = 0;
-	i = 3;
-	while ( !done) {
-		tempsActuel = SDL_GetTicks();
-		if(tempsActuel - tempsPrecedent > 1000) {
-			if(i == -1) {
-				done = 1;
-			}
-			else {
-				voitures[0].image = sprite[0][(voitures[0].angle)];  
-				camera (ecran, circuit, voitures[0], fond, coin, coinprec, position);
-				SDL_BlitSurface(voitures[0].image, NULL, ecran, &position);
-				sprintf(phrase, "%d",i);
-				texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
-				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
-				SDL_Flip(ecran);
-				i--;
-				tempsPrecedent = tempsActuel;
-			}
-		}
-		else {
-			SDL_Delay(30);
-		}
-	}
-	TTF_CloseFont(police);
+	
+	
+	affichageDecompte(ecran,voitures[0], circuit, &camera);
+
 	
 	tempsDebutCourse = SDL_GetTicks();
-	police = TTF_OpenFont("Prototype.ttf", 20);
-	positionTexte.x = 30;
-	positionTexte.y = 30;
+
 	
 	SDL_EnableKeyRepeat(10, 10);
 	done = 0;
@@ -178,12 +168,11 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 		tempsActuel = SDL_GetTicks();
 		if (tempsActuel - tempsPrecedent > 30){
 			tempsPrecedent = tempsActuel;
-			deplacer(voitures,circuit,sprite[0]);
-			affichage(ecran,voitures[0],sprite[0],circuit,coin,coinprec,&position,fond);
-			sprintf(phrase, "%d:%02d:%02d",(tempsActuel - tempsDebutCourse)/60000,(tempsActuel - tempsDebutCourse)/1000 % 60, (tempsActuel - tempsDebutCourse)/10 % 100);
-			texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
-			SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
-			SDL_Flip(ecran);
+			
+			deplacer(voitures,circuit,camera.spriteVoiture[0]);
+			camera.temps = tempsActuel-tempsDebutCourse;
+			affichage(ecran,voitures[0],circuit,&camera);
+			
 			SDL_PollEvent(&event);
 			if(event.type==SDL_KEYDOWN){
 				if((event.key.keysym.sym)==SDLK_UP) voitures[0].haut=1;
@@ -200,6 +189,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 			}
 			if(event.type==SDL_QUIT)
 				done = 1;
+			
 		}
 		else // Si ça fait moins de 30ms depuis le dernier tour de boucle, on endort le programme le temps qu'il faut
 		{
@@ -207,27 +197,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 		}
 	}
 	
-	for(i=0; i<32;i++)
-		SDL_FreeSurface(sprite[0][i]);
-	
-	for(i=0; i<4;i++)
-		SDL_FreeSurface(fond[i]);
-	
-	SDL_FreeSurface(texte);
-	
-	//free(circuit.tabMasque);
-	
-	for(i=0; i < circuit.largeurImage * circuit.nbrImageX; i++) {
-			free(circuit.tabCheckpoints[i]) ;
-	}
-	free (circuit.tabCheckpoints);
-
-	for(i=0; i < circuit.largeurImage * circuit.nbrImageX; i++) {
-		free(circuit.tabMasque[i]) ;
-	}
-	free (circuit.tabMasque);
-
-	TTF_CloseFont(police); // Fermeture de la police 
+	//liberation(&sprite, fond, &circuit);	
 
 	return 0;
 }

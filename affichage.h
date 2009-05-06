@@ -1,4 +1,7 @@
 #ifndef AFFICHAGE_H
 #define AFFICHAGE_H
-void affichage(SDL_Surface *ecran, Voiture voiture ,SDL_Surface *sprite[], Circuit circuit,int coin[],int coinprec[], SDL_Rect *position, SDL_Surface *fond[]);
+void affichage(SDL_Surface *ecran, Voiture voiture, Circuit circuit, Camera *camera);
+int affichageDecompte(SDL_Surface *ecran, Voiture voiture, Circuit circuit, Camera *camera);
+int ecranChargement (SDL_Surface * ecran);
+
 #endif
