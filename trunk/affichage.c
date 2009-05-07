@@ -24,7 +24,10 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
 
 	
 	//Affichage voiture et fond
-	positionnerCamera (ecran, circuit, voiture[0], camera);
+	if(nbrDeJoueurs == 1)
+		positionnerCamera (ecran, circuit, voiture[0], camera);
+	else
+		positionnerCamera2j (ecran, circuit, voiture, camera);
 	
 	for(i=0; i<nbrDeJoueurs; i++) {
 		voiture[i].image=camera->spriteVoiture[i][(voiture[i].angle)];  
@@ -112,7 +115,10 @@ int affichageDecompte(SDL_Surface *ecran, Voiture * voiture, Circuit circuit, Ca
 			}
 			else {
 				//Affichage de la voiture et du fond
-				positionnerCamera (ecran, circuit, voiture[0], camera);
+				if(nbrDeJoueurs == 1)
+					positionnerCamera (ecran, circuit, voiture[0], camera);
+				else
+					positionnerCamera2j (ecran, circuit, voiture, camera);
 				
 				for(i=0; i<nbrDeJoueurs; i++) {
 					voiture[i].image=camera->spriteVoiture[i][(voiture[i].angle)];  
