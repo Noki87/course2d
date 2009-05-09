@@ -29,6 +29,7 @@ typedef struct voiture{
         char nom[20];
         char cheminImage[25];
 		int checkpoints;
+		int ***tabVoiture;
 } Voiture;
 
 typedef struct circuit {

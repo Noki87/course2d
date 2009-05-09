@@ -66,10 +66,10 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	SDL_Rect pos;
 	pos.x=2;
 	pos.y=2;
-	lectureCouleur ("Circuit/test_checkpoints.bmp", car->position, pixel);
+	//lectureCouleur ("Circuit/test_checkpoints.bmp", car, pixel);
 	//sprintf(text,"%d",circuit.tabMasque[car->position.x+48][car->position.y+48]);
-	sprintf(text,"%d",testerCollision(car->position,car->angle,circuit));
-	SDL_WM_SetCaption(text, NULL);
+	//sprintf(text,"%d",testerCollision(car->position,car,circuit));
+	//SDL_WM_SetCaption(text, NULL);
 	//Etat des touches
 	if(car->haut==1)car->fMoteur.val=2;
 	if(car->bas==1)car->fMoteur.val=-1;
@@ -95,7 +95,7 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	//Position(n)=Position(n-1)+Vitesse(n)
 	car->position.x+=(int)(car->vitesse.x);
 	car->position.y+=(int)(car->vitesse.y);
-	if(testerCollision(car->position,car->angle,circuit)==1){
+	if(testerCollision(car->position,&car,circuit)==1){
 		car->vitesse.x*=-1;
 		car->vitesse.y*=-1;
 		car->position.x=x;

@@ -14,17 +14,31 @@
 
 
 
-int allocationVoiture (SDL_Surface ***surface, char nomVoiture[]) {
-	int i;
+int allocationVoiture (SDL_Surface ***surface,  Voiture *voiture) {
+	int i,n;
+	int nbImages=32;
+	int largeur=96,hauteur=96;
 	for (i=0;i<32;i++){
-		nomVoiture[13]=i-(i/10)*10+48;
-		nomVoiture[12]=(i/10)+48;
-		(*surface)[i] = SDL_LoadBMP(nomVoiture);
+		voiture->cheminImage[13]=i-(i/10)*10+48;
+		voiture->cheminImage[12]=(i/10)+48;
+		(*surface)[i] = SDL_LoadBMP(voiture->cheminImage);
 		if ((*surface)[i] == NULL) {
 			printf("Unable to load bitmap: %s\n", SDL_GetError());
 			return 1;
 		}
 		SDL_SetColorKey((*surface)[i], SDL_SRCCOLORKEY, SDL_MapRGB((*surface)[i]->format, 97, 68, 43));
+	}
+	return 0;
+	voiture->tabVoiture=malloc(nbImages*sizeof(int **));
+	if(voiture->tabVoiture==NULL)return 4;
+	for(n=0;n<nbImages;n++){
+		voiture->tabVoiture[n]=malloc(largeur*sizeof(int *));
+		if(voiture->tabVoiture[n]==NULL)return 4;
+		for(i=0; i< largeur; i++) {
+			voiture->tabVoiture[n][i] = calloc(hauteur,sizeof(int));
+			if(voiture->tabVoiture[n][i]==NULL)return 4;
+		}
+		chargerMasque(voiture->tabVoiture, largeur,hauteur);
 	}
 	return 0;
 }
@@ -83,7 +97,7 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	
 	for (i=0; i<nbrDeJoueurs; i++) {
 		camera->spriteVoiture[i] = malloc(32 * sizeof(SDL_Surface *));
-		allocationVoiture(&(camera->spriteVoiture[i]), voitures[i].cheminImage);
+		allocationVoiture(&(camera->spriteVoiture[i]), &voitures[i]);
 	}
 
 	//chargement du masque
@@ -195,10 +209,10 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 				if((event.key.keysym.sym)==SDLK_LEFT) voitures[0].gauche=1;
 				if((event.key.keysym.sym)==SDLK_RIGHT) voitures[0].droite=1;
 				if(nbrDeJoueurs == 2) {
-					if((event.key.keysym.sym)==SDLK_z) voitures[1].haut=1;
-					if((event.key.keysym.sym)==SDLK_s) voitures[1].bas=1;
-					if((event.key.keysym.sym)==SDLK_q) voitures[1].gauche=1;
-					if((event.key.keysym.sym)==SDLK_d) voitures[1].droite=1;
+					if((event.key.keysym.sym)==SDLK_e) voitures[1].haut=1;
+					if((event.key.keysym.sym)==SDLK_d) voitures[1].bas=1;
+					if((event.key.keysym.sym)==SDLK_s) voitures[1].gauche=1;
+					if((event.key.keysym.sym)==SDLK_f) voitures[1].droite=1;
 				}
 				if((event.key.keysym.sym)==SDLK_ESCAPE) partie->pause = 1;
 			}
@@ -209,10 +223,10 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 				if((event.key.keysym.sym)==SDLK_RIGHT)voitures[0].droite=0;
 				if((event.key.keysym.sym)==SDLK_ESCAPE) partie->pause = 0;
 				if(nbrDeJoueurs == 2) {
-					if((event.key.keysym.sym)==SDLK_z) voitures[1].haut=0;
-					if((event.key.keysym.sym)==SDLK_s) voitures[1].bas=0;
-					if((event.key.keysym.sym)==SDLK_q) voitures[1].gauche=0;
-					if((event.key.keysym.sym)==SDLK_d) voitures[1].droite=0;
+					if((event.key.keysym.sym)==SDLK_e) voitures[1].haut=0;
+					if((event.key.keysym.sym)==SDLK_d) voitures[1].bas=0;
+					if((event.key.keysym.sym)==SDLK_s) voitures[1].gauche=0;
+					if((event.key.keysym.sym)==SDLK_f) voitures[1].droite=0;
 				}
 			}
 			if(event.type==SDL_QUIT)

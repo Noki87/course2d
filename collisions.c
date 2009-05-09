@@ -106,6 +106,8 @@ int chargerMasque(int **tabMasque,int largeur, int hauteur){
 				tabMasque[x][y]=2;
 			if(r==255 && g==0 && b==0)
 				tabMasque[x][y]=3;
+			if(r==97 && g==68 && b==43)
+				tabMasque[x][y]=4;
 		}
 	}
 	SDL_UnlockSurface(surface);
@@ -113,17 +115,12 @@ int chargerMasque(int **tabMasque,int largeur, int hauteur){
 	return 0;
 }
 
-int testerCollision(SDL_Rect position,int angle,Circuit circuit){
+int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit){
 	//char text[33];
 	unsigned char r,g,b;
 	SDL_Surface *sVoiture;
 	int collision=0;
-	char cheminVoiture[]="bitmaps/car000.bmp";
 	SDL_Rect place,placeVoiture;
-	if(angle<10)sprintf(cheminVoiture,"bitmaps/car00%d.bmp",angle);
-	if(angle>=10)sprintf(cheminVoiture,"bitmaps/car0%d.bmp",angle);
-	sVoiture = SDL_LoadBMP(cheminVoiture);
-	SDL_LockSurface(sVoiture);
 	place.x=position.x;
 	place.y=position.y;
 	//fonction qui teste l'existence de collision et renvoie 0 ou 1
@@ -133,8 +130,7 @@ int testerCollision(SDL_Rect position,int angle,Circuit circuit){
 			if (circuit.tabMasque[place.x][place.y]==0){
 				placeVoiture.x=place.x-position.x;
 				placeVoiture.y=place.y-position.y;
-				SDL_GetRGB(getpixel(sVoiture,placeVoiture.x,placeVoiture.y),sVoiture->format, &r, &g, &b);
-				if (r!=97 && g!=68 && b!=43)
+				if (voiture->tabVoiture[placeVoiture.x][placeVoiture.y]!=4)
 					collision=1;
 			}
 			place.y+=20;
