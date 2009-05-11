@@ -149,12 +149,13 @@ int liberation(SDL_Surface **** sprite, SDL_Surface * fond[4], Circuit *circuit)
 
 int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	
-	int done,i,boucle;
+	int done,i,boucle, compt;
 	int tempsPrecedent = 0, tempsActuel = 0, tempsDebutCourse, tempsAvantPause = 0, tempsPause = 0;
 	int nbrDeJoueurs;
 
 	SDL_Event event;
 
+	
 	Voiture * voitures;
 	Circuit circuit;
 	Camera camera;
@@ -177,11 +178,10 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	}
 	
 	
-	affichageDecompte(ecran,voitures, circuit, &camera,nbrDeJoueurs);
 
 	
 	tempsDebutCourse = SDL_GetTicks();
-
+	compt = 3;
 	
 	SDL_EnableKeyRepeat(10, 10);
 	done = 0;
@@ -189,10 +189,15 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 		tempsActuel = SDL_GetTicks();
 		if (tempsActuel - tempsPrecedent > 30){
 			tempsPrecedent = tempsActuel;
-			for(i=0; i<nbrDeJoueurs; i ++)
-				deplacer(&voitures[i],circuit,camera.spriteVoiture[i]);
-			camera.temps = tempsActuel - tempsDebutCourse - tempsPause;
-			affichage(ecran,voitures,circuit,&camera,nbrDeJoueurs);
+			if(compt != -1) {
+				affichageDecompte(ecran,voitures, circuit, &camera,nbrDeJoueurs, &compt, &tempsDebutCourse,tempsPause);
+			}
+			else {
+				for(i=0; i<nbrDeJoueurs; i ++)
+					deplacer(&voitures[i],circuit,camera.spriteVoiture[i]);
+				camera.temps = tempsActuel - tempsDebutCourse - tempsPause;
+				affichage(ecran,voitures,circuit,&camera,nbrDeJoueurs);
+			}
 			if(partie->pause == 1) {
 				tempsAvantPause = SDL_GetTicks();
 				boucle = 1;
