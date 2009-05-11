@@ -47,6 +47,7 @@ int initialisationVoitures (Voiture *voiture, Partie partie, int numeroJoueur) {
 	voiture->angleR=0;
 	voiture->haut=voiture->bas=voiture->gauche=voiture->droite=0;
 	voiture->vitessemax=20;
+	voiture->checkpoints=1;
 	return 0;
 }
 void projeter(Vecteur *vecteur, int choix){
@@ -64,12 +65,8 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	int x,y;
 	unsigned char pixel[3];
 	SDL_Rect pos;
-	pos.x=2;
-	pos.y=2;
-	//lectureCouleur ("Circuit/test_checkpoints.bmp", car, pixel);
-	//sprintf(text,"%d",circuit.tabMasque[car->position.x+48][car->position.y+48]);
-	//sprintf(text,"%d",testerCollision(car->position,car,circuit));
-	//SDL_WM_SetCaption(text, NULL);
+	sprintf(text,"%d",car->checkpoints);
+	SDL_WM_SetCaption(text, NULL);
 	//Etat des touches
 	if(car->haut==1)car->fMoteur.val=2;
 	if(car->bas==1)car->fMoteur.val=-1;
@@ -90,8 +87,8 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	car->vitesse.x+=car->acceleration.x;
 	car->vitesse.y+=car->acceleration.y;
 	//sauvegarde ancienne position
-	x=car->position.x;
-	y=car->position.y;
+	pos.x=x=car->position.x;
+	pos.y=y=car->position.y;
 	//Position(n)=Position(n-1)+Vitesse(n)
 	car->position.x+=(int)(car->vitesse.x);
 	car->position.y+=(int)(car->vitesse.y);
@@ -117,5 +114,5 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	if(car->position.x<30)car->position.x=30;
 	
 	//Calcul checkpoints
-	//compterCheckpoints(circuit.tabCheckpoints,car->checkpoints,x,y,car->position);
+	car->checkpoints=testerCheckpoints (circuit.tabCheckpoints, car->checkpoints,pos,car->position);
 }
