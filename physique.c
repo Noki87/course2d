@@ -95,7 +95,7 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	//Position(n)=Position(n-1)+Vitesse(n)
 	car->position.x+=(int)(car->vitesse.x);
 	car->position.y+=(int)(car->vitesse.y);
-	if(testerCollision(car->position,&car,circuit)==1){
+	if(testerCollision(car->position,car,circuit)==1){
 		car->vitesse.x*=-1;
 		car->vitesse.y*=-1;
 		car->position.x=x;
