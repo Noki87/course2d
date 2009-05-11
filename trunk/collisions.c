@@ -130,7 +130,7 @@ int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit){
 			if (circuit.tabMasque[place.x][place.y]==0){
 				placeVoiture.x=place.x-position.x;
 				placeVoiture.y=place.y-position.y;
-				if (voiture->tabVoiture[placeVoiture.x][placeVoiture.y]!=4)
+				if (voiture->tabVoiture[voiture->angle][placeVoiture.x][placeVoiture.y]!=4)
 					collision=1;
 			}
 			place.y+=20;
