@@ -13,79 +13,79 @@
 
 Uint32 getpixel(SDL_Surface *surface, int x, int y)
 {
-    int bpp = surface->format->BytesPerPixel;
-    /* Here p is the address to the pixel we want to retrieve */
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+	int bpp = surface->format->BytesPerPixel;
+	/* Here p is the address to the pixel we want to retrieve */
+	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
-    switch(bpp) {
-    case 1:
-        return *p;
+	switch(bpp) {
+	case 1:
+		return *p;
 
-    case 2:
-        return *(Uint16 *)p;
+	case 2:
+		return *(Uint16 *)p;
 
-    case 3:
-        if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-            return p[0] << 16 | p[1] << 8 | p[2];
-        else
-            return p[0] | p[1] << 8 | p[2] << 16;
+	case 3:
+		if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			return p[0] << 16 | p[1] << 8 | p[2];
+		else
+			return p[0] | p[1] << 8 | p[2] << 16;
 
-    case 4:
-        return *(Uint32 *)p;
+	case 4:
+		return *(Uint32 *)p;
 
-    default:
-        return 0;       /* shouldn't happen, but avoids warnings */
-    }
+	default:
+		return 0;       /* shouldn't happen, but avoids warnings */
+	}
 }
 
 /*int lectureCouleur (char cheminImage[], SDL_Rect position,  unsigned char pixel[3]){
-	FILE *f;
-	char file_type[3];
-	long int file_size, reserved;
-	long int bitmap_offset;
-	long int header_size;
-	long int width, height;
-	short int planes; 
-	short int bits_per_pixel; 
-	long int compression ,size_bitmap, horiz_resolution, vert_resolution;
-	long int colors_used, colors_important;
-	long int positionPixel=0;
+FILE *f;
+char file_type[3];
+long int file_size, reserved;
+long int bitmap_offset;
+long int header_size;
+long int width, height;
+short int planes; 
+short int bits_per_pixel; 
+long int compression ,size_bitmap, horiz_resolution, vert_resolution;
+long int colors_used, colors_important;
+long int positionPixel=0;
 
-	f = fopen(cheminImage, "rb");
-	file_type[2] = 0;
+f = fopen(cheminImage, "rb");
+file_type[2] = 0;
 
-	if (fread( file_type, 2* sizeof(char),1, f) == 0) {
-		perror("erreur lecture file_type");
-		return 2;
-	}
-	if (strcmp("BM",file_type))
-		return 1;
-	fread( &file_size, sizeof(long int), 1, f) ;
-	fread( &reserved, sizeof(long int), 1, f) ;
-	fread( &bitmap_offset, sizeof(long int), 1, f); 
-	fread( &header_size, sizeof(long int), 1, f) ;
-	fread( &width, sizeof(long int), 1, f) ;
-	fread( &height, sizeof(long int), 1, f) ;
-	fread( &planes, sizeof(short int), 1, f) ;
-	fread( &bits_per_pixel, sizeof(short int), 1, f);
-	fread( &compression, sizeof(long int), 1, f) ;
-	fread( &size_bitmap, sizeof(long int), 1, f) ;
-	fread( &horiz_resolution, sizeof(long int), 1, f) ;
-	fread( &vert_resolution, sizeof(long int), 1, f) ;
-	fread( &colors_used, sizeof(long int), 1, f) ;
-	fread( &colors_important, sizeof(long int), 1, f) ;
+if (fread( file_type, 2* sizeof(char),1, f) == 0) {
+perror("erreur lecture file_type");
+return 2;
+}
+if (strcmp("BM",file_type))
+return 1;
+fread( &file_size, sizeof(long int), 1, f) ;
+fread( &reserved, sizeof(long int), 1, f) ;
+fread( &bitmap_offset, sizeof(long int), 1, f); 
+fread( &header_size, sizeof(long int), 1, f) ;
+fread( &width, sizeof(long int), 1, f) ;
+fread( &height, sizeof(long int), 1, f) ;
+fread( &planes, sizeof(short int), 1, f) ;
+fread( &bits_per_pixel, sizeof(short int), 1, f);
+fread( &compression, sizeof(long int), 1, f) ;
+fread( &size_bitmap, sizeof(long int), 1, f) ;
+fread( &horiz_resolution, sizeof(long int), 1, f) ;
+fread( &vert_resolution, sizeof(long int), 1, f) ;
+fread( &colors_used, sizeof(long int), 1, f) ;
+fread( &colors_important, sizeof(long int), 1, f) ;
 
-	fseek(f,bitmap_offset,SEEK_SET);
+fseek(f,bitmap_offset,SEEK_SET);
 
 
-	positionPixel = bitmap_offset;
-	positionPixel += 1 * ((height-position.y-1)*width + position.x);
+positionPixel = bitmap_offset;
+positionPixel += 1 * ((height-position.y-1)*width + position.x);
 
-	fseek(f,positionPixel,SEEK_SET);
-	fread( pixel , 3 * sizeof(unsigned char), 1, f);
+fseek(f,positionPixel,SEEK_SET);
+fread( pixel , 3 * sizeof(unsigned char), 1, f);
 
-	fclose(f);
-	return 0;
+fclose(f);
+return 0;
 }*/
 
 int chargerMasque(int **tabMasque,int largeur, int hauteur, SDL_Surface *surface){
@@ -112,7 +112,7 @@ int chargerMasque(int **tabMasque,int largeur, int hauteur, SDL_Surface *surface
 		}
 	}
 	SDL_UnlockSurface(surface);
-//	SDL_FreeSurface(surface);
+	//	SDL_FreeSurface(surface);
 	return 0;
 }
 
@@ -143,47 +143,60 @@ int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit){
 	return collision;
 }
 /*int couleurCheckpoints_prec (int nCheckpoints){
-	int couleurPrec;
+int couleurPrec;
+switch (nCheckpoints%3){
+case 0: 
+couleurPrec = 3; //couleur rouge
+case 1: 
+couleurPrec = 0; //couleur noir
+case 2: 
+couleurPrec = 2; //couleur bleu
+}
+return couleurPrec;
+}*/
+
+int testerCheckpoints ( int **tabCheckpoints, int nCheckpoints, SDL_Rect posPrec, SDL_Rect posSuiv){
+	int x, y,couleurPrec,pasX,pasY,i,j,checkPrec;
+	//tabCheckpoints[x][y];
+	/*retourne 0 si pixel en x,y est noir, 1 si pixel en x,y est blanc, 2 si pixel en x,y est bleu
+	3 si pixel en x,y est rouge */
+
+	int nx = posSuiv.x - posPrec.x; // distance suivant l'axe des abscisses entre posSuiv et posPrec
+	int ny = posSuiv.y - posPrec.y; // distance suivant l'axe des ordonnées entre posSuiv et posPrec
+
 	switch (nCheckpoints%3){
 		case 0: 
 			couleurPrec = 3; //couleur rouge
 		case 1: 
 			couleurPrec = 0; //couleur noir
 		case 2: 
-			couleurPrec = 2; //couleur bleu
+			couleurPrec = 2; //couleur bleue
 	}
-return couleurPrec;
-}*/
 
-int testerCheckpoints ( int **tabCheckpoints, int nCheckpoints, SDL_Rect posPrec, SDL_Rect posSuiv){
-int x, y,couleurPrec;
-//tabCheckpoints[x][y];
-/*retourne 0 si pixel en x,y est noir, 1 si pixel en x,y est blanc, 2 si pixel en x,y est bleu
-3 si pixel en x,y est rouge */
+	x = posPrec.x;
+	y = posPrec.y;
 
-int nx = posSuiv.x - posPrec.x; // distance suivant l'axe des abscisses entre posSuiv et posPrec
-int ny = posSuiv.y - posPrec.y; // distance suivant l'axe des ordonnées entre posSuiv et posPrec
+	if(nx>=0)pasX=1;
+	if(nx<0)pasX=-1;
+	if(ny>=0)pasY=1;
+	if(ny<0)pasY=-1;
 
-switch (nCheckpoints%3){
+	i=x;
+	while(i!=x+nx){
+		j=y;
+		while(j!=y+ny){
+			switch (nCheckpoints%3){
 		case 0: 
 			couleurPrec = 3; //couleur rouge
 		case 1: 
 			couleurPrec = 0; //couleur noir
 		case 2: 
-			couleurPrec = 2; //couleur bleu
-	}
-
-x = posPrec.x;
-y = posPrec.y;
-
-if ( nx >= 0 && ny >= 0 ){
-	int i,j;
-	for (i=x;i++;i<=x+nx){
-		for (j=y;j++;j<=y+ny){
+			couleurPrec = 2; //couleur bleue
+			}
 			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
 				nCheckpoints ++;
 			/*if ( tabCheckpoints[i][j] == 0 && couleurPrec == 0)
-				nCheckpoints = nCheckpoints; //ne rien faire */
+			nCheckpoints = nCheckpoints; //ne rien faire */
 			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
 				nCheckpoints --;
 			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
@@ -191,100 +204,16 @@ if ( nx >= 0 && ny >= 0 ){
 			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
 				nCheckpoints --;
 			/*if ( tabCheckpoints[i][j] == 2 && couleurPrec == 2)
-                nCheckpoints = nCheckpoints ; //ne rien faire */
-            if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
+			nCheckpoints = nCheckpoints ; //ne rien faire */
+			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
 				nCheckpoints ++;
 			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
 				nCheckpoints --;
 			/*if ( tabCheckpoints[i][j] == 3 && couleurPrec == 3)
-                nCheckpoints = nCheckpoints ; //ne rien faire*/
-
+			nCheckpoints = nCheckpoints ; //ne rien faire*/
+			j+=pasY;
 		}
+		i+=pasX;
 	}
-}
-
-if ( nx < 0 && ny >= 0 ){
-	int i,j;
-	for (i=x;i--;i>=x+nx){
-		for (j=y;j++;j<=y+ny){
-			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
-				nCheckpoints ++;
-			/*if ( tabCheckpoints[i][j] == 0 && couleurPrec == 0)
-				nCheckpoints = nCheckpoints; //ne rien faire*/
-			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
-				nCheckpoints --;
-			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
-				nCheckpoints ++;
-			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
-				nCheckpoints --;
-			/*if ( tabCheckpoints[i][j] == 2 && couleurPrec == 2)
-                nCheckpoints = nCheckpoints ; //ne rien faire*/
-            if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
-				nCheckpoints ++;
-			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
-				nCheckpoints --;
-			/*if ( tabCheckpoints[i][j] == 3 && couleurPrec == 3)
-                nCheckpoints = nCheckpoints ; //ne rien faire*/
-
-		}
-	}
-}
-
-if ( nx >= 0 && ny < 0 ){
-	int i,j;
-	for (i=x;i++;i<=x+nx){
-		for (j=y;j--;j>=y+ny){
-			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
-				nCheckpoints ++;
-			/*if ( tabCheckpoints[i][j] == 0 && couleurPrec == 0)
-				nCheckpoints = nCheckpoints; //ne rien faire*/
-			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
-				nCheckpoints --;
-			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
-				nCheckpoints ++;
-			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
-				nCheckpoints --;
-			/*if ( tabCheckpoints[i][j] == 2 && couleurPrec == 2)
-                nCheckpoints = nCheckpoints ; //ne rien faire*/
-            if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
-				nCheckpoints ++;
-			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
-				nCheckpoints --;
-			/*if ( tabCheckpoints[i][j] == 3 && couleurPrec == 3)
-                nCheckpoints = nCheckpoints ; //ne rien faire*/
-			
-		}
-	}
-}
-
-if ( nx < 0 && ny < 0 ){
-	int i,j;
-	for (i=x;i--;i>=x+nx){
-		for (j=y;j--;j>=y+ny){
-			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
-				nCheckpoints ++;
-			/*if ( tabCheckpoints[i][j] == 0 && couleurPrec == 0)
-				nCheckpoints = nCheckpoints; //ne rien faire*/
-			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
-				nCheckpoints --;
-			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
-				nCheckpoints ++;
-			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
-				nCheckpoints --;
-			/*if ( tabCheckpoints[i][j] == 2 && couleurPrec == 2)
-                nCheckpoints = nCheckpoints ; //ne rien faire*/
-            if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
-				nCheckpoints ++;
-			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
-				nCheckpoints --;
-			/*if ( tabCheckpoints[i][j] == 3 && couleurPrec == 3)
-                nCheckpoints = nCheckpoints ; //ne rien faire*/
-		}
-	}
-}
-
-
-
-return nCheckpoints;
-
+	return nCheckpoints;
 }
