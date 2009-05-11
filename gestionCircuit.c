@@ -37,7 +37,7 @@ int allocationVoiture (SDL_Surface ***surface,  Voiture *voiture) {
 			voiture->tabVoiture[n][i] = calloc(hauteur,sizeof(int));
 			if(voiture->tabVoiture[n][i]==NULL)return 4;
 		}
-		chargerMasque(voiture->tabVoiture[n], largeur,hauteur);
+		chargerMasque(voiture->tabVoiture[n], largeur,hauteur, (*surface)[n]);
 	}
 	return 0;
 }
@@ -46,7 +46,7 @@ int allocationVoiture (SDL_Surface ***surface,  Voiture *voiture) {
 int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int nbrDeJoueurs, Partie partie) {
 	int i,j;
 	char *** tab;	
-	
+	SDL_Surface *surfaceMasque;
 	
 	//initialisation des voitures 
 	for (i=0; i<nbrDeJoueurs; i++) 
@@ -100,13 +100,16 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	}
 
 	//chargement du masque
+	
+	surfaceMasque = SDL_LoadBMP("Circuit/test_masque.bmp");
+
 	circuit->tabMasque=malloc(circuit->largeurImage*circuit->nbrImageX*sizeof(int *));
 	if(circuit->tabMasque==NULL)return 4;
 	for(i=0; i< circuit->largeurImage * circuit->nbrImageX; i++) {
 		circuit->tabMasque[i] = calloc(circuit->hauteurImage*circuit->nbrImageY,sizeof(int));
 		if(circuit->tabMasque[i]==NULL)return 4;
 	}
-	chargerMasque(circuit->tabMasque, circuit->largeurImage * circuit->nbrImageX, circuit->hauteurImage * circuit->nbrImageY);
+	chargerMasque(circuit->tabMasque, circuit->largeurImage * circuit->nbrImageX, circuit->hauteurImage * circuit->nbrImageY, surfaceMasque);
 	//chargement du masque checkpoints
 	circuit->tabCheckpoints=malloc(circuit->largeurImage*circuit->nbrImageX*sizeof(int *));
 	if(circuit->tabCheckpoints==NULL)return 4;
@@ -114,7 +117,7 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 		circuit->tabCheckpoints[i]=calloc(circuit->hauteurImage*circuit->nbrImageY,sizeof(int));
 		if(circuit->tabCheckpoints[i]==NULL)return 4;
 	}
-	chargerMasque(circuit->tabCheckpoints,circuit->largeurImage*circuit->nbrImageX,circuit->hauteurImage*circuit->nbrImageY);
+	chargerMasque(circuit->tabCheckpoints,circuit->largeurImage*circuit->nbrImageX,circuit->hauteurImage*circuit->nbrImageY, surfaceMasque);
 	return 0;
 }
 
