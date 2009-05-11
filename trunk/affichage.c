@@ -88,57 +88,44 @@ int ecranChargement (SDL_Surface * ecran) {
 	return 0;
 }
 
-int affichageDecompte(SDL_Surface *ecran, Voiture * voiture, Circuit circuit, Camera *camera, int nbrDeJoueurs) {
-	
-	int done,i, compt;
-	int tempsPrecedent = 0, tempsActuel = 0;
+int affichageDecompte(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *camera, int nbrDeJoueurs, int *compteur, int *tempsPrec, int tempsPause) {	
+	int i;
+	int tempsActuel = 0;
 	char phrase[10];
 	
 	SDL_Color couleurBlanc = {255, 255, 255};
 	SDL_Rect positionTexte;
-	SDL_Surface *texte;
+	SDL_Surface *texte = NULL;
 	TTF_Font *police = TTF_OpenFont("Prototype.ttf", 50);
 	
 	positionTexte.x = 400;
 	positionTexte.y = 200;
 	
-	tempsActuel = SDL_GetTicks();
-	tempsPrecedent = tempsActuel - 2001;
-	done = 0;
-	compt = 3;
 	
-	while ( !done) {
-		tempsActuel = SDL_GetTicks();
-		if(tempsActuel - tempsPrecedent > 1000) {	//Attente d'1 seconde entre chaque affichage
-			if(compt == -1) {	//Si le compteur est fini on arrete la boucle
-				done = 1;
-			}
-			else {
-				//Affichage de la voiture et du fond
-				if(nbrDeJoueurs == 1)
-					positionnerCamera (ecran, circuit, voiture[0], camera);
-				else
-					positionnerCamera2j (ecran, circuit, voiture, camera);
-				
-				for(i=0; i<nbrDeJoueurs; i++) {
-					voiture[i].image=camera->spriteVoiture[i][(voiture[i].angle)];  
-					SDL_BlitSurface(voiture[i].image, NULL, ecran, &(camera->positionVoitures[i]));
-				}
-				//Affichage du decompte
-				sprintf(phrase, "%d",compt);
-				texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
-				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
-				SDL_Flip(ecran);
-				
-				//decrementation du compteur
-				compt--;
-				tempsPrecedent = tempsActuel;
-			}
+	tempsActuel = SDL_GetTicks();
+	if(tempsActuel - *tempsPrec - tempsPause > 1000) {	//Attente d'1 seconde entre chaque affichage
+		//Affichage de la voiture et du fond
+		if(nbrDeJoueurs == 1)
+			positionnerCamera (ecran, circuit, voiture[0], camera);
+		else
+			positionnerCamera2j (ecran, circuit, voiture, camera);
+		
+		for(i=0; i<nbrDeJoueurs; i++) {
+			voiture[i].image=camera->spriteVoiture[i][(voiture[i].angle)];  
+			SDL_BlitSurface(voiture[i].image, NULL, ecran, &(camera->positionVoitures[i]));
 		}
-		else {
-			SDL_Delay(1000 - (tempsActuel - tempsPrecedent));
-		}
+		//Affichage du decompte
+		sprintf(phrase, "%d",*compteur);
+		texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		SDL_Flip(ecran);
+		
+		//decrementation du compteur
+		(*compteur)--;
+		*tempsPrec = SDL_GetTicks() - tempsPause;
 	}
+	
+	
 	
 	TTF_CloseFont(police);
 	SDL_FreeSurface(texte);
