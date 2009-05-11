@@ -38,7 +38,7 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
     }
 }
 
-int lectureCouleur (char cheminImage[], SDL_Rect position,  unsigned char pixel[3]){
+/*int lectureCouleur (char cheminImage[], SDL_Rect position,  unsigned char pixel[3]){
 	FILE *f;
 	char file_type[3];
 	long int file_size, reserved;
@@ -86,13 +86,14 @@ int lectureCouleur (char cheminImage[], SDL_Rect position,  unsigned char pixel[
 
 	fclose(f);
 	return 0;
-}
+}*/
 
 int chargerMasque(int **tabMasque,int largeur, int hauteur, SDL_Surface *surface){
 	unsigned char r,g,b;
 	char cheminMasque[] = "Circuit/test_masque.bmp";
 	unsigned int x,y,pix;
 	SDL_Rect position;
+	//hauteur=(insigned int)(hauteur);
 	//SDL_Surface *surface;
 	//surface = SDL_LoadBMP("Circuit/test_masque.bmp");
 	SDL_LockSurface(surface);
@@ -133,11 +134,157 @@ int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit){
 				if (voiture->tabVoiture[voiture->angle][placeVoiture.x][placeVoiture.y]!=4)
 					collision=1;
 			}
-			place.y+=20;
+			place.y++;
 		}
-		place.x+=20;
+		place.x++;
 	}
 	//sprintf(text,"%d",placeVoiture.y);
 	//SDL_WM_SetCaption(text, NULL);
 	return collision;
+}
+/*int couleurCheckpoints_prec (int nCheckpoints){
+	int couleurPrec;
+	switch (nCheckpoints%3){
+		case 0: 
+			couleurPrec = 3; //couleur rouge
+		case 1: 
+			couleurPrec = 0; //couleur noir
+		case 2: 
+			couleurPrec = 2; //couleur bleu
+	}
+return couleurPrec;
+}*/
+
+int testerCheckpoints ( int **tabCheckpoints, int nCheckpoints, SDL_Rect posPrec, SDL_Rect posSuiv){
+int x, y,couleurPrec;
+//tabCheckpoints[x][y];
+/*retourne 0 si pixel en x,y est noir, 1 si pixel en x,y est blanc, 2 si pixel en x,y est bleu
+3 si pixel en x,y est rouge */
+
+int nx = posSuiv.x - posPrec.x; // distance suivant l'axe des abscisses entre posSuiv et posPrec
+int ny = posSuiv.y - posPrec.y; // distance suivant l'axe des ordonnées entre posSuiv et posPrec
+
+switch (nCheckpoints%3){
+		case 0: 
+			couleurPrec = 3; //couleur rouge
+		case 1: 
+			couleurPrec = 0; //couleur noir
+		case 2: 
+			couleurPrec = 2; //couleur bleu
+	}
+
+x = posPrec.x;
+y = posPrec.y;
+
+if ( nx >= 0 && ny >= 0 ){
+	int i,j;
+	for (i=x;i++;i<=x+nx){
+		for (j=y;j++;j<=y+ny){
+			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
+				nCheckpoints ++;
+			/*if ( tabCheckpoints[i][j] == 0 && couleurPrec == 0)
+				nCheckpoints = nCheckpoints; //ne rien faire */
+			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
+				nCheckpoints --;
+			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
+				nCheckpoints ++;
+			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
+				nCheckpoints --;
+			/*if ( tabCheckpoints[i][j] == 2 && couleurPrec == 2)
+                nCheckpoints = nCheckpoints ; //ne rien faire */
+            if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
+				nCheckpoints ++;
+			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
+				nCheckpoints --;
+			/*if ( tabCheckpoints[i][j] == 3 && couleurPrec == 3)
+                nCheckpoints = nCheckpoints ; //ne rien faire*/
+
+		}
+	}
+}
+
+if ( nx < 0 && ny >= 0 ){
+	int i,j;
+	for (i=x;i--;i>=x+nx){
+		for (j=y;j++;j<=y+ny){
+			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
+				nCheckpoints ++;
+			/*if ( tabCheckpoints[i][j] == 0 && couleurPrec == 0)
+				nCheckpoints = nCheckpoints; //ne rien faire*/
+			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
+				nCheckpoints --;
+			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
+				nCheckpoints ++;
+			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
+				nCheckpoints --;
+			/*if ( tabCheckpoints[i][j] == 2 && couleurPrec == 2)
+                nCheckpoints = nCheckpoints ; //ne rien faire*/
+            if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
+				nCheckpoints ++;
+			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
+				nCheckpoints --;
+			/*if ( tabCheckpoints[i][j] == 3 && couleurPrec == 3)
+                nCheckpoints = nCheckpoints ; //ne rien faire*/
+
+		}
+	}
+}
+
+if ( nx >= 0 && ny < 0 ){
+	int i,j;
+	for (i=x;i++;i<=x+nx){
+		for (j=y;j--;j>=y+ny){
+			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
+				nCheckpoints ++;
+			/*if ( tabCheckpoints[i][j] == 0 && couleurPrec == 0)
+				nCheckpoints = nCheckpoints; //ne rien faire*/
+			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
+				nCheckpoints --;
+			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
+				nCheckpoints ++;
+			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
+				nCheckpoints --;
+			/*if ( tabCheckpoints[i][j] == 2 && couleurPrec == 2)
+                nCheckpoints = nCheckpoints ; //ne rien faire*/
+            if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
+				nCheckpoints ++;
+			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
+				nCheckpoints --;
+			/*if ( tabCheckpoints[i][j] == 3 && couleurPrec == 3)
+                nCheckpoints = nCheckpoints ; //ne rien faire*/
+			
+		}
+	}
+}
+
+if ( nx < 0 && ny < 0 ){
+	int i,j;
+	for (i=x;i--;i>=x+nx){
+		for (j=y;j--;j>=y+ny){
+			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
+				nCheckpoints ++;
+			/*if ( tabCheckpoints[i][j] == 0 && couleurPrec == 0)
+				nCheckpoints = nCheckpoints; //ne rien faire*/
+			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
+				nCheckpoints --;
+			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
+				nCheckpoints ++;
+			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
+				nCheckpoints --;
+			/*if ( tabCheckpoints[i][j] == 2 && couleurPrec == 2)
+                nCheckpoints = nCheckpoints ; //ne rien faire*/
+            if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
+				nCheckpoints ++;
+			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
+				nCheckpoints --;
+			/*if ( tabCheckpoints[i][j] == 3 && couleurPrec == 3)
+                nCheckpoints = nCheckpoints ; //ne rien faire*/
+		}
+	}
+}
+
+
+
+return nCheckpoints;
+
 }

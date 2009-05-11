@@ -5,6 +5,6 @@
 int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit);
 int lectureCouleur (char cheminImage[], SDL_Rect position,  unsigned char pixel[3]);
 int chargerMasque(int **tabMasque,int largeur, int hauteur, SDL_Surface *surface);
-
+int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit);
 #endif
  
