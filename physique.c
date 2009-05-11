@@ -33,11 +33,11 @@ int initialisationVoitures (Voiture *voiture, Partie partie, int numeroJoueur) {
 	strcpy(voiture->cheminImage,"bitmaps/car000.bmp");
 	voiture->image=NULL;
 	voiture->masse=1;
-	voiture->position.x = 1200;
+	voiture->position.x = 850;
 	if(numeroJoueur == 1)
-		voiture->position.y = 600;
+		voiture->position.y = 450;
 	else
-		voiture->position.y = 650;
+		voiture->position.y = 500;
 	initVecteur(&voiture->vitesse);
 	initVecteur(&voiture->fFrot);
 	initVecteur(&voiture->acceleration);
