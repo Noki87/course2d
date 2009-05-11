@@ -28,7 +28,6 @@ int allocationVoiture (SDL_Surface ***surface,  Voiture *voiture) {
 		}
 		SDL_SetColorKey((*surface)[i], SDL_SRCCOLORKEY, SDL_MapRGB((*surface)[i]->format, 97, 68, 43));
 	}
-	return 0;
 	voiture->tabVoiture=malloc(nbImages*sizeof(int **));
 	if(voiture->tabVoiture==NULL)return 4;
 	for(n=0;n<nbImages;n++){
@@ -38,7 +37,7 @@ int allocationVoiture (SDL_Surface ***surface,  Voiture *voiture) {
 			voiture->tabVoiture[n][i] = calloc(hauteur,sizeof(int));
 			if(voiture->tabVoiture[n][i]==NULL)return 4;
 		}
-		chargerMasque(voiture->tabVoiture, largeur,hauteur);
+		chargerMasque(voiture->tabVoiture[n], largeur,hauteur);
 	}
 	return 0;
 }
@@ -150,7 +149,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	int tempsPrecedent = 0, tempsActuel = 0, tempsDebutCourse, tempsAvantPause = 0, tempsPause = 0;
 	int nbrDeJoueurs;
 
-	SDL_Event event, tmp;
+	SDL_Event event;
 
 	Voiture * voitures;
 	Circuit circuit;
