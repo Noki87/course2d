@@ -111,6 +111,7 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	}
 	chargerMasque(circuit->tabMasque, circuit->largeurImage * circuit->nbrImageX, circuit->hauteurImage * circuit->nbrImageY, surfaceMasque);
 	//chargement du masque checkpoints
+	surfaceMasque = SDL_LoadBMP("Circuit/test_checkpoints.bmp");
 	circuit->tabCheckpoints=malloc(circuit->largeurImage*circuit->nbrImageX*sizeof(int *));
 	if(circuit->tabCheckpoints==NULL)return 4;
 	for(i=0; i < circuit->largeurImage * circuit->nbrImageX; i++) {

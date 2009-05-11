@@ -156,7 +156,7 @@ return couleurPrec;
 }*/
 
 int testerCheckpoints ( int **tabCheckpoints, int nCheckpoints, SDL_Rect posPrec, SDL_Rect posSuiv){
-	int x, y,couleurPrec,pasX,pasY,i,j,checkPrec;
+	int x, y,couleurPrec,pasX,pasY,i,j,checkPrec,n;
 	//tabCheckpoints[x][y];
 	/*retourne 0 si pixel en x,y est noir, 1 si pixel en x,y est blanc, 2 si pixel en x,y est bleu
 	3 si pixel en x,y est rouge */
@@ -171,49 +171,49 @@ int testerCheckpoints ( int **tabCheckpoints, int nCheckpoints, SDL_Rect posPrec
 			couleurPrec = 0; //couleur noir
 		case 2: 
 			couleurPrec = 2; //couleur bleue
+		default :
+			couleurPrec = 0;
 	}
 
-	x = posPrec.x;
-	y = posPrec.y;
+	x= i = posPrec.x;
+	y= j = posPrec.y;
 
 	if(nx>=0)pasX=1;
 	if(nx<0)pasX=-1;
 	if(ny>=0)pasY=1;
 	if(ny<0)pasY=-1;
-
-	i=x;
-	while(i!=x+nx){
-		j=y;
-		while(j!=y+ny){
-			switch (nCheckpoints%3){
+	n=0;
+	do{
+		switch (nCheckpoints%3){
 		case 0: 
 			couleurPrec = 3; //couleur rouge
+			break;
 		case 1: 
 			couleurPrec = 0; //couleur noir
+			break;
 		case 2: 
 			couleurPrec = 2; //couleur bleue
-			}
-			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
-				nCheckpoints ++;
-			/*if ( tabCheckpoints[i][j] == 0 && couleurPrec == 0)
-			nCheckpoints = nCheckpoints; //ne rien faire */
-			if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
-				nCheckpoints --;
-			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
-				nCheckpoints ++;
-			if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
-				nCheckpoints --;
-			/*if ( tabCheckpoints[i][j] == 2 && couleurPrec == 2)
-			nCheckpoints = nCheckpoints ; //ne rien faire */
-			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
-				nCheckpoints ++;
-			if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
-				nCheckpoints --;
-			/*if ( tabCheckpoints[i][j] == 3 && couleurPrec == 3)
-			nCheckpoints = nCheckpoints ; //ne rien faire*/
-			j+=pasY;
+			break;
 		}
-		i+=pasX;
-	}
+		if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
+			nCheckpoints ++;
+		if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
+			nCheckpoints --;
+		if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
+			nCheckpoints ++;
+		if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
+			nCheckpoints --;
+		if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
+			nCheckpoints ++;
+		if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
+			nCheckpoints --;
+		if(j!=y+ny && n==0)
+			j+=(int)(pasY);
+		if(i!=x+nx && n==1)
+			i+=(int)(pasX);
+		n++;
+		if(n==2)n=0;
+	}while(i!=x+nx || j!=y+ny);
+
 	return nCheckpoints;
 }

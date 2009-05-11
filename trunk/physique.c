@@ -66,6 +66,7 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	unsigned char pixel[3];
 	SDL_Rect pos;
 	sprintf(text,"%d",car->checkpoints);
+	//sprintf(text,"%d",circuit.tabCheckpoints[car->position.x][car->position.y]);
 	SDL_WM_SetCaption(text, NULL);
 	//Etat des touches
 	if(car->haut==1)car->fMoteur.val=2;
