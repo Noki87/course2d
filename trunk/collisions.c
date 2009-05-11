@@ -38,56 +38,6 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
 	}
 }
 
-/*int lectureCouleur (char cheminImage[], SDL_Rect position,  unsigned char pixel[3]){
-FILE *f;
-char file_type[3];
-long int file_size, reserved;
-long int bitmap_offset;
-long int header_size;
-long int width, height;
-short int planes; 
-short int bits_per_pixel; 
-long int compression ,size_bitmap, horiz_resolution, vert_resolution;
-long int colors_used, colors_important;
-long int positionPixel=0;
-
-f = fopen(cheminImage, "rb");
-file_type[2] = 0;
-
-if (fread( file_type, 2* sizeof(char),1, f) == 0) {
-perror("erreur lecture file_type");
-return 2;
-}
-if (strcmp("BM",file_type))
-return 1;
-fread( &file_size, sizeof(long int), 1, f) ;
-fread( &reserved, sizeof(long int), 1, f) ;
-fread( &bitmap_offset, sizeof(long int), 1, f); 
-fread( &header_size, sizeof(long int), 1, f) ;
-fread( &width, sizeof(long int), 1, f) ;
-fread( &height, sizeof(long int), 1, f) ;
-fread( &planes, sizeof(short int), 1, f) ;
-fread( &bits_per_pixel, sizeof(short int), 1, f);
-fread( &compression, sizeof(long int), 1, f) ;
-fread( &size_bitmap, sizeof(long int), 1, f) ;
-fread( &horiz_resolution, sizeof(long int), 1, f) ;
-fread( &vert_resolution, sizeof(long int), 1, f) ;
-fread( &colors_used, sizeof(long int), 1, f) ;
-fread( &colors_important, sizeof(long int), 1, f) ;
-
-fseek(f,bitmap_offset,SEEK_SET);
-
-
-positionPixel = bitmap_offset;
-positionPixel += 1 * ((height-position.y-1)*width + position.x);
-
-fseek(f,positionPixel,SEEK_SET);
-fread( pixel , 3 * sizeof(unsigned char), 1, f);
-
-fclose(f);
-return 0;
-}*/
-
 int chargerMasque(int **tabMasque,int largeur, int hauteur, SDL_Surface *surface){
 	unsigned char r,g,b;
 	char cheminMasque[] = "Circuit/test_masque.bmp";

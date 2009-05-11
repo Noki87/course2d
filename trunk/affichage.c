@@ -44,6 +44,14 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
 	texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
 	SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 	
+	//Affichage nombre de tour
+	positionTexte.x = 30;
+	positionTexte.y = 50;
+	
+	sprintf(phrase,"%d/%d",camera->tourActuel,camera->nbrTour);
+	texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+	SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+
 	SDL_Flip(ecran);
 	
 	TTF_CloseFont(police); // Fermeture de la police 
@@ -105,15 +113,8 @@ int affichageDecompte(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Cam
 	tempsActuel = SDL_GetTicks();
 	if(tempsActuel - *tempsPrec - tempsPause > 1000) {	//Attente d'1 seconde entre chaque affichage
 		//Affichage de la voiture et du fond
-		if(nbrDeJoueurs == 1)
-			positionnerCamera (ecran, circuit, voiture[0], camera);
-		else
-			positionnerCamera2j (ecran, circuit, voiture, camera);
-		
-		for(i=0; i<nbrDeJoueurs; i++) {
-			voiture[i].image=camera->spriteVoiture[i][(voiture[i].angle)];  
-			SDL_BlitSurface(voiture[i].image, NULL, ecran, &(camera->positionVoitures[i]));
-		}
+		affichage(ecran, voiture, circuit, camera, nbrDeJoueurs);
+
 		//Affichage du decompte
 		sprintf(phrase, "%d",*compteur);
 		texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);

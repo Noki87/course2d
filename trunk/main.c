@@ -51,9 +51,11 @@ int main(int argc, char *argv[]) {
 	
 	initialiserPartie(partie);
 	
-	gestionMenu(ecran, partie);
-	if(partie->menu == MenuJeu)
-        gestionCircuit(ecran, partie);  
+	while(partie->menu != MenuQuitter) {
+		gestionMenu(ecran, partie);
+		if(partie->menu == MenuJeu)
+			gestionCircuit(ecran, partie);  
+	}
 	
 	SDL_FreeSurface(ecran);
 	

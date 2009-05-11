@@ -18,7 +18,9 @@ typedef enum {
 	MenuFinA = 8,
 	MenuFinB = 9,
 	MenuJeu = 10,
-	MenuBateau = 15
+	
+	MenuBateau = 15, // menu qui ne sert à rien equivallent à NULL
+	MenuQuitter = 16
 } Menu;
 
 typedef struct partie{
