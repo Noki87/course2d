@@ -51,12 +51,14 @@ int chargerMasque(int **tabMasque,int largeur, int hauteur, SDL_Surface *surface
 	for(y=0;y<(hauteur);y++){
 		for(x=0;x<(largeur);x++){
 			SDL_GetRGB(getpixel(surface,x,y),surface->format, &r, &g, &b);
-			if(r==255 && g==255 && b==255)
-				tabMasque[x][y]=1;
+			if(r==255){
+				if(g==255 && b==255)
+					tabMasque[x][y]=1;
+				if(g==0 && b==0)
+					tabMasque[x][y]=3;
+			}
 			if(r==0 && g==0 && b==255)
 				tabMasque[x][y]=2;
-			if(r==255 && g==0 && b==0)
-				tabMasque[x][y]=3;
 			if(r==97 && g==68 && b==43)
 				tabMasque[x][y]=4;
 		}
@@ -67,103 +69,150 @@ int chargerMasque(int **tabMasque,int largeur, int hauteur, SDL_Surface *surface
 }
 
 int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit){
-	//char text[33];
 	unsigned char r,g,b;
 	SDL_Surface *sVoiture;
 	int collision=0;
+	int nbCol=0,nbX=0,nbY=0;
 	SDL_Rect place,placeVoiture;
 	place.x=position.x;
 	place.y=position.y;
-	//fonction qui teste l'existence de collision et renvoie 0 ou 1
-	while ( collision == 0 && place.x < (position.x+96)){
+	while (place.x < (position.x+96)){
 		place.y=position.y;
-		while ( collision == 0 && place.y < (position.y+96)){
+		while (place.y < (position.y+96)){
 			if (circuit.tabMasque[place.x][place.y]==0){
 				placeVoiture.x=place.x-position.x;
 				placeVoiture.y=place.y-position.y;
-				if (voiture->tabVoiture[voiture->angle][placeVoiture.x][placeVoiture.y]!=4)
+				if (voiture->tabVoiture[voiture->angle][placeVoiture.x][placeVoiture.y]!=4){
 					collision=1;
+					nbCol++;
+					nbX+=placeVoiture.x;
+					nbY+=placeVoiture.y;
+				}
 			}
-			place.y++;
+			place.y+=2;
 		}
-		place.x++;
+		place.x+=2;
 	}
-	//sprintf(text,"%d",placeVoiture.y);
-	//SDL_WM_SetCaption(text, NULL);
+	if(collision==1){
+		voiture->moyCol.x=nbX/nbCol;
+		voiture->moyCol.y=nbY/nbCol;
+	}
 	return collision;
 }
-/*int couleurCheckpoints_prec (int nCheckpoints){
-int couleurPrec;
-switch (nCheckpoints%3){
-case 0: 
-couleurPrec = 3; //couleur rouge
-case 1: 
-couleurPrec = 0; //couleur noir
-case 2: 
-couleurPrec = 2; //couleur bleu
-}
-return couleurPrec;
-}*/
 
-int testerCheckpoints ( int **tabCheckpoints, int nCheckpoints, SDL_Rect posPrec, SDL_Rect posSuiv){
-	int x, y,couleurPrec,pasX,pasY,i,j,checkPrec,n;
-	//tabCheckpoints[x][y];
-	/*retourne 0 si pixel en x,y est noir, 1 si pixel en x,y est blanc, 2 si pixel en x,y est bleu
-	3 si pixel en x,y est rouge */
-
+int testerCheckpoints ( int **tabCheckpoints, int nCheckpoints, SDL_Rect posPrec, Voiture *car){
+	int x, y,pasX,pasY,i,j,checkPrec,n;
+	SDL_Rect posSuiv=car->position;
 	int nx = posSuiv.x - posPrec.x; // distance suivant l'axe des abscisses entre posSuiv et posPrec
 	int ny = posSuiv.y - posPrec.y; // distance suivant l'axe des ordonnées entre posSuiv et posPrec
-
-	switch (nCheckpoints%3){
-		case 0: 
-			couleurPrec = 3; //couleur rouge
-		case 1: 
-			couleurPrec = 0; //couleur noir
-		case 2: 
-			couleurPrec = 2; //couleur bleue
-		default :
-			couleurPrec = 0;
-	}
-
+	int couleurPrec=car->couleurPrec;
+	int couleurPrecPrec=car->couleurPrecPrec;
 	x= i = posPrec.x;
 	y= j = posPrec.y;
-
 	if(nx>=0)pasX=1;
 	if(nx<0)pasX=-1;
 	if(ny>=0)pasY=1;
 	if(ny<0)pasY=-1;
 	n=0;
+	checkPrec=nCheckpoints;
 	do{
-		switch (nCheckpoints%3){
-		case 0: 
-			couleurPrec = 3; //couleur rouge
-			break;
-		case 1: 
-			couleurPrec = 0; //couleur noir
+		switch (tabCheckpoints[i][j]){
+		case 0: //on traverse un checkpoint noir
+			switch (couleurPrec){
+			case 0: 
+				switch (couleurPrecPrec){
+					case 2: 
+						nCheckpoints++;
+						couleurPrec=0;
+						couleurPrecPrec=3;
+						break;
+					case 3: 
+						nCheckpoints--;
+						couleurPrec=0;
+						couleurPrecPrec=2;
+						break;
+				}
+				break;
+			case 2: 
+				nCheckpoints--;
+				couleurPrec=0;
+				couleurPrecPrec=2;
+				break;
+			case 3: 
+				nCheckpoints++;
+				couleurPrec=0;
+				couleurPrecPrec=3;
+				break;
+			}
 			break;
 		case 2: 
-			couleurPrec = 2; //couleur bleue
+			switch (couleurPrec){
+				case 0: 
+					nCheckpoints++;
+					couleurPrec=2;
+					couleurPrecPrec=0;
+					break;
+				case 2: 
+					switch (couleurPrecPrec){
+					case 0: 
+						nCheckpoints--;
+						couleurPrec=2;
+						couleurPrecPrec=3;
+						break;
+					case 3: 
+						nCheckpoints++;
+						couleurPrec=2;
+						couleurPrecPrec=2;
+						break;
+					}
+					break;
+				case 3: 
+					nCheckpoints--;
+					couleurPrec=2;
+					couleurPrecPrec=3;
+					break;
+				}
 			break;
+		case 3: 
+			switch (couleurPrec){
+				case 0: 
+					nCheckpoints--;
+					couleurPrec=3;
+					couleurPrecPrec=0;
+					break;
+				case 2: 
+					nCheckpoints++;
+					couleurPrec=3;
+					couleurPrecPrec=2;
+					break;
+				case 3: 
+					switch (couleurPrecPrec){
+					case 0: 
+						nCheckpoints++;
+						couleurPrec=3;
+						couleurPrecPrec=2;
+						break;
+					case 2: 
+						nCheckpoints--;
+						couleurPrec=3;
+						couleurPrecPrec=0;
+						break;
+					}
+					break;
+			}
+		break;
 		}
-		if ( tabCheckpoints[i][j] == 0 && couleurPrec == 3)
-			nCheckpoints ++;
-		if ( tabCheckpoints[i][j] == 0 && couleurPrec == 2)
-			nCheckpoints --;
-		if ( tabCheckpoints[i][j] == 2 && couleurPrec == 0)
-			nCheckpoints ++;
-		if ( tabCheckpoints[i][j] == 2 && couleurPrec == 3)
-			nCheckpoints --;
-		if ( tabCheckpoints[i][j] == 3 && couleurPrec == 2)
-			nCheckpoints ++;
-		if ( tabCheckpoints[i][j] == 3 && couleurPrec == 0)
-			nCheckpoints --;
+
 		if(j!=y+ny && n==0)
 			j+=(int)(pasY);
 		if(i!=x+nx && n==1)
 			i+=(int)(pasX);
 		n++;
 		if(n==2)n=0;
-	}while(i!=x+nx || j!=y+ny);
+	}while(checkPrec==nCheckpoints && (i!=x+nx || j!=y+ny));
+
+	car->couleurPrec=couleurPrec;
+	car->couleurPrecPrec=couleurPrecPrec;
 
 	return nCheckpoints;
 }
