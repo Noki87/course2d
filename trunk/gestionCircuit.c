@@ -199,6 +199,16 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 				for(i=0; i<nbrDeJoueurs; i ++)
 					deplacer(&voitures[i],circuit,camera.spriteVoiture[i]);
 				camera.temps = tempsActuel - tempsDebutCourse - tempsPause;
+				if(nbrDeJoueurs == 2) {
+					if(abs(voitures[0].position.y - voitures[1].position.y)>=600 || abs(voitures[0].position.x - voitures[1].position.x)>=800) {
+						if(voitures[0].checkpoints < voitures[1].checkpoints) {
+							camera.points--;
+						}
+						else {
+							camera.points++;
+						}
+					}
+				}
 				if(nbrDeJoueurs == 1 && voitures[0].checkpoints == 16) {
 					camera.tourActuel++;
 					voitures[0].checkpoints = 1;
