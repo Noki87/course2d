@@ -66,7 +66,7 @@ void projeter(Vecteur *vecteur, int choix){
 }
 void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	char text[33];
-	int x,y,n;
+	int x,y,n,i,j;
 	unsigned char pixel[3];
 	SDL_Rect pos;
 	sprintf(text,"%d Prec:%d Avant;%d",car->checkpoints,car->couleurPrec,car->couleurPrecPrec);//moyCol.x,car->moyCol.y);
@@ -77,8 +77,10 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	if(car->bas==1)car->fMoteur.val=-1;
 	if(car->haut==0 && car->bas==0)car->fMoteur.val=0;
 	if(car->vitesse.val>0||car->fMoteur.val>0){
-		if(car->gauche==1)car->angleD-=car->vitesse.val/3;
-		if(car->droite==1)car->angleD+=car->vitesse.val/3;
+		if(car->gauche==1)
+			car->angleD-=car->vitesse.val/3;
+		if(car->droite==1)
+			car->angleD+=car->vitesse.val/3;
 	}
 	car->fMoteur.alpha=car->angleD;
 	projeter(&car->fMoteur,0);
@@ -86,8 +88,8 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	car->fFrot.x=-0.1*car->vitesse.x;
 	car->fFrot.y=-0.1*car->vitesse.y;
 	//Calcul de l'acceleration, principe fondamental de la dynamique
-	car->acceleration.x=((car->fMoteur.x)+(car->fFrot.x))+(car->frottements.x)/car->masse;
-	car->acceleration.y=((car->fMoteur.y)+(car->fFrot.y)+(car->frottements.y))/car->masse;
+	car->acceleration.x=((car->fMoteur.x)+(car->fFrot.x))/car->masse;
+	car->acceleration.y=((car->fMoteur.y)+(car->fFrot.y))/car->masse;
 	//Vitesse(n)=Vitesse(n-1)+AccÈlÈration(n)
 	car->vitesse.x+=car->acceleration.x;
 	car->vitesse.y+=car->acceleration.y;
@@ -97,23 +99,11 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	//Position(n)=Position(n-1)+Vitesse(n)
 	car->position.x+=(int)(car->vitesse.x);
 	car->position.y+=(int)(car->vitesse.y);
-	/*if(testerCollision(car->position,car,circuit)==1){
-		projeter(&car->vitesse,1);//passage en polaires
-		projeter(&car->acceleration,1);
-		//car->vitesse.x*=-1;
-		//car->vitesse.y*=-1;
-		car->position.x=x;
-		car->position.y=y;
-		//car->position.x+=(int)(car->vitesse.x);
-		//car->position.y+=(int)(car->vitesse.y);
-		//if(car->moyCol.y<48)car->frottements.y=20;
-	}*/
-	projeter(&car->vitesse,1);
-	n=0;
-	if(testerCollision(car->position,car,circuit)==0){
-		car->frottements.y=0;
-	}
+
+	testerCollision(car->position,car,circuit)==1;
+
 	//Conversion du vecteur vitesse en coordonnÈes polaires (norme utilisÈe pour la rotation du vÈhicule)
+	projeter(&car->vitesse,1);
 	if(car->angleD>=360)car->angleD-=360;
 	if(car->angleD<0)car->angleD+=360;
 	//Angle en degrÈ compris entre 0 et 360

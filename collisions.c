@@ -74,8 +74,13 @@ int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit){
 	int collision=0;
 	int nbCol=0,nbX=0,nbY=0;
 	SDL_Rect place,placeVoiture;
+	SDL_Rect minCol,maxCol;
 	place.x=position.x;
 	place.y=position.y;
+	minCol.x=96;
+	minCol.y=96;
+	maxCol.x=0;
+	maxCol.y=0;
 	while (place.x < (position.x+96)){
 		place.y=position.y;
 		while (place.y < (position.y+96)){
@@ -87,6 +92,10 @@ int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit){
 					nbCol++;
 					nbX+=placeVoiture.x;
 					nbY+=placeVoiture.y;
+					if(placeVoiture.x<minCol.x)minCol.x=placeVoiture.x;
+					if(placeVoiture.y<minCol.y)minCol.y=placeVoiture.y;
+					if(placeVoiture.x>maxCol.x)maxCol.x=placeVoiture.x;
+					if(placeVoiture.y>maxCol.y)maxCol.y=placeVoiture.y;
 				}
 			}
 			place.y+=2;
@@ -96,6 +105,23 @@ int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit){
 	if(collision==1){
 		voiture->moyCol.x=nbX/nbCol;
 		voiture->moyCol.y=nbY/nbCol;
+		if(voiture->moyCol.x<=(96/2)){
+			voiture->position.x+=(maxCol.x-minCol.x+2);
+		}
+		if(voiture->moyCol.x>(96/2)){
+			voiture->position.x-=(maxCol.x-minCol.x+2);
+		}
+		if(voiture->moyCol.y<=(96/2)){
+			voiture->position.y+=(maxCol.y-minCol.y+2);
+
+		}
+		if(voiture->moyCol.y>(96/2)){
+			voiture->position.y-=(maxCol.y-minCol.y+2);
+		}
+		voiture->vitesse.x=0;
+		voiture->vitesse.y=0;
+		voiture->acceleration.x=0;
+		voiture->acceleration.y=0;
 	}
 	return collision;
 }
