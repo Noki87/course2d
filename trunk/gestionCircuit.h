@@ -18,7 +18,7 @@ typedef struct vecteur{
 
 typedef struct voiture{
         SDL_Surface     *image;
-        SDL_Rect position;
+        SDL_Rect position,moyCol;
         double angleR;
         int angleD;
         int vitessemax,masse;
@@ -28,7 +28,7 @@ typedef struct voiture{
         int angle;
         char nom[20];
         char cheminImage[25];
-		int checkpoints;
+		int checkpoints,couleurPrec,couleurPrecPrec;
 		int ***tabVoiture;
 } Voiture;
 
