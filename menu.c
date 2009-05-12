@@ -201,7 +201,7 @@ void menuJouer2 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	
 	if(partie->saisieAutorisee) {
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
-		saisirTexte (event, mot, texte, police, ecran, positionTexte, couleurNoire, 20);
+		saisirTexte (event, mot, texte, police, ecran, positionTexte, couleurNoire, 20-1);
 		strcpy(partie->nomJoueur1,mot);
 	}
 
@@ -249,7 +249,7 @@ void menuJouer3 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 
 	if(partie->saisieAutorisee) {
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
-		saisirTexte (event, mot, texte, police, ecran, positionTexte, couleurNoire, 20);
+		saisirTexte (event, mot, texte, police, ecran, positionTexte, couleurNoire, 19);
 		strcpy(partie->nomJoueur2,mot);
 	}
 
@@ -512,7 +512,7 @@ void saisirToucheAfficherLettre (SDL_Event event, SDL_Surface *zone, TTF_Font *p
 	char tabLettre[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z', 'H', 'B', 'D', 'G'};
 	char lettre;
 	int i;
-	char mot[2];
+	char mot[2] = {0,0};
 
 	if(event.key.keysym.sym==SDLK_BACKSPACE) {
 		lettre=' ';
