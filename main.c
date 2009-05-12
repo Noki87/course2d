@@ -50,11 +50,12 @@ int main(int argc, char *argv[]) {
 	SDL_WM_SetCaption("Jeu de course de voitures en 2D !", NULL);
 	
 	initialiserPartie(partie);
+	initialiserTouche(&(partie->clavier));
 	
 	while(partie->menu != MenuQuitter) {
 		gestionMenu(ecran, partie);
 		if(partie->menu == MenuJeu)
-			gestionCircuit(ecran, partie);  
+			gestionCircuit(ecran, partie);
 	}
 	
 	SDL_FreeSurface(ecran);

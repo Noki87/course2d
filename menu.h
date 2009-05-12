@@ -19,9 +19,20 @@ typedef enum {
 	MenuFinB = 9,
 	MenuJeu = 10,
 	
-	MenuBateau = 15, // menu qui ne sert Ã  rien equivallent Ã  NULL
+	MenuBateau = 15, // menu qui ne sert à rien equivallent à NULL 		
 	MenuQuitter = 16
 } Menu;
+
+typedef struct touche{
+	SDLKey gJoueur1;
+	SDLKey dJoueur1;
+	SDLKey hJoueur1;
+	SDLKey bJoueur1;
+	SDLKey gJoueur2;
+	SDLKey dJoueur2;
+	SDLKey hJoueur2;
+	SDLKey bJoueur2;
+} Touche;
 
 typedef struct partie{
 	char nomJoueur1[20];
@@ -29,6 +40,7 @@ typedef struct partie{
 	int joueur2;
 	char nomJoueur2[20];
 	int voiture2;
+	Touche clavier;
 	int circuit;
 	Menu menu;
 	int saisieAutorisee;
@@ -44,13 +56,15 @@ void menuScores (SDL_Event event, Partie *partie);
 void menuAccueil(SDL_Event event, Partie *partie);
 void menuJouer1(SDL_Event event, Partie *partie);
 void menuJouer2(SDL_Surface *ecran,SDL_Event event, Partie *partie);
-void menuJouer3(SDL_Event event, Partie *partie);
+void menuJouer3(SDL_Surface *ecran, SDL_Event event, Partie *partie);
 void menuJouer4(SDL_Event event, Partie *partie);
-void menuOptions(SDL_Event event, Partie *partie);
+void menuOptions(SDL_Surface *ecran, SDL_Event event, Partie *partie);
 void menuPause(SDL_Event event, Partie *partie);
 void menuFinA(SDL_Event event, Partie *partie);
 void menuFinB(SDL_Event event, Partie *partie);
 int initialiserPartie(Partie *partie);
-void saisirTexte (SDL_Event event, char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur);
+int initialiserTouche(Touche *touche);
+void saisirTexte (SDL_Event event, char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, int longMaxMot);
+void saisirToucheAfficherLettre (SDL_Event event, SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, SDLKey *touche);
 
 #endif
