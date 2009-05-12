@@ -51,6 +51,7 @@ typedef struct  camera {
 	int temps;
 	int nbrTour;
 	int tourActuel;
+	int points;
 } Camera;
 
 

@@ -51,6 +51,17 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
 	sprintf(phrase,"%d/%d",camera->tourActuel,camera->nbrTour);
 	texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
 	SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+	
+	
+	//Affichage du nombre de points en mode multi-joueurs
+	if(nbrDeJoueurs == 2) {
+		positionTexte.x = 30;
+		positionTexte.y = 70;
+		
+		sprintf(phrase,"points : %d",camera->points);
+		texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+	}
 
 	SDL_Flip(ecran);
 	
