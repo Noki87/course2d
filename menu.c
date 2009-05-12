@@ -97,7 +97,7 @@ void gestionMenu (SDL_Surface *ecran, Partie *partie) {
 					default:
 						break;
 				}
-				if(partie->menu == MenuJeu)
+				if(partie->menu == MenuJeu || partie->menu == MenuQuitter)
 					continuer = 0;
 				break;
 			case SDL_KEYDOWN:
@@ -129,7 +129,7 @@ void menuAccueil (SDL_Event event, Partie *partie){
 	if ((event.button.x <=510)&(event.button.x >=260)&(event.button.y <=415)&(event.button.y >=355))
 		partie->menu = MenuScores;
 	if ((event.button.x <=510)&(event.button.x >=260)&(event.button.y <=512)&(event.button.y >=452))
-		SDL_Quit();
+		partie->menu = MenuQuitter;
 
 }
 
@@ -137,7 +137,7 @@ void menuScores (SDL_Event event, Partie *partie){
 	if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
 		partie->menu = MenuAccueil;
 	if ((event.button.x <=767)&(event.button.x >=635)&(event.button.y <=577)&(event.button.y >=528))
-		SDL_Quit();
+		partie->menu = MenuQuitter;
 }
 
 void menuJouer1 (SDL_Event event, Partie *partie){
@@ -152,7 +152,7 @@ void menuJouer1 (SDL_Event event, Partie *partie){
 	if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
 		partie->menu = MenuAccueil;
 	if ((event.button.x <=767)&(event.button.x >=635)&(event.button.y <=577)&(event.button.y >=528))
-		SDL_Quit();
+		partie->menu = MenuQuitter;
 }
 
 
@@ -197,7 +197,7 @@ void menuJouer2 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
 		partie->menu = MenuJouer1;
 	if ((event.button.x <=767)&(event.button.x >=635)&(event.button.y <=575)&(event.button.y >=528))
-		SDL_Quit();	
+		partie->menu = MenuQuitter;
 	
 	if(partie->saisieAutorisee) {
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
@@ -245,7 +245,7 @@ void menuJouer3 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
 		partie->menu = MenuJouer2;
 	if ((event.button.x <=767)&(event.button.x >=635)&(event.button.y <=575)&(event.button.y >=528))
-		SDL_Quit();
+		partie->menu = MenuQuitter;
 
 	if(partie->saisieAutorisee) {
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
@@ -277,7 +277,7 @@ void menuJouer4 (SDL_Event event, Partie *partie){
 			partie->menu = MenuJouer2;
 	}
 	if ((event.button.x <=767)&(event.button.x >=635)&(event.button.y <=576)&(event.button.y >=526))
-		SDL_Quit();
+		partie->menu = MenuQuitter;
 }
 
 
@@ -375,7 +375,7 @@ void menuOptions (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 			partie->menu = MenuPause;
 	}
 	if ((event.button.x <=765)&(event.button.x >=635)&(event.button.y <=576)&(event.button.y >=526))
-		SDL_Quit();
+		partie->menu = MenuQuitter;
 	
 
 	if(partie->saisieAutorisee !=0) {
@@ -429,7 +429,7 @@ void menuPause (SDL_Event event, Partie *partie){
 		partie->menu = MenuJeu;
 	}
 	if ((event.button.x <=765)&(event.button.x >=635)&(event.button.y <=576)&(event.button.y >=526))
-		SDL_Quit();
+		partie->menu = MenuQuitter;
 }
 
 void menuFinA (SDL_Event event, Partie *partie){
@@ -438,7 +438,7 @@ void menuFinA (SDL_Event event, Partie *partie){
 		partie->menu = MenuAccueil;
 	}
 	if ((event.button.x <=765)&(event.button.x >=635)&(event.button.y <=576)&(event.button.y >=526))
-		SDL_Quit();
+		partie->menu = MenuQuitter;
 }
 
 void menuFinB (SDL_Event event, Partie *partie){                              
@@ -447,7 +447,7 @@ void menuFinB (SDL_Event event, Partie *partie){
 		partie->menu = MenuAccueil;
 	}
 	if ((event.button.x <=765)&(event.button.x >=635)&(event.button.y <=576)&(event.button.y >=526))
-		SDL_Quit();
+		partie->menu = MenuQuitter;
 	
 }
 
