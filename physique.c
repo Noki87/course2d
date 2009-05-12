@@ -110,8 +110,6 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	}*/
 	projeter(&car->vitesse,1);
 	n=0;
-	}
-
 	if(testerCollision(car->position,car,circuit)==0){
 		car->frottements.y=0;
 	}
