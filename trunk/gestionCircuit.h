@@ -33,6 +33,7 @@ typedef struct voiture{
 } Voiture;
 
 typedef struct circuit {
+		char nomCircuit[10];
         int nbrImageX;
         int nbrImageY;
         int largeurImage;

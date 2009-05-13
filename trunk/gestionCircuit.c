@@ -59,6 +59,7 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	circuit->nbrImageY=2;
 	circuit->largeurImage=1500;
 	circuit->hauteurImage=1000;
+	sscanf (partie.nomsCircuits[partie.circuit],"%s",circuit->nomCircuit);
 	
 	tab=(char ***)calloc(circuit->nbrImageX,sizeof(char**)); 
 
@@ -149,8 +150,6 @@ int liberation(SDL_Surface **** sprite, SDL_Surface * fond[4], Circuit *circuit)
 	
 	return 0;
 }
- 
-
 int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	
 	int done,i,boucle, compt;

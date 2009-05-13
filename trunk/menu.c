@@ -258,14 +258,14 @@ void menuJouer3 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 
 void menuJouer4 (SDL_Event event, Partie *partie){
 	if ((event.button.x <=257)&(event.button.x >=70)&(event.button.y <=420)&(event.button.y >=242)){
-		partie->circuit=1; 
+		partie->circuit=0; 
 	partie->menu = MenuJeu;}
 	if ((event.button.x <=485)&(event.button.x >=275)&(event.button.y <=420)&(event.button.y >=242)) {
-		partie->circuit=2; 
+		partie->circuit=1; 
 		partie->menu = MenuJeu;
 	}
 	if ((event.button.x <=705)&(event.button.x >=520)&(event.button.y <=420)&(event.button.y >=242)) {
-		partie->circuit=3; 
+		partie->circuit=2; 
 		partie->menu = MenuJeu;
 	}
 	if ((event.button.x <=165)&(event.button.x >=35)&(event.button.y <=576)&(event.button.y >=526)) {
