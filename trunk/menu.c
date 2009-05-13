@@ -62,6 +62,7 @@ void gestionMenu (SDL_Surface *ecran, Partie *partie) {
 		{
 			case SDL_QUIT:
 				continuer = 0;
+				partie->menu = MenuQuitter;
 				break;
 			case SDL_MOUSEBUTTONUP:
 				switch (partie->menu) {
@@ -140,11 +141,11 @@ void menuScores (SDL_Event event, Partie *partie){
 
 void menuJouer1 (SDL_Event event, Partie *partie){
 	if ((event.button.x <=565)&(event.button.x >=250)&(event.button.y <=300)&(event.button.y >=230)) {
-		partie->joueur2=0; 
+		partie->nbrDeJoueur=1; 
 		partie->menu = MenuJouer2;
 	}
 	if ((event.button.x <=565)&(event.button.x >=250)&(event.button.y <=425)&(event.button.y >=350)) {
-		partie->joueur2=1; 
+		partie->nbrDeJoueur=2; 
 		partie->menu = MenuJouer2;
 	}
 	if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
@@ -180,14 +181,14 @@ void menuJouer2 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	
 	if ((event.button.x <=320)&(event.button.x >=180)&(event.button.y <=460)&(event.button.y >=350)) {	
 		partie->voiture1=1;
-		if (partie->joueur2==1) 
+		if (partie->nbrDeJoueur==2) 
 			partie->menu =  MenuJouer3;
 		else 
 			partie->menu = MenuJouer4;
 	}
 	if ((event.button.x <=320)&(event.button.x >=180)&(event.button.y <=460)&(event.button.y >=350)) { 
 		partie->voiture1=2;
-		if (partie->joueur2==1)
+		if (partie->nbrDeJoueur==2)
 			partie->menu = MenuJouer3;
 		else 
 			partie->menu = MenuJouer4;
@@ -269,7 +270,7 @@ void menuJouer4 (SDL_Event event, Partie *partie){
 		partie->menu = MenuJeu;
 	}
 	if ((event.button.x <=165)&(event.button.x >=35)&(event.button.y <=576)&(event.button.y >=526)) {
-		if (partie->joueur2==1) 
+		if (partie->nbrDeJoueur==2) 
 			partie->menu = MenuJouer3;
 		else 
 			partie->menu = MenuJouer2;
@@ -467,7 +468,7 @@ void menuFinB (SDL_Event event, Partie *partie){
 int initialiserPartie(Partie *partie){
 	strcpy(partie->nomJoueur1,"Joueur1");
 	partie->voiture1=1;
-	partie->joueur2=0;
+	partie->nbrDeJoueur=1;
 	strcpy(partie->nomJoueur2,"Joueur2");
 	partie->voiture2=1;
 	partie->circuit=1;

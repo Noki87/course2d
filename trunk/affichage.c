@@ -18,6 +18,7 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
 	char phrase[15];
 	
 	SDL_Color couleurBlanc = {255, 255, 255};
+	SDL_Color couleurRouge = {255, 0, 0};
 	SDL_Rect positionTexte;
 	SDL_Surface *texte;
 	TTF_Font *police = TTF_OpenFont("Prototype.ttf", 20);
@@ -55,18 +56,24 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
 	
 	//Affichage du nombre de points en mode multi-joueurs
 	if(nbrDeJoueurs == 2) {
+		police = TTF_OpenFont("Prototype.ttf", 50);
 		positionTexte.x = 30;
-		positionTexte.y = 70;
-		
-		sprintf(phrase,"points : %d",camera->points);
-		texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
-		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		positionTexte.y = 60;
+		for(i=1; i<=7; i++) {
+			sprintf(phrase,".");
+			if(i == 4 + camera->points) 
+				texte = TTF_RenderText_Blended(police, phrase, couleurRouge);
+			else
+				texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+			SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+			positionTexte.y += 10;
+		}
 	}
 
 	SDL_Flip(ecran);
 	
 	TTF_CloseFont(police); // Fermeture de la police 
-
+	SDL_FreeSurface(texte);
 }
 
 
