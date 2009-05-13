@@ -251,29 +251,29 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 			}
 			SDL_PollEvent(&event);
 			if(event.type==SDL_KEYDOWN){
-				if((event.key.keysym.sym)==SDLK_UP) voitures[0].haut=1;
-				if((event.key.keysym.sym)==SDLK_DOWN) voitures[0].bas=1;
-				if((event.key.keysym.sym)==SDLK_LEFT) voitures[0].gauche=1;
-				if((event.key.keysym.sym)==SDLK_RIGHT) voitures[0].droite=1;
+				if((event.key.keysym.sym)==partie->clavier.hJoueur1) voitures[0].haut=1;
+				if((event.key.keysym.sym)==partie->clavier.bJoueur1) voitures[0].bas=1;
+				if((event.key.keysym.sym)==partie->clavier.gJoueur1) voitures[0].gauche=1;
+				if((event.key.keysym.sym)==partie->clavier.dJoueur1) voitures[0].droite=1;
 				if(nbrDeJoueurs == 2) {
-					if((event.key.keysym.sym)==SDLK_e) voitures[1].haut=1;
-					if((event.key.keysym.sym)==SDLK_d) voitures[1].bas=1;
-					if((event.key.keysym.sym)==SDLK_s) voitures[1].gauche=1;
-					if((event.key.keysym.sym)==SDLK_f) voitures[1].droite=1;
+					if((event.key.keysym.sym)==partie->clavier.hJoueur2) voitures[1].haut=1;
+					if((event.key.keysym.sym)==partie->clavier.bJoueur2) voitures[1].bas=1;
+					if((event.key.keysym.sym)==partie->clavier.gJoueur2) voitures[1].gauche=1;
+					if((event.key.keysym.sym)==partie->clavier.dJoueur2) voitures[1].droite=1;
 				}
 				if((event.key.keysym.sym)==SDLK_ESCAPE) partie->pause = 1;
 			}
 			if(event.type==SDL_KEYUP){
-				if((event.key.keysym.sym)==SDLK_UP)voitures[0].haut=0;
-				if((event.key.keysym.sym)==SDLK_DOWN)voitures[0].bas=0;
-				if((event.key.keysym.sym)==SDLK_LEFT)voitures[0].gauche=0;
-				if((event.key.keysym.sym)==SDLK_RIGHT)voitures[0].droite=0;
+				if((event.key.keysym.sym)==partie->clavier.hJoueur1) voitures[0].haut=0;
+				if((event.key.keysym.sym)==partie->clavier.bJoueur1) voitures[0].bas=0;
+				if((event.key.keysym.sym)==partie->clavier.gJoueur1) voitures[0].gauche=0;
+				if((event.key.keysym.sym)==partie->clavier.dJoueur1) voitures[0].droite=0;
 				if((event.key.keysym.sym)==SDLK_ESCAPE) partie->pause = 0;
 				if(nbrDeJoueurs == 2) {
-					if((event.key.keysym.sym)==SDLK_e) voitures[1].haut=0;
-					if((event.key.keysym.sym)==SDLK_d) voitures[1].bas=0;
-					if((event.key.keysym.sym)==SDLK_s) voitures[1].gauche=0;
-					if((event.key.keysym.sym)==SDLK_f) voitures[1].droite=0;
+					if((event.key.keysym.sym)==partie->clavier.hJoueur2) voitures[1].haut=0;
+					if((event.key.keysym.sym)==partie->clavier.bJoueur2) voitures[1].bas=0;
+					if((event.key.keysym.sym)==partie->clavier.gJoueur2) voitures[1].gauche=0;
+					if((event.key.keysym.sym)==partie->clavier.dJoueur2) voitures[1].droite=0;
 				}
 			}
 			if(event.type==SDL_QUIT) {
