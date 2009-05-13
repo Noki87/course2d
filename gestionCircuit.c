@@ -93,6 +93,7 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	camera->nbrTour = 3;
 	camera->tourActuel = 0;
 	camera->temps = 0;
+	camera->points = 0;
 	
 	//allocation des voitures	
 	camera->spriteVoiture = malloc(nbrDeJoueurs * sizeof(SDL_Surface **));
