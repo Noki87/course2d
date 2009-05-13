@@ -3,13 +3,13 @@
 #include <string.h>
 #include <SDL/SDL.h>
 
-int lireCircuits() {
+int lireCircuits(char buffer[3][10]) {
 
    FILE *fp;
    int i;
-   char buffer[3][250];
+   
 
-   fp = fopen("Circuit.txt","r");
+   fp = fopen("Circuit/circuits.txt","r");
    if (fp==NULL) {
        fputs("erreur d'ouverture\n",stderr);
        return 0;

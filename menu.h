@@ -18,7 +18,6 @@ typedef enum {
 	MenuFinA = 8,
 	MenuFinB = 9,
 	MenuJeu = 10,
-	
 	MenuBateau = 15, // menu qui ne sert à rien equivallent à NULL 		
 	MenuQuitter = 16
 } Menu;
@@ -48,6 +47,7 @@ typedef struct partie{
 	int affichage;
 	int musique;
 	int bruitage;
+	char nomsCircuits[3][10];
 } Partie;
 
 void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu * menuPrecedent);

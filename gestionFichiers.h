@@ -6,6 +6,6 @@
 #include <SDL/SDL_ttf.h>
 #endif
 
-int lireCircuits()
+int lireCircuits(char buffer[3][10]);
 
 #endif
