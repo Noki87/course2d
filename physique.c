@@ -66,7 +66,7 @@ void projeter(Vecteur *vecteur, int choix){
 }
 void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	char text[33];
-	int x,y,n,i,j;
+	int x,y,n,i,j,k;
 	unsigned char pixel[3];
 	SDL_Rect pos;
 	sprintf(text,"%d Prec:%d Avant;%d",car->checkpoints,car->couleurPrec,car->couleurPrecPrec);//moyCol.x,car->moyCol.y);
@@ -76,11 +76,15 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	if(car->haut==1)car->fMoteur.val=2;
 	if(car->bas==1)car->fMoteur.val=-1;
 	if(car->haut==0 && car->bas==0)car->fMoteur.val=0;
-	if(car->vitesse.val>0||car->fMoteur.val>0){
+	if(car->vitesse.val!=0||car->fMoteur.val!=0){
+		if(car->fMoteur.val>0)
+			k=1;
+		else
+			k=-1;
 		if(car->gauche==1)
-			car->angleD-=car->vitesse.val/3;
+			car->angleD-=k*car->vitesse.val/3;
 		if(car->droite==1)
-			car->angleD+=car->vitesse.val/3;
+			car->angleD+=k*car->vitesse.val/3;
 	}
 	car->fMoteur.alpha=car->angleD;
 	projeter(&car->fMoteur,0);
