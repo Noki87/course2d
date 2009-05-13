@@ -40,12 +40,8 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
 
 int chargerMasque(int **tabMasque,int largeur, int hauteur, SDL_Surface *surface){
 	unsigned char r,g,b;
-	char cheminMasque[] = "Circuit/test_masque.bmp";
 	unsigned int x,y,pix;
 	SDL_Rect position;
-	//hauteur=(insigned int)(hauteur);
-	//SDL_Surface *surface;
-	//surface = SDL_LoadBMP("Circuit/test_masque.bmp");
 	SDL_LockSurface(surface);
 	x=y=0;
 	for(y=0;y<(hauteur);y++){
@@ -64,7 +60,6 @@ int chargerMasque(int **tabMasque,int largeur, int hauteur, SDL_Surface *surface
 		}
 	}
 	SDL_UnlockSurface(surface);
-	//	SDL_FreeSurface(surface);
 	return 0;
 }
 

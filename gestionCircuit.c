@@ -55,11 +55,21 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	
 	
 	//initialisation du circuit
+	if(partie.circuit==0){
+		circuit->totalCheckpoints=16;
+		circuit->nbrImageX=2;
+		circuit->nbrImageY=2;
+		circuit->largeurImage=1500;
+		circuit->hauteurImage=1000;
+	}
+	if(partie.circuit==1){
+		circuit->totalCheckpoints=10;
+		circuit->nbrImageX=2;
+		circuit->nbrImageY=2;
+		circuit->largeurImage=1024;
+		circuit->hauteurImage=768;
+	}
 
-	circuit->nbrImageX=2;
-	circuit->nbrImageY=2;
-	circuit->largeurImage=1500;
-	circuit->hauteurImage=1000;
 	sscanf (partie.nomsCircuits[partie.circuit],"%s",circuit->nomCircuit);
 	
 	tab=(char ***)calloc(circuit->nbrImageX,sizeof(char**)); 
@@ -68,19 +78,11 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 		tab[i]=(char **) calloc( circuit->nbrImageY ,sizeof(char*));
 		for(j=0;j<circuit->nbrImageY;j++) {
 			tab[i][j]=(char *) calloc( 1024 ,sizeof(char));
+			sprintf(chemin,"Circuit/%s%d%d.bmp",circuit->nomCircuit,i,j);
+			strcpy(tab[i][j],chemin);
 		}
 	}
-	sprintf(chemin,"Circuit/%s00.bmp",circuit->nomCircuit);
-	strcpy(tab[0][0],chemin);
-	sprintf(chemin,"Circuit/%s01.bmp",circuit->nomCircuit);
-	strcpy(tab[0][1],chemin);
-	sprintf(chemin,"Circuit/%s10.bmp",circuit->nomCircuit);
-	strcpy(tab[1][0],chemin);
-	sprintf(chemin,"Circuit/%s11.bmp",circuit->nomCircuit);
-	strcpy(tab[1][1],chemin);
 	circuit->image=tab;
-	
-	
 	
 	//initialisation camera
 	for (i=0; i<4; i++)
@@ -215,7 +217,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 						}
 					}
 				}
-				if(nbrDeJoueurs == 1 && voitures[0].checkpoints == 16) {
+				if(nbrDeJoueurs == 1 && voitures[0].checkpoints == circuit.totalCheckpoints) {
 					camera.tourActuel++;
 					voitures[0].checkpoints = 1;
 				}

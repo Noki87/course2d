@@ -41,6 +41,7 @@ typedef struct circuit {
         char ***image;
 		int **tabMasque;
 		int **tabCheckpoints;
+		int totalCheckpoints;
 } Circuit;
 
 typedef struct  camera {
