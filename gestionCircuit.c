@@ -47,6 +47,7 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	int i,j;
 	char *** tab;	
 	SDL_Surface *surfaceMasque;
+	char chemin[30];
 	
 	//initialisation des voitures 
 	for (i=0; i<nbrDeJoueurs; i++) 
@@ -69,10 +70,14 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 			tab[i][j]=(char *) calloc( 1024 ,sizeof(char));
 		}
 	}
-	strcpy(tab[0][0],"Circuit/test00.bmp");
-	strcpy(tab[0][1],"Circuit/test01.bmp");
-	strcpy(tab[1][0],"Circuit/test10.bmp");
-	strcpy(tab[1][1],"Circuit/test11.bmp");
+	sprintf(chemin,"Circuit/%s00.bmp",circuit->nomCircuit);
+	strcpy(tab[0][0],chemin);
+	sprintf(chemin,"Circuit/%s01.bmp",circuit->nomCircuit);
+	strcpy(tab[0][1],chemin);
+	sprintf(chemin,"Circuit/%s10.bmp",circuit->nomCircuit);
+	strcpy(tab[1][0],chemin);
+	sprintf(chemin,"Circuit/%s11.bmp",circuit->nomCircuit);
+	strcpy(tab[1][1],chemin);
 	circuit->image=tab;
 	
 	
@@ -105,8 +110,8 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	}
 
 	//chargement du masque
-	
-	surfaceMasque = SDL_LoadBMP("Circuit/test_masque.bmp");
+	sprintf(chemin,"Circuit/%s_masque.bmp",circuit->nomCircuit);
+	surfaceMasque = SDL_LoadBMP(chemin);
 
 	circuit->tabMasque=malloc(circuit->largeurImage*circuit->nbrImageX*sizeof(int *));
 	if(circuit->tabMasque==NULL)return 4;
@@ -116,7 +121,8 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	}
 	chargerMasque(circuit->tabMasque, circuit->largeurImage * circuit->nbrImageX, circuit->hauteurImage * circuit->nbrImageY, surfaceMasque);
 	//chargement du masque checkpoints
-	surfaceMasque = SDL_LoadBMP("Circuit/test_checkpoints.bmp");
+	sprintf(chemin,"Circuit/%s_checkpoints.bmp",circuit->nomCircuit);
+	surfaceMasque = SDL_LoadBMP(chemin);
 	circuit->tabCheckpoints=malloc(circuit->largeurImage*circuit->nbrImageX*sizeof(int *));
 	if(circuit->tabCheckpoints==NULL)return 4;
 	for(i=0; i < circuit->largeurImage * circuit->nbrImageX; i++) {
