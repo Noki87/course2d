@@ -15,7 +15,7 @@
 void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *camera, int nbrDeJoueurs){
 	
 	int i;
-	char phrase[10];
+	char phrase[15];
 	
 	SDL_Color couleurBlanc = {255, 255, 255};
 	SDL_Rect positionTexte;
