@@ -165,25 +165,112 @@ int liberation(SDL_Surface **** sprite, SDL_Surface * fond[4], Circuit *circuit)
 	
 	return 0;
 }
+
+void repositionnerVoitures (int voitureEnTete, Voiture * voitures) {
+	voitures[0].position = voitures[voitureEnTete].position;
+	voitures[1].position = voitures[voitureEnTete].position;
+	voitures[0].checkpoints = voitures[voitureEnTete].checkpoints;
+	voitures[1].checkpoints = voitures[voitureEnTete].checkpoints;
+}
+
+void gestion2j (Voiture * voitures, Camera * camera, int *compt, Partie * partie, int *done) {
+	if(abs(voitures[0].position.y - voitures[1].position.y)>=600 || abs(voitures[0].position.x - voitures[1].position.x)>=800) {
+		if(voitures[0].checkpoints < voitures[1].checkpoints) {
+			camera->points--;
+			repositionnerVoitures(1, voitures);
+		}
+		else {
+			camera->points++;
+			repositionnerVoitures(0, voitures);
+		}
+		*compt = 2;
+	}
+	if(abs(camera->points) == 3) {
+		partie->menu = MenuFinA;
+		*done = 1;
+	}
+}
+
+void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *partie, int *done) {
+	if(voitures[0].checkpoints == circuit.totalCheckpoints) {
+		camera->tourActuel++;
+		voitures[0].checkpoints = 1;
+	}
+	if(camera->tourActuel == camera->nbrTour) {
+		*done = 1;
+		partie->menu =MenuFinA;
+	}
+}
+
+void gestionPause(SDL_Event *event, Partie *partie, SDL_Surface * ecran, int *done, int *tempsPause) {
+	int boucle, tempsAvantPause;
+	
+	tempsAvantPause = SDL_GetTicks();
+	boucle = 1;
+	while (boucle) {
+		SDL_PollEvent(event);
+		if(event->type == SDL_KEYUP && event->key.keysym.sym == SDLK_ESCAPE)
+			boucle= 0;
+	}
+	partie->menu = MenuPause;				
+	gestionMenu (ecran, partie);
+	if(partie->menu == MenuQuitter) {
+		*done =1;
+	}
+	*tempsPause += SDL_GetTicks() - tempsAvantPause;
+	
+}
+
+
+void gestionEvent(SDL_Event event, Voiture * voitures, Partie *partie, int nbrDeJoueurs, int *done) {
+	if(event.type==SDL_KEYDOWN){
+		if((event.key.keysym.sym)==partie->clavier.hJoueur1) voitures[0].haut=1;
+		if((event.key.keysym.sym)==partie->clavier.bJoueur1) voitures[0].bas=1;
+		if((event.key.keysym.sym)==partie->clavier.gJoueur1) voitures[0].gauche=1;
+		if((event.key.keysym.sym)==partie->clavier.dJoueur1) voitures[0].droite=1;
+		if(nbrDeJoueurs == 2) {
+			if((event.key.keysym.sym)==partie->clavier.hJoueur2) voitures[1].haut=1;
+			if((event.key.keysym.sym)==partie->clavier.bJoueur2) voitures[1].bas=1;
+			if((event.key.keysym.sym)==partie->clavier.gJoueur2) voitures[1].gauche=1;
+			if((event.key.keysym.sym)==partie->clavier.dJoueur2) voitures[1].droite=1;
+		}
+		if((event.key.keysym.sym)==SDLK_ESCAPE) partie->pause = 1;
+	}
+	if(event.type==SDL_KEYUP){
+		if((event.key.keysym.sym)==partie->clavier.hJoueur1) voitures[0].haut=0;
+		if((event.key.keysym.sym)==partie->clavier.bJoueur1) voitures[0].bas=0;
+		if((event.key.keysym.sym)==partie->clavier.gJoueur1) voitures[0].gauche=0;
+		if((event.key.keysym.sym)==partie->clavier.dJoueur1) voitures[0].droite=0;
+		if((event.key.keysym.sym)==SDLK_ESCAPE) partie->pause = 0;
+		if(nbrDeJoueurs == 2) {
+			if((event.key.keysym.sym)==partie->clavier.hJoueur2) voitures[1].haut=0;
+			if((event.key.keysym.sym)==partie->clavier.bJoueur2) voitures[1].bas=0;
+			if((event.key.keysym.sym)==partie->clavier.gJoueur2) voitures[1].gauche=0;
+			if((event.key.keysym.sym)==partie->clavier.dJoueur2) voitures[1].droite=0;
+		}
+	}
+	if(event.type==SDL_QUIT) {
+		partie->menu = MenuQuitter;
+		*done = 1;
+	}		
+	
+}
+
 int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	
-	int done,i,boucle, compt;
-	int tempsPrecedent = 0, tempsActuel = 0, tempsDebutCourse, tempsAvantPause = 0, tempsPause = 0;
+	int done,i, compt;
+	int tempsPrecedent = 0, tempsActuel = 0, tempsDebutCourse, tempsPause = 0;
 	int nbrDeJoueurs;
 
 	SDL_Event event;
 
-	
 	Voiture * voitures;
 	Circuit circuit;
 	Camera camera;
 	
 	
-	if(partie->joueur2 == 0)
-		nbrDeJoueurs = 1;
-	else
-		nbrDeJoueurs = 2;
-	
+	nbrDeJoueurs = partie->nbrDeJoueur;
+
 	
 
 	voitures = malloc(nbrDeJoueurs * sizeof(Voiture));
@@ -194,9 +281,6 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 	if(initialisation(&camera, voitures, &circuit, nbrDeJoueurs, *partie)==1){
 		return 4;
 	}
-	
-	
-
 	
 	tempsDebutCourse = SDL_GetTicks();
 	compt = 3;
@@ -214,73 +298,17 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 				for(i=0; i<nbrDeJoueurs; i ++)
 					deplacer(&voitures[i],circuit,camera.spriteVoiture[i]);
 				camera.temps = tempsActuel - tempsDebutCourse - tempsPause;
-				if(nbrDeJoueurs == 2) {
-					if(abs(voitures[0].position.y - voitures[1].position.y)>=600 || abs(voitures[0].position.x - voitures[1].position.x)>=800) {
-						if(voitures[0].checkpoints < voitures[1].checkpoints) {
-							camera.points--;
-						}
-						else {
-							camera.points++;
-						}
-					}
-				}
-				if(nbrDeJoueurs == 1 && voitures[0].checkpoints == circuit.totalCheckpoints) {
-					camera.tourActuel++;
-					voitures[0].checkpoints = 1;
-				}
-				if(camera.tourActuel == camera.nbrTour) {
-					done = 1;
-					partie->menu =MenuFinA;
-				}
+				if(nbrDeJoueurs == 1)
+					gestion1j (voitures, &camera, circuit, partie, &done);
+				else
+					gestion2j(voitures, &camera, &compt, partie, &done);
 				affichage(ecran,voitures,circuit,&camera,nbrDeJoueurs);
 			}
-			if(partie->pause == 1) {
-				tempsAvantPause = SDL_GetTicks();
-				boucle = 1;
-				while (boucle) {
-					SDL_PollEvent(&event);
-					if(event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_ESCAPE)
-					   boucle= 0;
-				}
-				partie->menu = MenuPause;				
-				gestionMenu (ecran, partie);
-				if(partie->menu == MenuQuitter) {
-					done =1;
-				}
-				tempsPause += SDL_GetTicks() - tempsAvantPause;
-			}
-			SDL_PollEvent(&event);
-			if(event.type==SDL_KEYDOWN){
-				if((event.key.keysym.sym)==partie->clavier.hJoueur1) voitures[0].haut=1;
-				if((event.key.keysym.sym)==partie->clavier.bJoueur1) voitures[0].bas=1;
-				if((event.key.keysym.sym)==partie->clavier.gJoueur1) voitures[0].gauche=1;
-				if((event.key.keysym.sym)==partie->clavier.dJoueur1) voitures[0].droite=1;
-				if(nbrDeJoueurs == 2) {
-					if((event.key.keysym.sym)==partie->clavier.hJoueur2) voitures[1].haut=1;
-					if((event.key.keysym.sym)==partie->clavier.bJoueur2) voitures[1].bas=1;
-					if((event.key.keysym.sym)==partie->clavier.gJoueur2) voitures[1].gauche=1;
-					if((event.key.keysym.sym)==partie->clavier.dJoueur2) voitures[1].droite=1;
-				}
-				if((event.key.keysym.sym)==SDLK_ESCAPE) partie->pause = 1;
-			}
-			if(event.type==SDL_KEYUP){
-				if((event.key.keysym.sym)==partie->clavier.hJoueur1) voitures[0].haut=0;
-				if((event.key.keysym.sym)==partie->clavier.bJoueur1) voitures[0].bas=0;
-				if((event.key.keysym.sym)==partie->clavier.gJoueur1) voitures[0].gauche=0;
-				if((event.key.keysym.sym)==partie->clavier.dJoueur1) voitures[0].droite=0;
-				if((event.key.keysym.sym)==SDLK_ESCAPE) partie->pause = 0;
-				if(nbrDeJoueurs == 2) {
-					if((event.key.keysym.sym)==partie->clavier.hJoueur2) voitures[1].haut=0;
-					if((event.key.keysym.sym)==partie->clavier.bJoueur2) voitures[1].bas=0;
-					if((event.key.keysym.sym)==partie->clavier.gJoueur2) voitures[1].gauche=0;
-					if((event.key.keysym.sym)==partie->clavier.dJoueur2) voitures[1].droite=0;
-				}
-			}
-			if(event.type==SDL_QUIT) {
-				partie->menu = MenuQuitter;
-				done = 1;
-			}	
+			if(partie->pause == 1)
+				gestionPause(&event, partie, ecran, &done, &tempsPause);
 			
+			SDL_PollEvent(&event);
+			gestionEvent(event, voitures, partie, nbrDeJoueurs, &done);
 		}
 		else // Si ça fait moins de 30ms depuis le dernier tour de boucle, on endort le programme le temps qu'il faut
 		{

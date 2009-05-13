@@ -36,7 +36,7 @@ typedef struct touche{
 typedef struct partie{
 	char nomJoueur1[20];
 	int voiture1;
-	int joueur2;
+	int nbrDeJoueur;
 	char nomJoueur2[20];
 	int voiture2;
 	Touche clavier;
