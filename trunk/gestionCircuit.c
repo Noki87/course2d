@@ -47,7 +47,7 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	int i,j;
 	char *** tab;	
 	SDL_Surface *surfaceMasque;
-	char chemin[30];
+	char chemin[50];
 	
 	//initialisation des voitures 
 	for (i=0; i<nbrDeJoueurs; i++) 
@@ -63,6 +63,13 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 		circuit->hauteurImage=1000;
 	}
 	if(partie.circuit==1){
+		circuit->totalCheckpoints=10;
+		circuit->nbrImageX=2;
+		circuit->nbrImageY=2;
+		circuit->largeurImage=1024;
+		circuit->hauteurImage=768;
+	}
+	if(partie.circuit==2){
 		circuit->totalCheckpoints=10;
 		circuit->nbrImageX=2;
 		circuit->nbrImageY=2;
