@@ -20,6 +20,8 @@ int main(int argc, char *argv[]) {
 	
 	partie=malloc(sizeof(Partie));
 	
+	//lecture du fichiers texte
+	lireCircuits(partie->nomsCircuits);
 	
 	
 	// Initialize the SDL library

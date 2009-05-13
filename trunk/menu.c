@@ -42,8 +42,6 @@ void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu *
 	SDL_FreeSurface(imageDeFond);
 
 }
- 
-
 void gestionMenu (SDL_Surface *ecran, Partie *partie) {
 	int continuer = 1;
 	SDL_Event event;
