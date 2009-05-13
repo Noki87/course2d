@@ -379,35 +379,50 @@ void menuOptions (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	if(partie->saisieAutorisee !=0) {
 		switch(partie->saisieAutorisee)
 		{
-		case 1: SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		case 1: positionTexte.x = 254;
+				positionTexte.y = 364;
+				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 				saisirToucheAfficherLettre(event, texte, police, ecran, positionTexte, couleurNoire, &(partie->clavier.hJoueur1));
 				break;
 			   
-		case 2: SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		case 2: positionTexte.x = 204;
+				positionTexte.y = 414;
+				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 				saisirToucheAfficherLettre(event, texte, police, ecran, positionTexte, couleurNoire, &(partie->clavier.gJoueur1));
 				break;
 			   
-		case 3: SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		case 3: positionTexte.x = 299;
+				positionTexte.y = 414;
+				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 				saisirToucheAfficherLettre(event, texte, police, ecran, positionTexte, couleurNoire, &(partie->clavier.dJoueur1));
 				break;
 				   
-		case 4: SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		case 4: positionTexte.x = 254;
+				positionTexte.y = 459;			
+				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 				saisirToucheAfficherLettre(event, texte, police, ecran, positionTexte, couleurNoire, &(partie->clavier.bJoueur1));
 				break;
 			   
-		case 5: SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		case 5: positionTexte.x = 499;
+				positionTexte.y = 364;
+				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 				saisirToucheAfficherLettre(event, texte, police, ecran, positionTexte, couleurNoire, &(partie->clavier.hJoueur2));
 				break;
 			   
-		case 6: SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		case 6: positionTexte.x = 449;
+				positionTexte.y = 414;
+				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 				saisirToucheAfficherLettre(event, texte, police, ecran, positionTexte, couleurNoire, &(partie->clavier.gJoueur2));
 				break;
 			   
-		case 7: SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		case 7: positionTexte.x = 549;
+				positionTexte.y = 414;SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 				saisirToucheAfficherLettre(event, texte, police, ecran, positionTexte, couleurNoire, &(partie->clavier.dJoueur2));
 				break;
 			   
-		case 8: SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		case 8: positionTexte.x = 499;
+				positionTexte.y = 459;
+				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 				saisirToucheAfficherLettre(event, texte, police, ecran, positionTexte, couleurNoire, &(partie->clavier.bJoueur2));
 				break;
 			   
