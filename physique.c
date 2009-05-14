@@ -25,7 +25,7 @@ Vecteur somme(Vecteur a,Vecteur b,Vecteur c){
 	c.y=a.y+b.y;
 	return c;
 }
-int initialisationVoitures (Voiture *voiture, Partie partie, int numeroJoueur) {
+int initialisationVoitures (Voiture *voiture, Partie partie, Circuit *circuit, int numeroJoueur) {
 	if (numeroJoueur == 1)
 		strcpy(voiture->nom, partie.nomJoueur1);
 	else
@@ -33,11 +33,15 @@ int initialisationVoitures (Voiture *voiture, Partie partie, int numeroJoueur) {
 	strcpy(voiture->cheminImage,"bitmaps/car000.bmp");
 	voiture->image=NULL;
 	voiture->masse=1;
-	voiture->position.x = 850;
-	if(numeroJoueur == 1)
-		voiture->position.y = 450;
-	else
-		voiture->position.y = 500;
+	
+	if(numeroJoueur == 1){
+		voiture->position.x = circuit->posDepart1.x;
+		voiture->position.y = circuit->posDepart1.y;
+	}
+	else{
+		voiture->position.x = circuit->posDepart2.x;
+		voiture->position.y = circuit->posDepart2.y;
+	}
 	initVecteur(&voiture->vitesse);
 	initVecteur(&voiture->fFrot);
 	initVecteur(&voiture->acceleration);
@@ -77,7 +81,7 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	if(car->bas==1)car->fMoteur.val=-1;
 	if(car->haut==0 && car->bas==0)car->fMoteur.val=0;
 	if(car->vitesse.val!=0||car->fMoteur.val!=0){
-		if(car->fMoteur.val>0)
+		if(car->fMoteur.val>0||(car->fMoteur.val==0&&car->vitesse.val>0))
 			k=1;
 		else
 			k=-1;
