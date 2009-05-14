@@ -19,7 +19,12 @@
 
 void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu * menuPrecedent) {
 	char fond[50];
+	int i;
 	SDL_Surface *imageDeFond = NULL;
+	SDL_Surface *circuit1 = NULL;
+	SDL_Surface *circuit2 = NULL;
+	SDL_Surface *circuit3 = NULL;
+	SDL_Rect positionMini;
 	char *tabMenu[] = {
 		"menuAccueil", //0
 		"menuScores",  //1
@@ -33,9 +38,19 @@ void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu *
 		"menuFinB",    //9
 	};
 	if(partie.menu != *menuPrecedent) {
+
 		sprintf(fond, "bitmaps/%s.bmp", tabMenu[partie.menu]);
 		imageDeFond = SDL_LoadBMP(fond);
-		SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);	
+		SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
+		if(partie.menu==MenuJouer4){
+			for(i=0;i<3;i++){
+				sprintf(fond, "Circuit/%s_mini.bmp", partie.nomsCircuits[i]);
+				imageDeFond = SDL_LoadBMP(fond);
+				positionMini.x=75+227*i;
+				positionMini.y=260;
+				SDL_BlitSurface(imageDeFond, NULL, ecran, &positionMini);
+			}
+		}	
 		SDL_Flip(ecran);
 		*menuPrecedent = partie.menu;
 	}
@@ -383,6 +398,8 @@ void menuOptions (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 		case 1: positionTexte.x = 254;
 				positionTexte.y = 364;
 				SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+				positionTexte.x = 254;
+				positionTexte.y = 364;
 				saisirToucheAfficherLettre(event, texte, police, ecran, positionTexte, couleurNoire, &(partie->clavier.hJoueur1));
 				break;
 			   
