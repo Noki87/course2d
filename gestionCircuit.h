@@ -42,6 +42,9 @@ typedef struct circuit {
 		int **tabMasque;
 		int **tabCheckpoints;
 		int totalCheckpoints;
+		SDL_Rect posDepart1;
+		SDL_Rect posDepart2;
+		int nbTours;
 } Circuit;
 
 typedef struct  camera {

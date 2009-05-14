@@ -9,6 +9,7 @@
 #endif
 #include "menu.h"
 #include "gestionCircuit.h"
+#include "gestionFichiers.h"
 #include "physique.h"
 #include "affichage.h"
 
@@ -53,9 +54,8 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	for (i=0; i<nbrDeJoueurs; i++) 
 		initialisationVoitures (&voitures[i], partie, i+1);
 	
-	
-	//initialisation du circuit
-	if(partie.circuit==0){
+
+	/*if(partie.circuit==0){
 		circuit->totalCheckpoints=16;
 		circuit->nbrImageX=2;
 		circuit->nbrImageY=2;
@@ -75,10 +75,14 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 		circuit->nbrImageY=2;
 		circuit->largeurImage=1024;
 		circuit->hauteurImage=768;
-	}
+	}*/
+
 
 	sscanf (partie.nomsCircuits[partie.circuit],"%s",circuit->nomCircuit);
-	
+	//initialisation du circuit
+	lireVariables(circuit);
+
+
 	tab=(char ***)calloc(circuit->nbrImageX,sizeof(char**)); 
 
 	for(i=0;i<circuit->nbrImageX;i++)  {
