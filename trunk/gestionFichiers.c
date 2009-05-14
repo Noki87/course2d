@@ -17,7 +17,7 @@ int lireCircuits(char buffer[3][10]) {
 	}
 	else {
 		for (i = 0; i < 3; i++) {
-			fgets(buffer[i],sizeof(buffer[i]),fp);
+			fscanf (fp, "%s", &buffer[i]);
 		}
 	}
 	fclose(fp);
@@ -44,6 +44,7 @@ int lireVariables(Circuit *circuit){
 	fscanf (file, "%d", &circuit->largeurImage);
 	fscanf (file, "%d", &circuit->hauteurImage);
 	fscanf (file, "%d", &circuit->totalCheckpoints);
+	circuit->totalCheckpoints++;
 	fscanf (file, "%d", &circuit->posDepart1.x);
 	fscanf (file, "%d", &circuit->posDepart1.y);
 	fscanf (file, "%d", &circuit->posDepart2.x);
