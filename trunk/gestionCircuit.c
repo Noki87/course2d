@@ -50,39 +50,14 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	SDL_Surface *surfaceMasque;
 	char chemin[50];
 	
-	//initialisation des voitures 
-	for (i=0; i<nbrDeJoueurs; i++) 
-		initialisationVoitures (&voitures[i], partie, i+1);
-	
-
-	/*if(partie.circuit==0){
-		circuit->totalCheckpoints=16;
-		circuit->nbrImageX=2;
-		circuit->nbrImageY=2;
-		circuit->largeurImage=1500;
-		circuit->hauteurImage=1000;
-	}
-	if(partie.circuit==1){
-		circuit->totalCheckpoints=10;
-		circuit->nbrImageX=2;
-		circuit->nbrImageY=2;
-		circuit->largeurImage=1024;
-		circuit->hauteurImage=768;
-	}
-	if(partie.circuit==2){
-		circuit->totalCheckpoints=10;
-		circuit->nbrImageX=2;
-		circuit->nbrImageY=2;
-		circuit->largeurImage=1024;
-		circuit->hauteurImage=768;
-	}*/
-
-
 	sscanf (partie.nomsCircuits[partie.circuit],"%s",circuit->nomCircuit);
 	//initialisation du circuit
 	lireVariables(circuit);
 
-
+	//initialisation des voitures 
+	for (i=0; i<nbrDeJoueurs; i++) 
+		initialisationVoitures (&voitures[i], partie, circuit, i+1);
+	
 	tab=(char ***)calloc(circuit->nbrImageX,sizeof(char**)); 
 
 	for(i=0;i<circuit->nbrImageX;i++)  {
@@ -109,7 +84,7 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	}
 	camera->coin[0] =  camera->coin[1] = 1;
 	camera->coinprec[0] = camera->coinprec[1] = 0;
-	camera->nbrTour = 3;
+	camera->nbrTour = circuit->nbTours;
 	camera->tourActuel = 0;
 	camera->temps = 0;
 	camera->points = 0;
@@ -122,10 +97,9 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 		allocationVoiture(&(camera->spriteVoiture[i]), &voitures[i]);
 	}
 
-	//chargement du masque
+	//chargement du masque collisions
 	sprintf(chemin,"Circuit/%s_masque.bmp",circuit->nomCircuit);
 	surfaceMasque = SDL_LoadBMP(chemin);
-
 	circuit->tabMasque=malloc(circuit->largeurImage*circuit->nbrImageX*sizeof(int *));
 	if(circuit->tabMasque==NULL)return 4;
 	for(i=0; i< circuit->largeurImage * circuit->nbrImageX; i++) {
