@@ -5,7 +5,9 @@
 #else
 #include <SDL/SDL_ttf.h>
 #endif
+#include "gestionCircuit.h"
 
 int lireCircuits(char buffer[3][10]);
+int lireVariables(Circuit *circuit);
 
 #endif
