@@ -15,7 +15,7 @@
 void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *camera, int nbrDeJoueurs){
 	
 	int i;
-	char phrase[15];
+	char phrase[30];
 	
 	SDL_Color couleurBlanc = {255, 255, 255};
 	SDL_Color couleurRouge = {255, 0, 0};
@@ -46,19 +46,32 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
 	SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 	
 	//Affichage nombre de tour
-	positionTexte.x = 30;
-	positionTexte.y = 50;
+	if(nbrDeJoueurs == 1) {
+		positionTexte.x = 30;
+		positionTexte.y = 50;
 	
-	sprintf(phrase,"%d/%d",camera->tourActuel,camera->nbrTour);
-	texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
-	SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
-	
+		sprintf(phrase,"%d/%d",camera->tourActuel,camera->nbrTour);
+		texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+	}
 	
 	//Affichage du nombre de points en mode multi-joueurs
 	if(nbrDeJoueurs == 2) {
-		police = TTF_OpenFont("Prototype.ttf", 50);
+		TTF_CloseFont(police);
+		police = TTF_OpenFont("Prototype.ttf", 14);
+		
 		positionTexte.x = 30;
-		positionTexte.y = 60;
+		positionTexte.y = 90;
+		sprintf(phrase,"J 1");
+		texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		
+		positionTexte.x = 33;
+		positionTexte.y = 70;
+		TTF_CloseFont(police);
+		police = TTF_OpenFont("Prototype.ttf", 50);
+
+		
 		for(i=1; i<=7; i++) {
 			sprintf(phrase,".");
 			if(i == 4 + camera->points) 
@@ -68,6 +81,14 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
 			SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 			positionTexte.y += 10;
 		}
+		
+		positionTexte.x = 30;
+		positionTexte.y = 180;
+		TTF_CloseFont(police);
+		police = TTF_OpenFont("Prototype.ttf", 14);
+		sprintf(phrase,"J 2");
+		texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 	}
 
 	SDL_Flip(ecran);
@@ -115,7 +136,6 @@ int ecranChargement (SDL_Surface * ecran) {
 }
 
 int affichageDecompte(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *camera, int nbrDeJoueurs, int *compteur, int *tempsPrec, int tempsPause) {	
-	int i;
 	int tempsActuel = 0;
 	char phrase[10];
 	
