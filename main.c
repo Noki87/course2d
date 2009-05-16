@@ -10,12 +10,15 @@
 #endif
 #include "menu.h"
 #include "gestionCircuit.h"
+#include "gestionFichiers.h"
+
 
 int main(int argc, char *argv[]) {
 	Uint32 initflags = SDL_INIT_VIDEO;  //See documentation for details
 	SDL_Surface *ecran;
 	Partie *partie;
-	
+	Scores *scores;
+
 	Uint8  video_bpp = 32;
 	Uint32 videoflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
 	
@@ -54,9 +57,10 @@ int main(int argc, char *argv[]) {
 	
 	initialiserPartie(partie);
 	initialiserTouche(&(partie->clavier));
-	
+	initialiserScores(scores);
+
 	while(partie->menu != MenuQuitter) {
-		gestionMenu(ecran, partie);
+		gestionMenu(ecran, partie, scores);
 		if(partie->menu == MenuJeu)
 			gestionCircuit(ecran, partie);
 	}

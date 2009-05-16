@@ -82,11 +82,10 @@ int lireScores(Partie *partie, Scores *scores) {
 } 
 
 int insererScore(Partie *partie, Scores *scores) {
-	int i=4;
-	int aux;
+	int i=3;
 	FILE *fp;
 
-	while (partie->timer < scores->temps[i]){
+	while ((partie->timer < scores->temps[i])&&(i>-1)){
 		scores->temps[i+1]= scores->temps[i];
 		strcpy(scores->nomJoueur1[i+1],scores->nomJoueur1[i]);
 		i--;

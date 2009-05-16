@@ -180,17 +180,17 @@ void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *par
 	}
 	if(camera->tourActuel == camera->nbrTour) {
 		*done = 1;
-		lireScores(&partie, &scores);
+		lireScores(partie, scores);
 		if (scores->temps[5]<partie->timer) 
 		partie->menu =MenuFinB;
 		else{
-			insererScore(&partie, &scores);
+			insererScore(partie, scores);
 			partie->menu =MenuFinA;
 		}
 	}
 }
 
-void gestionPause(SDL_Event *event, Partie *partie, SDL_Surface * ecran, int *done, int *tempsPause) {
+void gestionPause(SDL_Event *event, Partie *partie, SDL_Surface * ecran, int *done, int *tempsPause, Scores *scores) {
 	int boucle, tempsAvantPause;
 	
 	tempsAvantPause = SDL_GetTicks();
@@ -201,7 +201,7 @@ void gestionPause(SDL_Event *event, Partie *partie, SDL_Surface * ecran, int *do
 			boucle= 0;
 	}
 	partie->menu = MenuPause;				
-	gestionMenu (ecran, partie);
+	gestionMenu (ecran, partie, scores);
 	if(partie->menu != MenuJeu) {
 		*done =1;
 	}
@@ -244,15 +244,13 @@ void gestionEvent(SDL_Event event, Voiture * voitures, Partie *partie, int nbrDe
 	
 }
 
-int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
+int gestionCircuit( SDL_Surface *ecran, Partie *partie, Scores *scores) {
 	
 	int done,i, compt;
 	int tempsPrecedent = 0, tempsActuel = 0, tempsDebutCourse, tempsPause = 0;
 	int nbrDeJoueurs;
 
 	SDL_Event event;
-
-	Scores *scores;
 
 	Voiture * voitures;
 	Circuit circuit;
@@ -289,13 +287,13 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 					deplacer(&voitures[i],circuit,camera.spriteVoiture[i]);
 				camera.temps = tempsActuel - tempsDebutCourse - tempsPause;
 				if(nbrDeJoueurs == 1)
-					gestion1j (voitures, &camera, circuit, partie, &done, scores);
+					gestion1j (voitures, &camera, circuit, partie, &done, &scores);
 				else
 					gestion2j(voitures, &camera, &compt, partie, &done);
 				affichage(ecran,voitures,circuit,&camera,nbrDeJoueurs);
 			}
 			if(partie->pause == 1)
-				gestionPause(&event, partie, ecran, &done, &tempsPause);
+				gestionPause(&event, partie, ecran, &done, &tempsPause, scores);
 			
 			SDL_PollEvent(&event);
 			gestionEvent(event, voitures, partie, nbrDeJoueurs, &done);
