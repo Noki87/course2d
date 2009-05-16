@@ -18,7 +18,7 @@ typedef enum {
 	MenuFinA = 8,
 	MenuFinB = 9,
 	MenuJeu = 10,
-	MenuBateau = 15, // menu qui ne sert à rien equivallent à NULL 		
+	MenuBateau = 15, // menu qui ne sert â€¡ rien equivallent â€¡ NULL 		
 	MenuQuitter = 16
 } Menu;
 
@@ -64,7 +64,7 @@ void menuFinA(SDL_Event event, Partie *partie);
 void menuFinB(SDL_Event event, Partie *partie);
 int initialiserPartie(Partie *partie);
 int initialiserTouche(Touche *touche);
-void saisirTexte (SDL_Event event, char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, int longMaxMot);
-void saisirToucheAfficherLettre (SDL_Event event, SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, SDLKey *touche);
+void saisirTexte (SDL_Event event, char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, int longMaxMot, int numeroSaisie, int saisieAutorisee);
+void saisirToucheAfficherLettre (SDL_Event event, SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, SDLKey *touche, int numeroSaisie, int saisieAutorisee);
 
 #endif

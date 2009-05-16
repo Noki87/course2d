@@ -149,16 +149,20 @@ void repositionnerVoitures (int voitureEnTete, Voiture * voitures) {
 	voitures[1].position = voitures[voitureEnTete].position;
 	voitures[0].checkpoints = voitures[voitureEnTete].checkpoints;
 	voitures[1].checkpoints = voitures[voitureEnTete].checkpoints;
+	voitures[0].couleurPrec = voitures[voitureEnTete].couleurPrec;
+	voitures[1].couleurPrec = voitures[voitureEnTete].couleurPrec;
+	voitures[0].couleurPrecPrec = voitures[voitureEnTete].couleurPrecPrec;
+	voitures[1].couleurPrecPrec = voitures[voitureEnTete].couleurPrecPrec;
 }
 
 void gestion2j (Voiture * voitures, Camera * camera, int *compt, Partie * partie, int *done) {
-	if(abs(voitures[0].position.y - voitures[1].position.y)>=600 || abs(voitures[0].position.x - voitures[1].position.x)>=800) {
+	if(abs(voitures[0].position.y - voitures[1].position.y)>=560 || abs(voitures[0].position.x - voitures[1].position.x)>=760) {
 		if(voitures[0].checkpoints < voitures[1].checkpoints) {
-			camera->points--;
+			camera->points++;
 			repositionnerVoitures(1, voitures);
 		}
 		else {
-			camera->points++;
+			camera->points--;
 			repositionnerVoitures(0, voitures);
 		}
 		*compt = 2;
@@ -192,7 +196,7 @@ void gestionPause(SDL_Event *event, Partie *partie, SDL_Surface * ecran, int *do
 	}
 	partie->menu = MenuPause;				
 	gestionMenu (ecran, partie);
-	if(partie->menu == MenuQuitter) {
+	if(partie->menu != MenuJeu) {
 		*done =1;
 	}
 	*tempsPause += SDL_GetTicks() - tempsAvantPause;
