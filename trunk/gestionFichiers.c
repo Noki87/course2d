@@ -53,3 +53,65 @@ int lireVariables(Circuit *circuit){
 
 	return EXIT_SUCCESS;
 }
+
+int lireScores(Partie *partie, Scores *scores) {
+
+	FILE *fp;
+	int i;
+
+	if (partie->circuit==0)
+	fp = fopen("Circuit/scores0.txt","r");
+
+	if (partie->circuit==1)
+	fp = fopen("Circuit/scores1.txt","r");
+	
+	if (partie->circuit==2)
+	fp = fopen("Circuit/scores2.txt","r");
+
+	if (fp==NULL) {
+		fputs("erreur d'ouverture\n",stderr);
+		return 0;
+	}
+	else {
+		for (i = 0; i < 5; i++)
+			fscanf (fp, "%s%d", scores->nomJoueur1[i], scores->temps[i]);
+	}
+	fclose(fp);
+
+	return EXIT_SUCCESS;
+} 
+
+int insererScore(Partie *partie, Scores *scores) {
+	int i=4;
+	int aux;
+	FILE *fp;
+
+	while (partie->timer < scores->temps[i]){
+		scores->temps[i+1]= scores->temps[i];
+		strcpy(scores->nomJoueur1[i+1],scores->nomJoueur1[i]);
+		i--;
+	}
+	scores->temps[i+1]=partie->timer;
+	strcpy(scores->nomJoueur1[i+1],partie->nomJoueur1);
+
+	if (partie->circuit==0)
+	fp = fopen("Circuit/scores0.txt","w");
+
+	if (partie->circuit==1)
+	fp = fopen("Circuit/scores1.txt","w");
+	
+	if (partie->circuit==2)
+	fp = fopen("Circuit/scores2.txt","w");
+
+	if (fp==NULL) {
+		fputs("erreur d'ouverture\n",stderr);
+		return 0;
+	}
+	else {
+		for (i = 0; i < 5; i++)
+			fprintf (fp, "%s%d", scores->nomJoueur1[i], scores->temps[i]);
+	}
+	fclose(fp);
+
+	return EXIT_SUCCESS;
+} 
