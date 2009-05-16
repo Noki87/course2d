@@ -173,14 +173,20 @@ void gestion2j (Voiture * voitures, Camera * camera, int *compt, Partie * partie
 	}
 }
 
-void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *partie, int *done) {
+void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *partie, int *done, Scores *scores) {
 	if(voitures[0].checkpoints == circuit.totalCheckpoints) {
 		camera->tourActuel++;
 		voitures[0].checkpoints = 1;
 	}
 	if(camera->tourActuel == camera->nbrTour) {
 		*done = 1;
-		partie->menu =MenuFinA;
+		lireScores(&partie, &scores);
+		if (scores->temps[5]<partie->timer) 
+		partie->menu =MenuFinB;
+		else{
+			insererScore(&partie, &scores);
+			partie->menu =MenuFinA;
+		}
 	}
 }
 
@@ -246,6 +252,8 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 
 	SDL_Event event;
 
+	Scores *scores;
+
 	Voiture * voitures;
 	Circuit circuit;
 	Camera camera;
@@ -281,7 +289,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie) {
 					deplacer(&voitures[i],circuit,camera.spriteVoiture[i]);
 				camera.temps = tempsActuel - tempsDebutCourse - tempsPause;
 				if(nbrDeJoueurs == 1)
-					gestion1j (voitures, &camera, circuit, partie, &done);
+					gestion1j (voitures, &camera, circuit, partie, &done, &scores);
 				else
 					gestion2j(voitures, &camera, &compt, partie, &done);
 				affichage(ecran,voitures,circuit,&camera,nbrDeJoueurs);

@@ -9,5 +9,9 @@
 
 int lireCircuits(char buffer[3][10]);
 int lireVariables(Circuit *circuit);
+int lireScores(Partie *partie, Scores *scores);
+int insererScore(Partie *partie, Scores *scores);
 
 #endif
+
+

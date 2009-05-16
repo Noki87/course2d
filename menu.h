@@ -47,8 +47,14 @@ typedef struct partie{
 	int affichage;
 	int musique;
 	int bruitage;
+	int timer;
 	char nomsCircuits[3][10];
 } Partie;
+
+typedef struct scores{
+	char nomJoueur1[5][20];
+	int temps[5];
+} Scores;
 
 void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu * menuPrecedent);
 void gestionMenu (SDL_Surface *ecran, Partie *partie);
