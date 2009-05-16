@@ -46,7 +46,6 @@ typedef struct partie{
 	int pause;
 	int affichage;
 	int musique;
-	int bruitage;
 	int timer;
 	char nomsCircuits[3][10];
 } Partie;
@@ -57,8 +56,8 @@ typedef struct scores{
 } Scores;
 
 void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu * menuPrecedent);
-void gestionMenu (SDL_Surface *ecran, Partie *partie);
-void menuScores (SDL_Event event, Partie *partie);
+void gestionMenu (SDL_Surface *ecran, Partie *partie, Scores *scores);
+void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *scores);
 void menuAccueil(SDL_Event event, Partie *partie);
 void menuJouer1(SDL_Event event, Partie *partie);
 void menuJouer2(SDL_Surface *ecran,SDL_Event event, Partie *partie);
@@ -70,6 +69,7 @@ void menuFinA(SDL_Event event, Partie *partie);
 void menuFinB(SDL_Event event, Partie *partie);
 int initialiserPartie(Partie *partie);
 int initialiserTouche(Touche *touche);
+int initialiserScores(Scores *scores);
 void saisirTexte (SDL_Event event, char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, int longMaxMot, int numeroSaisie, int saisieAutorisee);
 void saisirToucheAfficherLettre (SDL_Event event, SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, SDLKey *touche, int numeroSaisie, int saisieAutorisee);
 

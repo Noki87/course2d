@@ -9,7 +9,6 @@
 #endif
 #include "menu.h"
 #include "gestionCircuit.h"
-
 #define NB_LIGNES 2
 #define NB_COLONNES 26
 
@@ -52,6 +51,7 @@ void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu *
 				SDL_BlitSurface(imageDeFond, NULL, ecran, &positionMini);
 			}
 		}
+		 SDL_WaitEvent(&event);
 		if(partie.menu==MenuOptions)
 			menuOptions(ecran, event, &partie);
 		if(partie.menu==MenuJouer3)
@@ -64,7 +64,7 @@ void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu *
 	SDL_FreeSurface(imageDeFond);
 
 }
-void gestionMenu (SDL_Surface *ecran, Partie *partie) {
+void gestionMenu (SDL_Surface *ecran, Partie *partie, Scores *scores) {
 	int continuer = 1;
 	SDL_Event event;
 	
@@ -93,6 +93,9 @@ void gestionMenu (SDL_Surface *ecran, Partie *partie) {
 				switch (partie->menu) {
 					case MenuAccueil:
 						menuAccueil(event, partie);
+						break;
+					case MenuScores:
+						menuScores(ecran, event, partie, scores);
 						break;
 					case MenuJouer1:
 						menuJouer1(event, partie);
@@ -142,11 +145,49 @@ void menuAccueil (SDL_Event event, Partie *partie){
 
 }
 
-void menuScores (SDL_Event event, Partie *partie){
+void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *scores){
+	int i;
+	char mot[20];
+	TTF_Font *police = NULL;
+	SDL_Color couleurNoire = {0, 0, 0};
+	
+	SDL_Surface *texte = NULL;
+	SDL_Rect positionTexte;
+
+	police = TTF_OpenFont("Prototype.ttf", 18);
+	texte = SDL_CreateRGBSurface(SDL_HWSURFACE, 230, 30, 32, 0, 0, 0, 0);
+	
+	lireScores(partie, &scores);
+
+	positionTexte.x = 200;
+	positionTexte.y = 200;
+
+	for (i=0; i<5;i++){
+		strcpy(mot,"%s",scores->nomJoueur1[i]);
+		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		SDL_Flip(ecran);
+		positionTexte.y += 40;
+	}
+
+	positionTexte.x = 200;
+	positionTexte.x = 470;
+
+	for (i=0; i<5;i++){
+		strcpy(mot,"%s",scores->temps[i]);
+		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		SDL_Flip(ecran);
+		positionTexte.y += 40;
+	}	
+
 	if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
 		partie->menu = MenuAccueil;
 	if ((event.button.x <=767)&(event.button.x >=635)&(event.button.y <=577)&(event.button.y >=528))
 		partie->menu = MenuQuitter;
+
+	TTF_CloseFont(police); // Fermeture de la police 
+	SDL_FreeSurface(texte);
 }
 
 void menuJouer1 (SDL_Event event, Partie *partie){
@@ -302,10 +343,6 @@ void menuOptions (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 		partie->musique=1;
 	if ((event.button.x <=357)&(event.button.x >=317)&(event.button.y <=253)&(event.button.y >=217))
 		partie->musique=0;
-	if ((event.button.x <=490)&(event.button.x >=570)&(event.button.y <=253)&(event.button.y >=217))
-		partie->bruitage=0;
-	if ((event.button.x <=600)&(event.button.x >=640)&(event.button.y <=253)&(event.button.y >=217))
-		partie->bruitage=1;
 	
 
 	if ((event.button.x <=290)&(event.button.x >=250)&(event.button.y <=400)&(event.button.y >=360))
@@ -419,7 +456,6 @@ int initialiserPartie(Partie *partie){
 	partie->pause=0;
 	partie->affichage=0;
 	partie->musique=0;
-	partie->bruitage=0;
 	return 0;
 }
 
@@ -432,6 +468,14 @@ int initialiserTouche(Touche *touche){
 	touche->dJoueur2 = SDLK_d;
 	touche->hJoueur2 = SDLK_z;
 	touche->bJoueur2 = SDLK_s;
+	return 0;
+}
+int initialiserScores(Scores *scores){
+	int i;
+	for (i=0; i<5; i++){
+		strcpy(scores->nomJoueur1[i],"J");
+		scores->temps[i]=1;
+	}
 	return 0;
 }
 void saisirTexte (SDL_Event event, char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, int longMaxMot, int numeroSaisie, int saisieAutorisee){
