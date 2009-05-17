@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
 	Uint8  video_bpp = 32;
 	Uint32 videoflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
 	
+	scores=malloc(sizeof(Scores));
 	partie=malloc(sizeof(Partie));
 	
 	//lecture du fichiers texte

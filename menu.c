@@ -157,6 +157,13 @@ void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *sc
 	police = TTF_OpenFont("Prototype.ttf", 18);
 	texte = SDL_CreateRGBSurface(SDL_HWSURFACE, 230, 30, 32, 0, 0, 0, 0);
 	
+	if ((event.button.x <=130)&(event.button.x >=25)&(event.button.y <=260)&(event.button.y >=178))
+		partie->circuit = 0;
+	if ((event.button.x <=134)&(event.button.x >=29)&(event.button.y <=365)&(event.button.y >=280))
+		partie->circuit = 1;
+	if ((event.button.x <=133)&(event.button.x >=28)&(event.button.y <=475)&(event.button.y >=385))
+		partie->circuit = 2;
+
 	lireScores(partie, &scores);
 
 	positionTexte.x = 200;
