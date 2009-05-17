@@ -74,7 +74,7 @@ int lireScores(Partie *partie, Scores *scores) {
 	}
 	else {
 		for (i = 0; i < 5; i++)
-			fscanf (fp, "%s%d", scores->nomJoueur1[i], scores->temps[i]);
+ 			fscanf (fp, "%s %d", &scores->nomJoueur1[i], &scores->temps[i]);
 	}
 	fclose(fp);
 
