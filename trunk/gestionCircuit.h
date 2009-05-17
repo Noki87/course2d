@@ -60,6 +60,6 @@ typedef struct  camera {
 } Camera;
 
 
-int gestionCircuit( SDL_Surface *ecran, Partie *partie) ;
+int gestionCircuit( SDL_Surface *ecran, Partie *partie, Scores *scores);
 
 #endif

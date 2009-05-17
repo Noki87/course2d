@@ -189,7 +189,6 @@ void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *sc
 		strcpy(mot,scores->nomJoueur1[i]);
 		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
-		SDL_Flip(ecran);
 		positionTexte.y += 40;
 	}
 
@@ -200,10 +199,12 @@ void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *sc
 		sprintf(mot,"%d",scores->temps[i]);
 		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
-		SDL_Flip(ecran);
 		positionTexte.y += 40;
 	}	
 
+	SDL_Flip(ecran);
+
+	
 	if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
 		partie->menu = MenuAccueil;
 	if ((event.button.x <=767)&(event.button.x >=635)&(event.button.y <=577)&(event.button.y >=528))
