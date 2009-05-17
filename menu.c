@@ -51,7 +51,7 @@ void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu *
 				SDL_BlitSurface(imageDeFond, NULL, ecran, &positionMini);
 			}
 		}
-		 SDL_WaitEvent(&event);
+		 SDL_PollEvent(&event);
 		if(partie.menu==MenuOptions)
 			menuOptions(ecran, event, &partie);
 		if(partie.menu==MenuJouer3)
@@ -196,7 +196,7 @@ void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *sc
 	positionTexte.x = 470;
 
 	for (i=0; i<5;i++){
-		sprintf(mot,"%d",scores->temps[i]);
+		sprintf(mot, "%d:%02d:%02d",scores->temps[i]/60000,scores->temps[i]/1000 % 60, scores->temps[i]/10 % 100);
 		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 		positionTexte.y += 40;
@@ -503,7 +503,7 @@ int initialiserScores(Scores *scores){
 	int i;
 	for (i=0; i<5; i++){
 		strcpy(scores->nomJoueur1[i],"J");
-		scores->temps[i]=1;
+		scores->temps[i]=1111111111;
 	}
 	return 0;
 }
@@ -564,7 +564,7 @@ void saisirToucheAfficherLettre (SDL_Event event, SDL_Surface *zone, TTF_Font *p
 			lettre=' ';
 		}
 		else {
-			for (i=0; i<30; i++){
+			for (i=0; i<34; i++){
 				if(event.key.keysym.sym==tabKey[i]){
 					lettre=tabLettre[i];
 					mot[0]=lettre;
@@ -574,7 +574,7 @@ void saisirToucheAfficherLettre (SDL_Event event, SDL_Surface *zone, TTF_Font *p
 		}
 	}
 	else {
-		for (i=0; i<30; i++){
+		for (i=0; i<34; i++){
 			if(*touche==tabKey[i]){
 				lettre=tabLettre[i];
 				mot[0]=lettre;

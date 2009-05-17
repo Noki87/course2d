@@ -182,7 +182,7 @@ void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *par
 		*done = 1;
 		partie->timer=camera->temps;
 		lireScores(partie, scores);
-		if (scores->temps[4] > partie->timer) 
+		if (scores->temps[4] < partie->timer) 
 			partie->menu =MenuFinB;
 		else{
 			insererScore(partie, scores);
