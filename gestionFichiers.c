@@ -108,7 +108,7 @@ int insererScore(Partie *partie, Scores *scores) {
 	}
 	else {
 		for (i = 0; i < 5; i++)
-			fprintf (fp, "%s%d", scores->nomJoueur1[i], scores->temps[i]);
+			fprintf (fp, "%s %d\n", scores->nomJoueur1[i], scores->temps[i]);
 	}
 	fclose(fp);
 

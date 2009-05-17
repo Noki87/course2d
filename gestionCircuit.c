@@ -180,10 +180,10 @@ void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *par
 	}
 	if(camera->tourActuel == camera->nbrTour) {
 		*done = 1;
-		partie->timer=(camera->temps)/1000;
+		partie->timer=camera->temps;
 		lireScores(partie, scores);
-		if (scores->temps[5]<partie->timer) 
-		partie->menu =MenuFinB;
+		if (scores->temps[4] > partie->timer) 
+			partie->menu =MenuFinB;
 		else{
 			insererScore(partie, scores);
 			partie->menu =MenuFinA;
@@ -288,7 +288,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie, Scores *scores) {
 					deplacer(&voitures[i],circuit,camera.spriteVoiture[i]);
 				camera.temps = tempsActuel - tempsDebutCourse - tempsPause;
 				if(nbrDeJoueurs == 1)
-					gestion1j (voitures, &camera, circuit, partie, &done, &scores);
+					gestion1j (voitures, &camera, circuit, partie, &done, scores);
 				else
 					gestion2j(voitures, &camera, &compt, partie, &done);
 				affichage(ecran,voitures,circuit,&camera,nbrDeJoueurs);
