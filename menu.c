@@ -151,37 +151,53 @@ void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *sc
 	TTF_Font *police = NULL;
 	SDL_Color couleurNoire = {0, 0, 0};
 	
-	SDL_Surface *texte = NULL;
+	SDL_Surface *texte = NULL, *rectangle = NULL;
 	SDL_Rect positionTexte;
 
 	police = TTF_OpenFont("Prototype.ttf", 18);
 	texte = SDL_CreateRGBSurface(SDL_HWSURFACE, 230, 30, 32, 0, 0, 0, 0);
+	rectangle = SDL_CreateRGBSurface(SDL_HWSURFACE, 400, 200, 32, 0, 0, 0, 0);
 	
-	if ((event.button.x <=130)&(event.button.x >=25)&(event.button.y <=260)&(event.button.y >=178))
-		partie->circuit = 0;
-	if ((event.button.x <=134)&(event.button.x >=29)&(event.button.y <=365)&(event.button.y >=280))
-		partie->circuit = 1;
-	if ((event.button.x <=133)&(event.button.x >=28)&(event.button.y <=475)&(event.button.y >=385))
-		partie->circuit = 2;
+	positionTexte.y = 200;
+	positionTexte.x = 200;
 
-	lireScores(partie, &scores);
+	if ((event.button.x <=130)&(event.button.x >=25)&(event.button.y <=260)&(event.button.y >=178)){
+		partie->circuit = 0;
+		SDL_FillRect(rectangle, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
+		SDL_BlitSurface(rectangle, NULL, ecran, &positionTexte); 
+		SDL_Flip(ecran);
+	}
+	if ((event.button.x <=134)&(event.button.x >=29)&(event.button.y <=365)&(event.button.y >=280)){
+		partie->circuit = 1;
+		SDL_FillRect(rectangle, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
+		SDL_BlitSurface(rectangle, NULL, ecran, &positionTexte); 
+		SDL_Flip(ecran);
+	}
+	if ((event.button.x <=133)&(event.button.x >=28)&(event.button.y <=475)&(event.button.y >=385)){
+		partie->circuit = 2;
+		SDL_FillRect(rectangle, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
+		SDL_BlitSurface(rectangle, NULL, ecran, &positionTexte); 
+		SDL_Flip(ecran);
+	}
+
+	lireScores(partie, scores);
 
 	positionTexte.x = 200;
 	positionTexte.y = 200;
 
 	for (i=0; i<5;i++){
-		strcpy(mot,"%s",scores->nomJoueur1[i]);
+		strcpy(mot,scores->nomJoueur1[i]);
 		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 		SDL_Flip(ecran);
 		positionTexte.y += 40;
 	}
 
-	positionTexte.x = 200;
+	positionTexte.y = 200;
 	positionTexte.x = 470;
 
 	for (i=0; i<5;i++){
-		strcpy(mot,"%s",scores->temps[i]);
+		sprintf(mot,"%d",scores->temps[i]);
 		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 		SDL_Flip(ecran);
@@ -195,6 +211,7 @@ void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *sc
 
 	TTF_CloseFont(police); // Fermeture de la police 
 	SDL_FreeSurface(texte);
+	SDL_FreeSurface(rectangle);
 }
 
 void menuJouer1 (SDL_Event event, Partie *partie){
@@ -237,7 +254,7 @@ void menuJouer2 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 		else 
 			partie->menu = MenuJouer4;
 	}
-	if ((event.button.x <=320)&(event.button.x >=180)&(event.button.y <=460)&(event.button.y >=350)) { 
+	if ((event.button.x <=530)&(event.button.x >=390)&(event.button.y <=460)&(event.button.y >=350)) { 
 		partie->voiture1=2;
 		if (partie->nbrDeJoueur==2)
 			partie->menu = MenuJouer3;
@@ -281,12 +298,16 @@ void menuJouer3 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	}
 
 	if ((event.button.x <=320)&(event.button.x >=180)&(event.button.y <=460)&(event.button.y >=350)) {
+		if (partie->voiture1!=1){
 		partie->voiture2=1; 
 		partie->menu = MenuJouer4;
+		}
 	}
-	if ((event.button.x <=320)&(event.button.x >=180)&(event.button.y <=460)&(event.button.y >=350)) {
+	if ((event.button.x <=530)&(event.button.x >=390)&(event.button.y <=460)&(event.button.y >=350)) {
+		if (partie->voiture1!=2){
 		partie->voiture2=2;
 		partie->menu = MenuJouer4;
+		}
 	}
 	if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
 		partie->menu = MenuJouer2;
@@ -452,10 +473,10 @@ void menuFinB (SDL_Event event, Partie *partie){
 }
 
 int initialiserPartie(Partie *partie){
-	strcpy(partie->nomJoueur1,"Joueur1");
+	strcpy(partie->nomJoueur1,"joueur1");
 	partie->voiture1=1;
 	partie->nbrDeJoueur=1;
-	strcpy(partie->nomJoueur2,"Joueur2");
+	strcpy(partie->nomJoueur2,"joueur2");
 	partie->voiture2=1;
 	partie->circuit=1;
 	partie->menu=MenuAccueil;
@@ -487,8 +508,8 @@ int initialiserScores(Scores *scores){
 }
 void saisirTexte (SDL_Event event, char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, int longMaxMot, int numeroSaisie, int saisieAutorisee){
 	
-	SDLKey tabKey[]= {SDLK_a, SDLK_b, SDLK_c, SDLK_d, SDLK_e, SDLK_f, SDLK_g, SDLK_h, SDLK_i, SDLK_j, SDLK_k, SDLK_l, SDLK_m, SDLK_n, SDLK_o, SDLK_p, SDLK_q, SDLK_r, SDLK_s, SDLK_t, SDLK_u, SDLK_v, SDLK_w, SDLK_x, SDLK_y, SDLK_z, SDLK_UP, SDLK_DOWN, SDLK_RIGHT, SDLK_LEFT};
-	char tabLettre[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z', 'H', 'B', 'D', 'G'};
+	SDLKey tabKey[]= {SDLK_a, SDLK_b, SDLK_c, SDLK_d, SDLK_e, SDLK_f, SDLK_g, SDLK_h, SDLK_i, SDLK_j, SDLK_k, SDLK_l, SDLK_m, SDLK_n, SDLK_o, SDLK_p, SDLK_q, SDLK_r, SDLK_s, SDLK_t, SDLK_u, SDLK_v, SDLK_w, SDLK_x, SDLK_y, SDLK_z, SDLK_0, SDLK_1, SDLK_2, SDLK_3};
+	char tabLettre[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3'};
 	char touche;
 	int i;
 	
@@ -523,8 +544,8 @@ void saisirTexte (SDL_Event event, char mot[], SDL_Surface *zone, TTF_Font *poli
 
 void saisirToucheAfficherLettre (SDL_Event event, SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, SDLKey *touche, int numeroSaisie, int saisieAutorisee){
 	
-	SDLKey tabKey[]= {SDLK_a, SDLK_b, SDLK_c, SDLK_d, SDLK_e, SDLK_f, SDLK_g, SDLK_h, SDLK_i, SDLK_j, SDLK_k, SDLK_l, SDLK_m, SDLK_n, SDLK_o, SDLK_p, SDLK_q, SDLK_r, SDLK_s, SDLK_t, SDLK_u, SDLK_v, SDLK_w, SDLK_x, SDLK_y, SDLK_z, SDLK_UP, SDLK_DOWN, SDLK_RIGHT, SDLK_LEFT};
-	char tabLettre[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z', 'H', 'B', 'D', 'G'};
+	SDLKey tabKey[]= {SDLK_a, SDLK_b, SDLK_c, SDLK_d, SDLK_e, SDLK_f, SDLK_g, SDLK_h, SDLK_i, SDLK_j, SDLK_k, SDLK_l, SDLK_m, SDLK_n, SDLK_o, SDLK_p, SDLK_q, SDLK_r, SDLK_s, SDLK_t, SDLK_u, SDLK_v, SDLK_w, SDLK_x, SDLK_y, SDLK_z, SDLK_0, SDLK_1, SDLK_2, SDLK_3, SDLK_UP, SDLK_DOWN, SDLK_RIGHT, SDLK_LEFT};
+	char tabLettre[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3', 'H', 'B', 'D', 'G'};
 	char lettre;
 	int i;
 	char mot[2] = {0,0};

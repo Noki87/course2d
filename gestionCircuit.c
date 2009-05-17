@@ -180,6 +180,7 @@ void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *par
 	}
 	if(camera->tourActuel == camera->nbrTour) {
 		*done = 1;
+		partie->timer=(camera->temps)/1000;
 		lireScores(partie, scores);
 		if (scores->temps[5]<partie->timer) 
 		partie->menu =MenuFinB;
