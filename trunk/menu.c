@@ -581,7 +581,7 @@ int initialiserScores(Scores *scores){
 void saisirTexte (SDL_Event event, char mot[], SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, int longMaxMot, int numeroSaisie, int saisieAutorisee){
 	
 	SDLKey tabKey[]= {SDLK_a, SDLK_b, SDLK_c, SDLK_d, SDLK_e, SDLK_f, SDLK_g, SDLK_h, SDLK_i, SDLK_j, SDLK_k, SDLK_l, SDLK_m, SDLK_n, SDLK_o, SDLK_p, SDLK_q, SDLK_r, SDLK_s, SDLK_t, SDLK_u, SDLK_v, SDLK_w, SDLK_x, SDLK_y, SDLK_z, SDLK_0, SDLK_1, SDLK_2, SDLK_3};
-	char tabLettre[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3'};
+	char tabLettre[] = {'q','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','a','r','s','t','u','v','z','x','y','w','0','1','2','3'};
 	char touche;
 	int i;
 	
@@ -617,7 +617,7 @@ void saisirTexte (SDL_Event event, char mot[], SDL_Surface *zone, TTF_Font *poli
 void saisirToucheAfficherLettre (SDL_Event event, SDL_Surface *zone, TTF_Font *police, SDL_Surface *ecran, SDL_Rect position, SDL_Color couleur, SDLKey *touche, int numeroSaisie, int saisieAutorisee){
 	
 	SDLKey tabKey[]= {SDLK_a, SDLK_b, SDLK_c, SDLK_d, SDLK_e, SDLK_f, SDLK_g, SDLK_h, SDLK_i, SDLK_j, SDLK_k, SDLK_l, SDLK_m, SDLK_n, SDLK_o, SDLK_p, SDLK_q, SDLK_r, SDLK_s, SDLK_t, SDLK_u, SDLK_v, SDLK_w, SDLK_x, SDLK_y, SDLK_z, SDLK_0, SDLK_1, SDLK_2, SDLK_3, SDLK_UP, SDLK_DOWN, SDLK_RIGHT, SDLK_LEFT};
-	char tabLettre[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3', 'H', 'B', 'D', 'G'};
+	char tabLettre[] = {'q','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','a','r','s','t','u','v','z','x','y','w','0','1','2','3', 'H', 'B', 'D', 'G'};
 	char lettre;
 	int i;
 	char mot[2] = {0,0};
