@@ -116,10 +116,10 @@ void gestionMenu (SDL_Surface *ecran, Partie *partie, Scores *scores) {
 						menuPause(event, partie);
 						break;
 					case MenuFinA:
-						menuFinA(event, partie);
+						menuFinA(event, partie, ecran, scores);
 						break;
 					case MenuFinB:
-						menuFinB(event, partie);
+						menuFinB(event, partie, ecran, scores);
 						break;
 					default:
 						break;
@@ -454,16 +454,85 @@ void menuPause (SDL_Event event, Partie *partie){
 		partie->menu = MenuJouer4;
 }
 
-void menuFinA (SDL_Event event, Partie *partie){
+void menuFinA (SDL_Event event, Partie *partie, SDL_Surface *ecran, Scores *scores){
+	int i;
+	char mot[20];
+	TTF_Font *police = NULL;
+	SDL_Color couleurNoire = {0, 0, 0};
+	
+	SDL_Surface *texte = NULL;
+	SDL_Rect positionTexte;
+
+	police = TTF_OpenFont("Prototype.ttf", 18);
+	texte = SDL_CreateRGBSurface(SDL_HWSURFACE, 230, 30, 32, 0, 0, 0, 0);
+	
+	positionTexte.y = 260;
+	positionTexte.x = 45;
+
+	for (i=0; i<5;i++){
+		strcpy(mot,scores->nomJoueur1[i]);
+		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		positionTexte.y += 40;
+	}
+
+	positionTexte.y = 200;
+	positionTexte.x = 470;
+
+	for (i=0; i<5;i++){
+		sprintf(mot, "%d:%02d:%02d",scores->temps[i]/60000,scores->temps[i]/1000 % 60, scores->temps[i]/10 % 100);
+		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		positionTexte.y += 40;
+	}
+
+	SDL_Flip(ecran);
+	
 	if ((event.button.x <=282)&(event.button.x >=26)&(event.button.y <=576)&(event.button.y >=526)) {
 		initialiserPartie(partie); 
 		partie->menu = MenuAccueil;
 	}
 	if ((event.button.x <=765)&(event.button.x >=635)&(event.button.y <=576)&(event.button.y >=526))
 		partie->menu = MenuQuitter;
+
+	TTF_CloseFont(police); // Fermeture de la police 
+	SDL_FreeSurface(texte);
 }
 
-void menuFinB (SDL_Event event, Partie *partie){                              
+void menuFinB (SDL_Event event, Partie *partie, SDL_Surface *ecran, Scores *scores){                              
+	int i;
+	char mot[20];
+	TTF_Font *police = NULL;
+	SDL_Color couleurNoire = {0, 0, 0};
+	
+	SDL_Surface *texte = NULL;
+	SDL_Rect positionTexte;
+
+	police = TTF_OpenFont("Prototype.ttf", 18);
+	texte = SDL_CreateRGBSurface(SDL_HWSURFACE, 230, 30, 32, 0, 0, 0, 0);
+	
+	positionTexte.y = 260;
+	positionTexte.x = 45;
+
+	for (i=0; i<5;i++){
+		strcpy(mot,scores->nomJoueur1[i]);
+		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		positionTexte.y += 40;
+	}
+
+	positionTexte.y = 200;
+	positionTexte.x = 470;
+
+	for (i=0; i<5;i++){
+		sprintf(mot, "%d:%02d:%02d",scores->temps[i]/60000,scores->temps[i]/1000 % 60, scores->temps[i]/10 % 100);
+		texte = TTF_RenderText_Blended(police, mot, couleurNoire);			
+		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+		positionTexte.y += 40;
+	}
+
+	SDL_Flip(ecran);
+	
 	if ((event.button.x <=282)&(event.button.x >=26)&(event.button.y <=576)&(event.button.y >=526)){
 		initialiserPartie(partie); 
 		partie->menu = MenuAccueil;
@@ -471,6 +540,8 @@ void menuFinB (SDL_Event event, Partie *partie){
 	if ((event.button.x <=765)&(event.button.x >=635)&(event.button.y <=576)&(event.button.y >=526))
 		partie->menu = MenuQuitter;
 	
+	TTF_CloseFont(police); // Fermeture de la police 
+	SDL_FreeSurface(texte);
 }
 
 int initialiserPartie(Partie *partie){

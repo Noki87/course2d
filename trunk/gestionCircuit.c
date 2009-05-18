@@ -174,6 +174,7 @@ void gestion2j (Voiture * voitures, Camera * camera, int *compt, Partie * partie
 }
 
 void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *partie, int *done, Scores *scores) {
+	
 	if(voitures[0].checkpoints == circuit.totalCheckpoints) {
 		camera->tourActuel++;
 		voitures[0].checkpoints = 1;
@@ -182,7 +183,7 @@ void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *par
 		*done = 1;
 		partie->timer=camera->temps;
 		lireScores(partie, scores);
-		if (scores->temps[4] < partie->timer) 
+		if (scores->temps[4] < partie->timer)
 			partie->menu =MenuFinB;
 		else{
 			insererScore(partie, scores);
@@ -190,6 +191,7 @@ void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *par
 		}
 	}
 }
+
 
 void gestionPause(SDL_Event *event, Partie *partie, SDL_Surface * ecran, int *done, int *tempsPause, Scores *scores) {
 	int boucle, tempsAvantPause;
