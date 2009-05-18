@@ -12,19 +12,14 @@
 #include "physique.h"
 #include "collisions.h"
 
-
+//initialise un vecteur en mettant ses variables à 0
 void initVecteur(Vecteur *vecteur){
 	vecteur->x=0;
 	vecteur->y=0;
 	vecteur->alpha=0;
 	vecteur->val=0;
 }
-
-Vecteur somme(Vecteur a,Vecteur b,Vecteur c){
-	c.x=a.x+b.x;
-	c.y=a.y+b.y;
-	return c;
-}
+//initialisation des structures Voiture
 int initialisationVoitures (Voiture *voiture, Partie partie, Circuit *circuit, int numeroJoueur) {
 	if (numeroJoueur == 1)
 		strcpy(voiture->nom, partie.nomJoueur1);
@@ -58,6 +53,7 @@ int initialisationVoitures (Voiture *voiture, Partie partie, Circuit *circuit, i
 	voiture->moyCol.y=0;
 	return 0;
 }
+//fonction servant à passer un vecteur de coordonnees polaire à cartesiennes et inversement
 void projeter(Vecteur *vecteur, int choix){
 	if(choix==0){//polaire->cartÈsien
 		vecteur->x=(vecteur->val*cos((vecteur->alpha)*6.2831/360));
@@ -68,26 +64,22 @@ void projeter(Vecteur *vecteur, int choix){
 		vecteur->alpha=(atan(vecteur->y/vecteur->x));
 	}
 }
+//calcule la nouvelle position d'une voiture et appelle la detection de collisions et le test des checkpoints
 void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
-	char text[33];
 	int x,y,n,i,j,k;
-	unsigned char pixel[3];
 	SDL_Rect pos;
-	sprintf(text,"%d Prec:%d Avant;%d",car->checkpoints,car->couleurPrec,car->couleurPrecPrec);//moyCol.x,car->moyCol.y);
-	//sprintf(text,"%d",circuit.tabCheckpoints[car->position.x][car->position.y]);
-	SDL_WM_SetCaption(text, NULL);
 	//Etat des touches
 	if(car->haut==1)car->fMoteur.val=2;
 	if(car->bas==1)car->fMoteur.val=-1;
 	if(car->haut==0 && car->bas==0)car->fMoteur.val=0;
 	if(car->vitesse.val!=0||car->fMoteur.val!=0){
 		if(car->fMoteur.val>0||(car->fMoteur.val==0&&car->vitesse.val>0))
-			k=1;
+			k=1;//marche avant
 		else
-			k=-1;
-		if(car->gauche==1)
+			k=-1;//marche arriere
+		if(car->gauche==1)//tourner à gauche
 			car->angleD-=k*car->vitesse.val/3;
-		if(car->droite==1)
+		if(car->droite==1)//tourner à droite
 			car->angleD+=k*car->vitesse.val/3;
 	}
 	car->fMoteur.alpha=car->angleD;
@@ -107,21 +99,16 @@ void deplacer(Voiture *car, Circuit circuit, SDL_Surface **sprite){
 	//Position(n)=Position(n-1)+Vitesse(n)
 	car->position.x+=(int)(car->vitesse.x);
 	car->position.y+=(int)(car->vitesse.y);
-
+	
+	//test des collisions avec la nouvelle position
 	testerCollision(car->position,car,circuit)==1;
 
-	//Conversion du vecteur vitesse en coordonnÈes polaires (norme utilisÈe pour la rotation du vÈhicule)
+	//Conversion du vecteur vitesse en coordonnees polaires (norme utilisee pour la rotation du vehicule)
 	projeter(&car->vitesse,1);
 	if(car->angleD>=360)car->angleD-=360;
 	if(car->angleD<0)car->angleD+=360;
 	//Angle en degrÈ compris entre 0 et 360
 	car->angle =(int)((car->angleD)*32/360);
-	//collisions avec le bord de l'écran
-	
-	if(car->position.y>circuit.nbrImageY*circuit.hauteurImage-100)car->position.y=circuit.nbrImageY*circuit.hauteurImage-100;
-	if(car->position.x>circuit.nbrImageX*circuit.largeurImage-100)car->position.x=circuit.nbrImageX*circuit.largeurImage-100;
-	if(car->position.y<30)car->position.y=30;
-	if(car->position.x<30)car->position.x=30;
 	
 	//Calcul checkpoints
 	car->checkpoints=testerCheckpoints (circuit.tabCheckpoints, car->checkpoints,pos,car);
