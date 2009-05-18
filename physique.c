@@ -21,11 +21,20 @@ void initVecteur(Vecteur *vecteur){
 }
 //initialisation des structures Voiture
 int initialisationVoitures (Voiture *voiture, Partie partie, Circuit *circuit, int numeroJoueur) {
-	if (numeroJoueur == 1)
+	if (numeroJoueur == 1){
 		strcpy(voiture->nom, partie.nomJoueur1);
-	else
+		if(partie.voiture1==1)
+			strcpy(voiture->cheminImage,"bitmaps/car000.bmp");
+		else
+			strcpy(voiture->cheminImage,"bitmaps/car000b.bmp");
+	}
+	else{
 		strcpy(voiture->nom, partie.nomJoueur2);
-	strcpy(voiture->cheminImage,"bitmaps/car000.bmp");
+		if(partie.voiture2==1)
+			strcpy(voiture->cheminImage,"bitmaps/car000.bmp");
+		else
+			strcpy(voiture->cheminImage,"bitmaps/car000b.bmp");
+	}
 	voiture->image=NULL;
 	voiture->masse=1;
 	
