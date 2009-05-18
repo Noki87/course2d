@@ -28,7 +28,7 @@ void positionnerCamera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, Ca
 		}
 		else {
 			positionCameraX =  circuit.largeurImage + 400 - positionRelativeX;
-			camera->coin[0]=i+1;
+			camera->coin[1]=i+1;
 		}
 	}
 	else {
@@ -38,7 +38,7 @@ void positionnerCamera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, Ca
 		}
 		else {
 			positionCameraX = 400 - positionRelativeX;
-			camera->coin[0]=i;
+			camera->coin[1]=i;
 		}
 	}
 	
@@ -50,7 +50,7 @@ void positionnerCamera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, Ca
 		}
 		else {
 			positionCameraY =  circuit.hauteurImage + 300 - positionRelativeY;
-			camera->coin[1]=j+1;
+			camera->coin[0]=j+1;
 		}
 	}
 	else {
@@ -60,13 +60,16 @@ void positionnerCamera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, Ca
 		}
 		else {
 			positionCameraY = 300 - positionRelativeY;
-			camera->coin[1]=j;
+			camera->coin[0]=j;
 		}
 	}
 	
 	
+	printf("coin : %d %d\n",camera->coin[0], camera->coin[1]);
+	printf("coinprec : %d %d\n",camera->coinprec[0], camera->coinprec[1]);
+
 	
-	if (camera->coin[0] != camera->coinprec[0] && camera->coin[1] != camera->coinprec[1]) {
+	if (camera->coin[0] != camera->coinprec[0] || camera->coin[1] != camera->coinprec[1]) {
 		for(i=0; i<4;i++)
 			SDL_FreeSurface(camera->fond[i]);
 		camera->fond[0] = SDL_LoadBMP(circuit.image[camera->coin[0]-1][camera->coin[1]-1]);

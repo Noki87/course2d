@@ -58,11 +58,11 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	for (i=0; i<nbrDeJoueurs; i++) 
 		initialisationVoitures (&voitures[i], partie, circuit, i+1);
 	
-	tab=(char ***)calloc(circuit->nbrImageX,sizeof(char**)); 
+	tab=(char ***)calloc(circuit->nbrImageY,sizeof(char**)); 
 
-	for(i=0;i<circuit->nbrImageX;i++)  {
-		tab[i]=(char **) calloc( circuit->nbrImageY ,sizeof(char*));
-		for(j=0;j<circuit->nbrImageY;j++) {
+	for(i=0;i<circuit->nbrImageY;i++)  {
+		tab[i]=(char **) calloc( circuit->nbrImageX ,sizeof(char*));
+		for(j=0;j<circuit->nbrImageX;j++) {
 			tab[i][j]=(char *) calloc( 1024 ,sizeof(char));
 			sprintf(chemin,"Circuit/%s%d%d.bmp",circuit->nomCircuit,i,j);
 			strcpy(tab[i][j],chemin);
@@ -153,6 +153,9 @@ void repositionnerVoitures (int voitureEnTete, Voiture * voitures) {
 	voitures[1].couleurPrec = voitures[voitureEnTete].couleurPrec;
 	voitures[0].couleurPrecPrec = voitures[voitureEnTete].couleurPrecPrec;
 	voitures[1].couleurPrecPrec = voitures[voitureEnTete].couleurPrecPrec;
+	voitures[0].angle = voitures[voitureEnTete].angle;
+	voitures[1].angle = voitures[voitureEnTete].angle;
+
 }
 
 void gestion2j (Voiture * voitures, Camera * camera, int *compt, Partie * partie, int *done) {
