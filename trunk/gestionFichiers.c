@@ -28,7 +28,7 @@ int lireCircuits(char buffer[3][10]) {
 
 	return EXIT_SUCCESS;
 } 
-
+//lit les variable
 int lireVariables(Circuit *circuit){
 	FILE *file;
 	char chemin[30];
