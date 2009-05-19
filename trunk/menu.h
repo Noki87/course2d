@@ -55,7 +55,7 @@ typedef struct scores{
 	int temps[5];
 } Scores;
 
-void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu * menuPrecedent);
+void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu * menuPrecedent, Scores *scores); 
 void gestionMenu (SDL_Surface *ecran, Partie *partie, Scores *scores);
 void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *scores);
 void menuAccueil(SDL_Event event, Partie *partie);

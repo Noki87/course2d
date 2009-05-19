@@ -16,14 +16,12 @@
 
 
 
-void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu * menuPrecedent) {
+void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu * menuPrecedent, Scores *scores) {
+	SDL_Event event;
 	char fond[50];
 	int i;
-	SDL_Event event;
 	SDL_Surface *imageDeFond = NULL;
-	SDL_Surface *circuit1 = NULL;
-	SDL_Surface *circuit2 = NULL;
-	SDL_Surface *circuit3 = NULL;
+
 	SDL_Rect positionMini;
 	char *tabMenu[] = {
 		"menuAccueil", //0
@@ -37,33 +35,32 @@ void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu *
 		"menuFinA",    //8
 		"menuFinB",    //9
 	};
-	if(partie.menu != *menuPrecedent) {
 
-		sprintf(fond, "bitmaps/%s.bmp", tabMenu[partie.menu]);
-		imageDeFond = SDL_LoadBMP(fond);
-		SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
-		if(partie.menu==MenuJouer4){
-			for(i=0;i<3;i++){
-				sprintf(fond, "Circuit/%s_mini.bmp", partie.nomsCircuits[i]);
-				imageDeFond = SDL_LoadBMP(fond);
-				positionMini.x=75+227*i;
-				positionMini.y=260;
-				SDL_BlitSurface(imageDeFond, NULL, ecran, &positionMini);
-			}
+	sprintf(fond, "bitmaps/%s.bmp", tabMenu[partie.menu]);
+	imageDeFond = SDL_LoadBMP(fond);
+	SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
+	if(partie.menu==MenuJouer4){
+		for(i=0;i<3;i++){
+			sprintf(fond, "Circuit/%s_mini.bmp", partie.nomsCircuits[i]);
+			imageDeFond = SDL_LoadBMP(fond);
+			positionMini.x=75+227*i;
+			positionMini.y=260;
+			SDL_BlitSurface(imageDeFond, NULL, ecran, &positionMini);
 		}
-		 SDL_PollEvent(&event);
-		if(partie.menu==MenuOptions)
-			menuOptions(ecran, event, &partie);
-		if(partie.menu==MenuJouer3)
-			menuJouer3(ecran, event, &partie);
-		if(partie.menu==MenuJouer2)
-			menuJouer2(ecran, event, &partie);
-		SDL_Flip(ecran);
-		*menuPrecedent = partie.menu;
 	}
+	if(partie.menu==MenuOptions)
+		menuOptions(ecran, event, &partie);
+	if(partie.menu==MenuJouer3)
+		menuJouer3(ecran, event, &partie);
+	if(partie.menu==MenuJouer2)
+		menuJouer2(ecran, event, &partie);
+	if(partie.menu==MenuScores)
+		menuScores(ecran, event, &partie, scores);
+	*menuPrecedent = partie.menu;
 	SDL_FreeSurface(imageDeFond);
-
+	
 }
+
 void gestionMenu (SDL_Surface *ecran, Partie *partie, Scores *scores) {
 	int continuer = 1;
 	SDL_Event event;
@@ -78,7 +75,8 @@ void gestionMenu (SDL_Surface *ecran, Partie *partie, Scores *scores) {
 
 	while (continuer)
 	{
-		chargerFond(ecran, *partie, positionFond, &menuPrecedent);
+		chargerFond(ecran, *partie, positionFond, &menuPrecedent, scores);
+		SDL_Flip(ecran);
 		SDL_WaitEvent(&event);
 		switch(event.type)
 		{
@@ -129,6 +127,7 @@ void gestionMenu (SDL_Surface *ecran, Partie *partie, Scores *scores) {
 				break;
 		}
 		
+		
 	}
 	
 }
@@ -161,23 +160,22 @@ void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *sc
 	positionTexte.y = 200;
 	positionTexte.x = 200;
 
-	if ((event.button.x <=130)&(event.button.x >=25)&(event.button.y <=260)&(event.button.y >=178)){
-		partie->circuit = 0;
-		SDL_FillRect(rectangle, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
-		SDL_BlitSurface(rectangle, NULL, ecran, &positionTexte); 
-		SDL_Flip(ecran);
-	}
-	if ((event.button.x <=134)&(event.button.x >=29)&(event.button.y <=365)&(event.button.y >=280)){
-		partie->circuit = 1;
-		SDL_FillRect(rectangle, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
-		SDL_BlitSurface(rectangle, NULL, ecran, &positionTexte); 
-		SDL_Flip(ecran);
-	}
-	if ((event.button.x <=133)&(event.button.x >=28)&(event.button.y <=475)&(event.button.y >=385)){
-		partie->circuit = 2;
-		SDL_FillRect(rectangle, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
-		SDL_BlitSurface(rectangle, NULL, ecran, &positionTexte); 
-		SDL_Flip(ecran);
+	if (event.type == SDL_MOUSEBUTTONUP) {
+		if ((event.button.x <=130)&(event.button.x >=25)&(event.button.y <=260)&(event.button.y >=178)){
+			partie->circuit = 0;
+			SDL_FillRect(rectangle, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
+			SDL_BlitSurface(rectangle, NULL, ecran, &positionTexte); 
+		}
+		if ((event.button.x <=134)&(event.button.x >=29)&(event.button.y <=365)&(event.button.y >=280)){
+			partie->circuit = 1;
+			SDL_FillRect(rectangle, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
+			SDL_BlitSurface(rectangle, NULL, ecran, &positionTexte); 
+		}
+		if ((event.button.x <=133)&(event.button.x >=28)&(event.button.y <=475)&(event.button.y >=385)){
+			partie->circuit = 2;
+			SDL_FillRect(rectangle, NULL, SDL_MapRGB(ecran->format, 255, 255, 255)); 
+			SDL_BlitSurface(rectangle, NULL, ecran, &positionTexte); 
+		}
 	}
 
 	lireScores(partie, scores);
@@ -201,8 +199,6 @@ void menuScores (SDL_Surface *ecran, SDL_Event event, Partie *partie, Scores *sc
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 		positionTexte.y += 40;
 	}	
-
-	SDL_Flip(ecran);
 
 	
 	if ((event.button.x <=165)&(event.button.x >=34)&(event.button.y <=580)&(event.button.y >=530))
@@ -244,7 +240,7 @@ void menuJouer2 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	police = TTF_OpenFont("Prototype.ttf", 18);
 	texte = SDL_CreateRGBSurface(SDL_HWSURFACE, 230, 30, 32, 0, 0, 0, 0);
 	
-	if ((event.button.x <=510)&(event.button.x >=264)&(event.button.y <=240)&(event.button.y >=200)) {
+	if (event.type == SDL_MOUSEBUTTONUP && (event.button.x <=510)&(event.button.x >=264)&(event.button.y <=240)&(event.button.y >=200)) {
 		partie->saisieAutorisee = 1;
 	}
 	
@@ -274,8 +270,6 @@ void menuJouer2 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	saisirTexte (event, mot, texte, police, ecran, positionTexte, couleurNoire, 20-1, 1, partie->saisieAutorisee);
 	strcpy(partie->nomJoueur1,mot);
 	
-	SDL_Flip(ecran);
-
 	
 	TTF_CloseFont(police); // Fermeture de la police 
 	SDL_FreeSurface(texte);
@@ -294,7 +288,8 @@ void menuJouer3 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	police = TTF_OpenFont("Prototype.ttf", 18);
 	texte = SDL_CreateRGBSurface(SDL_HWSURFACE, 230, 30, 32, 0, 0, 0, 0);
 	
-	if ((event.button.x <=510)&(event.button.x >=264)&(event.button.y <=240)&(event.button.y >=200)) {
+
+	if (event.type == SDL_MOUSEBUTTONUP && (event.button.x <=510)&(event.button.x >=264)&(event.button.y <=240)&(event.button.y >=200)) {
 		partie->saisieAutorisee = 1;
 	}
 
@@ -320,7 +315,6 @@ void menuJouer3 (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	saisirTexte (event, mot, texte, police, ecran, positionTexte, couleurNoire, 19, 1, partie->saisieAutorisee);
 	strcpy(partie->nomJoueur2,mot);
 	
-	SDL_Flip(ecran);
 	
 	TTF_CloseFont(police); // Fermeture de la police 
 	SDL_FreeSurface(texte);
@@ -361,45 +355,54 @@ void menuOptions (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	police = TTF_OpenFont("Prototype.ttf", 18);
 	
 	texte = SDL_CreateRGBSurface(SDL_HWSURFACE, 30, 30, 32, 0, 0, 0, 0);
-
-
 	
-	if ((event.button.x <=424)&(event.button.x >=247)&(event.button.y <=197)&(event.button.y >=158))
-		partie->affichage=1;
-	if ((event.button.x <=630)&(event.button.x >=454)&(event.button.y <=197)&(event.button.y >=158))
-		partie->affichage=0;
-	if ((event.button.x <=287)&(event.button.x >=247)&(event.button.y <=253)&(event.button.y >=217))
-		partie->musique=1;
-	if ((event.button.x <=357)&(event.button.x >=317)&(event.button.y <=253)&(event.button.y >=217))
-		partie->musique=0;
+	if(event.type == SDL_MOUSEBUTTONUP) {
+		
+		if ((event.button.x <=424)&(event.button.x >=247)&(event.button.y <=197)&(event.button.y >=158)) {
+			Uint8  video_bpp = 32;
+			Uint32 videoflags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;
+			ecran=SDL_SetVideoMode(800,600, video_bpp, videoflags);
+		}
+		if ((event.button.x <=630)&(event.button.x >=454)&(event.button.y <=197)&(event.button.y >=158)) {
+			Uint8  video_bpp = 32;
+			Uint32 videoflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
+			ecran=SDL_SetVideoMode(800,600, video_bpp, videoflags);
+		}
+		if ((event.button.x <=287)&(event.button.x >=247)&(event.button.y <=253)&(event.button.y >=217))
+			partie->musique=1;
+		if ((event.button.x <=357)&(event.button.x >=317)&(event.button.y <=253)&(event.button.y >=217))
+			partie->musique=0;
+		
+		if ((event.button.x <=290)&(event.button.x >=250)&(event.button.y <=400)&(event.button.y >=360))
+			partie->saisieAutorisee = 1;
+		if ((event.button.x <=240)&(event.button.x >=200)&(event.button.y <=450)&(event.button.y >=410))
+			partie->saisieAutorisee = 2;
+		if ((event.button.x <=335)&(event.button.x >=295)&(event.button.y <=450)&(event.button.y >=410))
+			partie->saisieAutorisee = 3;
+		if ((event.button.x <=288)&(event.button.x >=250)&(event.button.y <=490)&(event.button.y >=455))
+			partie->saisieAutorisee = 4;
+		if ((event.button.x <=535)&(event.button.x >=495)&(event.button.y <=400)&(event.button.y >=360))
+			partie->saisieAutorisee = 5;
+		if ((event.button.x <=485)&(event.button.x >=445)&(event.button.y <=450)&(event.button.y >=410))
+			partie->saisieAutorisee = 6;
+		if ((event.button.x <=585)&(event.button.x >=545)&(event.button.y <=450)&(event.button.y >=410))
+			partie->saisieAutorisee = 7;
+		if ((event.button.x <=535)&(event.button.x >=495)&(event.button.y <=490)&(event.button.y >=455))
+			partie->saisieAutorisee = 8;
+	}
 	
-
-	if ((event.button.x <=290)&(event.button.x >=250)&(event.button.y <=400)&(event.button.y >=360))
-		partie->saisieAutorisee = 1;
-	if ((event.button.x <=240)&(event.button.x >=200)&(event.button.y <=450)&(event.button.y >=410))
-		partie->saisieAutorisee = 2;
-	if ((event.button.x <=335)&(event.button.x >=295)&(event.button.y <=450)&(event.button.y >=410))
-		partie->saisieAutorisee = 3;
-	if ((event.button.x <=288)&(event.button.x >=250)&(event.button.y <=490)&(event.button.y >=455))
-		partie->saisieAutorisee = 4;
-	if ((event.button.x <=535)&(event.button.x >=495)&(event.button.y <=400)&(event.button.y >=360))
-		partie->saisieAutorisee = 5;
-	if ((event.button.x <=485)&(event.button.x >=445)&(event.button.y <=450)&(event.button.y >=410))
-		partie->saisieAutorisee = 6;
-	if ((event.button.x <=585)&(event.button.x >=545)&(event.button.y <=450)&(event.button.y >=410))
-		partie->saisieAutorisee = 7;
-	if ((event.button.x <=535)&(event.button.x >=495)&(event.button.y <=490)&(event.button.y >=455))
-		partie->saisieAutorisee = 8;
-
-
 	if ((event.button.x <=167)&(event.button.x >=37)&(event.button.y <=576)&(event.button.y >=526)) {
 		if (partie->pause == 0) 
 			partie->menu = MenuAccueil;
 		else 
 			partie->menu = MenuPause;
 	}
-	if ((event.button.x <=765)&(event.button.x >=635)&(event.button.y <=576)&(event.button.y >=526))
-		partie->menu = MenuJouer4;
+	if ((event.button.x <=765)&(event.button.x >=635)&(event.button.y <=576)&(event.button.y >=526)) {
+		if (partie->pause == 0) 
+			partie->menu = MenuJouer1;
+		else 
+			partie->menu = MenuJouer4;
+	}
 	
 	if(event.key.keysym.sym == SDLK_ESCAPE)
 		partie->menu = MenuJeu;
@@ -437,7 +440,6 @@ void menuOptions (SDL_Surface *ecran, SDL_Event event, Partie *partie){
 	saisirToucheAfficherLettre(event, texte, police, ecran, positionTexte, couleurNoire, &(partie->clavier.bJoueur2), 8, partie->saisieAutorisee);
 	
 	
-	SDL_Flip(ecran);
 	
 	TTF_CloseFont(police); // Fermeture de la police 
 	SDL_FreeSurface(texte);
@@ -486,7 +488,6 @@ void menuFinA (SDL_Event event, Partie *partie, SDL_Surface *ecran, Scores *scor
 		positionTexte.y += 40;
 	}
 
-	SDL_Flip(ecran);
 	
 	if ((event.button.x <=282)&(event.button.x >=26)&(event.button.y <=576)&(event.button.y >=526)) {
 		initialiserPartie(partie); 
@@ -531,7 +532,6 @@ void menuFinB (SDL_Event event, Partie *partie, SDL_Surface *ecran, Scores *scor
 		positionTexte.y += 40;
 	}
 
-	SDL_Flip(ecran);
 	
 	if ((event.button.x <=282)&(event.button.x >=26)&(event.button.y <=576)&(event.button.y >=526)){
 		initialiserPartie(partie); 
