@@ -49,9 +49,9 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	char *** tab;	
 	SDL_Surface *surfaceMasque;
 	char chemin[50];
-	
-	sscanf (partie.nomsCircuits[partie.circuit],"%s",circuit->nomCircuit);
+		
 	//initialisation du circuit
+	sscanf (partie.nomsCircuits[partie.circuit],"%s",circuit->nomCircuit);
 	lireVariables(circuit);
 
 	//initialisation des voitures 
@@ -73,8 +73,8 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	//initialisation camera
 	for (i=0; i<4; i++)
 		camera->fond[i] = NULL; 
+	camera->positionVoitures = malloc(nbrDeJoueurs * sizeof(SDL_Rect));
 	for (i=0; i<nbrDeJoueurs; i++) {
-		
 		if(i == 0) 
 			camera->positionVoitures[i].y = 300;
 		else
@@ -107,6 +107,7 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 		if(circuit->tabMasque[i]==NULL)return 4;
 	}
 	chargerMasque(circuit->tabMasque, circuit->largeurImage * circuit->nbrImageX, circuit->hauteurImage * circuit->nbrImageY, surfaceMasque);
+	
 	//chargement du masque checkpoints
 	sprintf(chemin,"Circuit/%s_checkpoints.bmp",circuit->nomCircuit);
 	surfaceMasque = SDL_LoadBMP(chemin);
@@ -177,16 +178,18 @@ void gestion2j (Voiture * voitures, Camera * camera, int *compt, Partie * partie
 }
 
 void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *partie, int *done, Scores *scores) {
-	
+	//Gestion des tours
 	if(voitures[0].checkpoints == circuit.totalCheckpoints) {
 		camera->tourActuel++;
 		voitures[0].checkpoints = 1;
 	}
+	
+	//Gestion de la fin de la course
 	if(camera->tourActuel == camera->nbrTour) {
-		*done = 1;
+		*done = 1;	//Arret de gestion circuit
 		partie->timer=camera->temps;
 		lireScores(partie, scores);
-		if (scores->temps[4] < partie->timer)
+		if (scores->temps[4] < partie->timer) 	//si le temps est superieur au dernier temps enregistre : game over
 			partie->menu =MenuFinB;
 		else{
 			insererScore(partie, scores);
@@ -199,20 +202,26 @@ void gestion1j (Voiture *voitures, Camera * camera, Circuit circuit, Partie *par
 void gestionPause(SDL_Event *event, Partie *partie, SDL_Surface * ecran, int *done, int *tempsPause, Scores *scores) {
 	int boucle, tempsAvantPause;
 	
+	//Sauvegarde du temps avant la pause
 	tempsAvantPause = SDL_GetTicks();
+
+	//vidage du cache des evenements
 	boucle = 1;
 	while (boucle) {
 		SDL_PollEvent(event);
 		if(event->type == SDL_KEYUP && event->key.keysym.sym == SDLK_ESCAPE)
 			boucle= 0;
 	}
+	
+	//mise en pause
 	partie->menu = MenuPause;				
 	gestionMenu (ecran, partie, scores);
 	if(partie->menu != MenuJeu) {
-		*done =1;
+		*done =1; //Arret de gestion circuit
 	}
-	*tempsPause += SDL_GetTicks() - tempsAvantPause;
 	
+	//Calcul du temps de pause
+	*tempsPause += SDL_GetTicks() - tempsAvantPause;	
 }
 
 
@@ -245,7 +254,7 @@ void gestionEvent(SDL_Event event, Voiture * voitures, Partie *partie, int nbrDe
 	}
 	if(event.type==SDL_QUIT) {
 		partie->menu = MenuQuitter;
-		*done = 1;
+		*done = 1; //Arret de gestion circuit
 	}		
 	
 }
@@ -262,48 +271,54 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie, Scores *scores) {
 	Circuit circuit;
 	Camera camera;
 	
-	
+	//Allocation du tableau des voitures
 	nbrDeJoueurs = partie->nbrDeJoueur;
-
-	
-
 	voitures = malloc(nbrDeJoueurs * sizeof(Voiture));
-	camera.positionVoitures = malloc(nbrDeJoueurs * sizeof(SDL_Rect));
 	
+	//Chargement des parametress de la course
 	ecranChargement (ecran);
-	
 	if(initialisation(&camera, voitures, &circuit, nbrDeJoueurs, *partie)==1){
 		return 4;
 	}
 	
+	//Initilaisation de la boucle principale
 	tempsDebutCourse = SDL_GetTicks();
 	compt = 3;
-	
 	SDL_EnableKeyRepeat(10, 10);
 	done = 0;
+	
 	while ( !done ) {
 		tempsActuel = SDL_GetTicks();
-		if (tempsActuel - tempsPrecedent > 30){
+		if (tempsActuel - tempsPrecedent > 30){ //Traitement d'une image toutes les 30ms
 			tempsPrecedent = tempsActuel;
 			if(compt != -1) {
+				//Affichage du decompte
 				affichage(ecran,voitures,circuit,&camera,nbrDeJoueurs);
 				affichageDecompte(ecran, &camera, &compt, &tempsDebutCourse,tempsPause);
 				SDL_Flip(ecran);
 			}
 			else {
+				//Deplacement des voitures
 				for(i=0; i<nbrDeJoueurs; i ++)
 					deplacer(&voitures[i],circuit,camera.spriteVoiture[i]);
+				
+				//Gestion temps et joueurs
 				camera.temps = tempsActuel - tempsDebutCourse - tempsPause;
 				if(nbrDeJoueurs == 1)
 					gestion1j (voitures, &camera, circuit, partie, &done, scores);
 				else
 					gestion2j(voitures, &camera, &compt, partie, &done);
+				
+				//Affichage de l'ecran calcule
 				affichage(ecran,voitures,circuit,&camera,nbrDeJoueurs);
 				SDL_Flip(ecran);
 			}
+			
+			//Gestion  de la pause
 			if(partie->pause == 1)
 				gestionPause(&event, partie, ecran, &done, &tempsPause, scores);
 			
+			//Gestion des evenements
 			SDL_PollEvent(&event);
 			gestionEvent(event, voitures, partie, nbrDeJoueurs, &done);
 		}
