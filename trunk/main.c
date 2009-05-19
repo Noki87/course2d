@@ -23,8 +23,10 @@ int main(int argc, char *argv[]) {
 	Uint32 videoflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
 	
 	scores=malloc(sizeof(Scores));
+	if(scores==NULL)return 4;
 	partie=malloc(sizeof(Partie));
-	
+	if(partie==NULL)return 4;
+
 	//lecture du fichiers texte
 	lireCircuits(partie->nomsCircuits);
 	
@@ -70,6 +72,8 @@ int main(int argc, char *argv[]) {
 	
 	SDL_FreeSurface(ecran);
 	
+	free(scores);
+	free(partie);
 	
 	// Clean up the SDL library 
 	TTF_Quit();
