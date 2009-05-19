@@ -14,7 +14,7 @@
 
 
 int main(int argc, char *argv[]) {
-	Uint32 initflags = SDL_INIT_VIDEO;  //See documentation for details
+	Uint32 initflags = SDL_INIT_VIDEO;
 	SDL_Surface *ecran;
 	Partie *partie;
 	Scores *scores;
@@ -29,14 +29,14 @@ int main(int argc, char *argv[]) {
 	lireCircuits(partie->nomsCircuits);
 	
 	
-	// Initialize the SDL library
+	// Initilisation de la SDL
 	if ( SDL_Init(initflags) < 0 ) {
-		fprintf(stderr, "Couldn't initialize SDL: %s\n",
+		fprintf(stderr, "Erreur d'initialisation de SDL: %s\n",
 				SDL_GetError());
 		exit(1);
 	}
 	
-	//Initialize the SDL_ttf library
+	//Initilisation de la SDL_TTF
 	if(TTF_Init() < 0 ){
 		fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", 
 				TTF_GetError());
@@ -45,10 +45,10 @@ int main(int argc, char *argv[]) {
 	
 	
 	
-	// Set 640x480 video mode 
+	// Afficgahe en 800x600 
 	ecran=SDL_SetVideoMode(800,600, video_bpp, videoflags);
     if (ecran == NULL) {
-		fprintf(stderr, "Couldn't set 640x480x%d video mode: %s\n",
+		fprintf(stderr, "Mise en 800x600x%d de la video impossible: %s\n",
 				video_bpp, SDL_GetError());
 		SDL_Quit();
 		exit(2);
@@ -56,10 +56,12 @@ int main(int argc, char *argv[]) {
 	
 	SDL_WM_SetCaption("Jeu de course de voitures en 2D !", NULL);
 	
+	//Initialisation des parametres de la partie
 	initialiserPartie(partie);
 	initialiserTouche(&(partie->clavier));
 	initialiserScores(scores);
 
+	//Boucle du jeu
 	while(partie->menu != MenuQuitter) {
 		gestionMenu(ecran, partie, scores);
 		if(partie->menu == MenuJeu)

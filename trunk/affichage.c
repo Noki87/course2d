@@ -37,7 +37,6 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
     
 	
 	//Affichage du temps
-	
 	positionTexte.x = 30;
 	positionTexte.y = 30;
 	
@@ -66,11 +65,11 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
 		texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 		
-		positionTexte.x = 33;
-		positionTexte.y = 70;
+
 		TTF_CloseFont(police);
 		police = TTF_OpenFont("Prototype.ttf", 50);
-
+		positionTexte.x = 33;
+		positionTexte.y = 70;
 		
 		for(i=1; i<=7; i++) {
 			sprintf(phrase,".");
@@ -82,18 +81,16 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
 			positionTexte.y += 10;
 		}
 		
-		positionTexte.x = 30;
-		positionTexte.y = 180;
 		TTF_CloseFont(police);
 		police = TTF_OpenFont("Prototype.ttf", 14);
+		positionTexte.x = 30;
+		positionTexte.y = 180;
 		sprintf(phrase,"J 2");
 		texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 	}
-
-//	SDL_Flip(ecran);
 	
-	TTF_CloseFont(police); // Fermeture de la police 
+	TTF_CloseFont(police); 
 	SDL_FreeSurface(texte);
 }
 
@@ -114,7 +111,6 @@ int ecranChargement (SDL_Surface * ecran) {
 	fond = SDL_CreateRGBSurface(SDL_HWSURFACE, 800, 600, 32, 0, 0, 0, 0);
 	SDL_FillRect(fond, NULL, SDL_MapRGB(fond->format, 0, 0, 0));
 	SDL_BlitSurface(fond, NULL, ecran, &position);
-	
 	
 	
 	//Création du texte
@@ -148,7 +144,6 @@ int affichageDecompte(SDL_Surface *ecran, Camera *camera, int *compteur, int *te
 	positionTexte.y = 200;
 	
 	//Affichage du decompte
-
 	sprintf(phrase, "%d",*compteur);
 	texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
 	SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
@@ -160,9 +155,6 @@ int affichageDecompte(SDL_Surface *ecran, Camera *camera, int *compteur, int *te
 		(*compteur)--;
 		*tempsPrec = SDL_GetTicks() - tempsPause;
 	}
-	
-	
-	
 	
 	TTF_CloseFont(police);
 	SDL_FreeSurface(texte);

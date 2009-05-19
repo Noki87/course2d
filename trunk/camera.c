@@ -21,6 +21,7 @@ void positionnerCamera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, Ca
 	camera->positionVoitures[0].x= 400;
 	camera->positionVoitures[0].y= 300;
 	
+	//Gestion de l'axe horizontale
 	if(positionRelativeX > circuit.largeurImage - 400 || (i == 0 && positionRelativeX > 400)) {
 		if(i == circuit.nbrImageX - 1) {
 			camera->positionVoitures[0].x= positionRelativeX - (circuit.largeurImage - 800);
@@ -42,7 +43,7 @@ void positionnerCamera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, Ca
 		}
 	}
 	
-	
+	//Gestion de l'axe verticale
 	if(positionRelativeY > circuit.hauteurImage - 300 || (j == 0 && positionRelativeY > 300)) {
 		if(j == circuit.nbrImageY - 1) {
 			camera->positionVoitures[0].y= positionRelativeY - (circuit.hauteurImage - 600);
@@ -65,10 +66,8 @@ void positionnerCamera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, Ca
 	}
 	
 	
-	printf("coin : %d %d\n",camera->coin[0], camera->coin[1]);
-	printf("coinprec : %d %d\n",camera->coinprec[0], camera->coinprec[1]);
 
-	
+	//Mise à jour des images
 	if (camera->coin[0] != camera->coinprec[0] || camera->coin[1] != camera->coinprec[1]) {
 		for(i=0; i<4;i++)
 			SDL_FreeSurface(camera->fond[i]);
@@ -80,7 +79,7 @@ void positionnerCamera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, Ca
 		camera->coinprec[1] = camera->coin[1];
 	}
 	
-	
+	//Cacul des postions de chaque image
 	position_00.x = positionCameraX - circuit.largeurImage;
 	position_00.y = positionCameraY - circuit.hauteurImage;
 	position_01.x = positionCameraX;
@@ -90,6 +89,7 @@ void positionnerCamera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, Ca
 	position_11.x = positionCameraX;
 	position_11.y = positionCameraY;
 	
+	//Blit des images
 	SDL_BlitSurface(camera->fond[0], NULL, ecran, &position_00);
 	SDL_BlitSurface(camera->fond[1], NULL, ecran, &position_01);
 	SDL_BlitSurface(camera->fond[2], NULL, ecran, &position_10);
@@ -101,8 +101,9 @@ void positionnerCamera (SDL_Surface *ecran, Circuit circuit, Voiture voiture, Ca
 void positionnerCamera2j (SDL_Surface *ecran, Circuit circuit, Voiture *voiture, Camera * camera) {
 	SDL_Rect position_00, position_01, position_10 , position_11;
 	int i, j, positionRelativeX, positionRelativeY, positionCameraX, positionCameraY, positionCentralX, positionCentralY;
-	
 	float a,b;
+	
+	//Calcul du baricentre des voitures
 	if(abs(voiture[0].position.x - voiture[1].position.x) < 600 &&  abs(voiture[0].position.y - voiture[1].position.y)<400) {
 		positionCentralX =  (voiture[0].position.x + voiture[1].position.x) /2;
 		positionCentralY =  (voiture[0].position.y + voiture[1].position.y) /2;
@@ -116,7 +117,6 @@ void positionnerCamera2j (SDL_Surface *ecran, Circuit circuit, Voiture *voiture,
 			b = 1 + (abs(voiture[0].position.y - voiture[1].position.y) - 400) / (600.0 - 500.0);
 		else
 			b=1;
-		printf("a : %f\nb : %f\n",a,b);
 		if(voiture[0].checkpoints < voiture[1].checkpoints) {
 			positionCentralX =  (voiture[0].position.x + a*voiture[1].position.x) / (1+a);
 			positionCentralY =  (voiture[0].position.y + b*voiture[1].position.y) / (1+b);
@@ -127,15 +127,18 @@ void positionnerCamera2j (SDL_Surface *ecran, Circuit circuit, Voiture *voiture,
 		}
 	}
 	
+	//Calcul de l'indice des voitures dans la matrice
 	i = positionCentralX / circuit.largeurImage;
 	j = positionCentralY / circuit.hauteurImage;
+	
+	//Calcul de la position relative à une image
 	positionRelativeX = positionCentralX % circuit.largeurImage;
 	positionRelativeY = positionCentralY % circuit.hauteurImage;
 	
 	
-	
+	//Gestion de l'axe horizontale
 	if(positionRelativeX > circuit.largeurImage - 400 || (i == 0 && positionRelativeX > 400)) {
-		if(i == circuit.nbrImageX - 1) {
+		if(i == circuit.nbrImageX - 1) { //Bord droit de la matrice
 			camera->positionVoitures[0].x= (voiture[0].position.x % circuit.largeurImage) - (circuit.largeurImage - 800);
 			camera->positionVoitures[1].x= (voiture[1].position.x % circuit.largeurImage) - (circuit.largeurImage - 800);
 			positionCameraX = 800 - circuit.largeurImage;
@@ -148,7 +151,7 @@ void positionnerCamera2j (SDL_Surface *ecran, Circuit circuit, Voiture *voiture,
 		}
 	}
 	else {
-		if(i == 0) {
+		if(i == 0) { //Bord gauche de la matrice
 			camera->positionVoitures[0].x= (voiture[0].position.x % circuit.largeurImage);
 			camera->positionVoitures[1].x= (voiture[1].position.x % circuit.largeurImage);
 			positionCameraX = circuit.largeurImage;
@@ -161,9 +164,9 @@ void positionnerCamera2j (SDL_Surface *ecran, Circuit circuit, Voiture *voiture,
 		}
 	}
 	
-	
+	//Gestion de l'axe verticale
 	if(positionRelativeY > circuit.hauteurImage - 300 || (j == 0 && positionRelativeY > 300)) {
-		if(j == circuit.nbrImageY - 1) {
+		if(j == circuit.nbrImageY - 1) { //Bord bas de la matrice
 			camera->positionVoitures[0].y= (voiture[0].position.y % circuit.hauteurImage) - (circuit.hauteurImage - 600);
 			camera->positionVoitures[1].y= (voiture[1].position.y % circuit.hauteurImage) - (circuit.hauteurImage - 600);
 			positionCameraY = 600 - circuit.hauteurImage;
@@ -176,7 +179,7 @@ void positionnerCamera2j (SDL_Surface *ecran, Circuit circuit, Voiture *voiture,
 		}
 	}
 	else {
-		if(j == 0) {
+		if(j == 0) { //Bord haut de la matrice
 			camera->positionVoitures[0].y= voiture[0].position.y % circuit.hauteurImage;
 			camera->positionVoitures[1].y= voiture[1].position.y % circuit.hauteurImage;
 			positionCameraY = circuit.hauteurImage;
@@ -194,7 +197,7 @@ void positionnerCamera2j (SDL_Surface *ecran, Circuit circuit, Voiture *voiture,
 	
 	
 	
-	
+	//Mise à jour des images
 	if (camera->coin[0] != camera->coinprec[0] && camera->coin[1] != camera->coinprec[1]) {
 		for(i=0; i<4;i++)
 			SDL_FreeSurface(camera->fond[i]);
@@ -206,7 +209,7 @@ void positionnerCamera2j (SDL_Surface *ecran, Circuit circuit, Voiture *voiture,
 		camera->coinprec[1] = camera->coin[1];
 	}
 	
-	
+	//Cacul des postions de chaque image
 	position_00.x = positionCameraX - circuit.largeurImage;
 	position_00.y = positionCameraY - circuit.hauteurImage;
 	position_01.x = positionCameraX;
@@ -216,6 +219,7 @@ void positionnerCamera2j (SDL_Surface *ecran, Circuit circuit, Voiture *voiture,
 	position_11.x = positionCameraX;
 	position_11.y = positionCameraY;
 	
+	//Blit des images
 	SDL_BlitSurface(camera->fond[0], NULL, ecran, &position_00);
 	SDL_BlitSurface(camera->fond[1], NULL, ecran, &position_01);
 	SDL_BlitSurface(camera->fond[2], NULL, ecran, &position_10);
