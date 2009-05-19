@@ -56,6 +56,10 @@ void chargerFond(SDL_Surface *ecran,Partie partie, SDL_Rect positionFond, Menu *
 		menuJouer2(ecran, event, &partie);
 	if(partie.menu==MenuScores)
 		menuScores(ecran, event, &partie, scores);
+	if(partie.menu==MenuFinA)
+		menuFinA(event, &partie, ecran, scores);
+	if(partie.menu==MenuFinB)
+		menuFinB(event, &partie, ecran, scores);
 	*menuPrecedent = partie.menu;
 	SDL_FreeSurface(imageDeFond);
 	
@@ -478,8 +482,8 @@ void menuFinA (SDL_Event event, Partie *partie, SDL_Surface *ecran, Scores *scor
 		positionTexte.y += 40;
 	}
 
-	positionTexte.y = 200;
-	positionTexte.x = 470;
+	positionTexte.y = 260;
+	positionTexte.x = 400;
 
 	for (i=0; i<5;i++){
 		sprintf(mot, "%d:%02d:%02d",scores->temps[i]/60000,scores->temps[i]/1000 % 60, scores->temps[i]/10 % 100);
@@ -522,8 +526,8 @@ void menuFinB (SDL_Event event, Partie *partie, SDL_Surface *ecran, Scores *scor
 		positionTexte.y += 40;
 	}
 
-	positionTexte.y = 200;
-	positionTexte.x = 470;
+	positionTexte.y = 260;
+	positionTexte.x = 400;
 
 	for (i=0; i<5;i++){
 		sprintf(mot, "%d:%02d:%02d",scores->temps[i]/60000,scores->temps[i]/1000 % 60, scores->temps[i]/10 % 100);
