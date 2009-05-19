@@ -91,7 +91,7 @@ void affichage(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *ca
 		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
 	}
 
-	SDL_Flip(ecran);
+//	SDL_Flip(ecran);
 	
 	TTF_CloseFont(police); // Fermeture de la police 
 	SDL_FreeSurface(texte);
@@ -135,7 +135,7 @@ int ecranChargement (SDL_Surface * ecran) {
 	return 0;
 }
 
-int affichageDecompte(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Camera *camera, int nbrDeJoueurs, int *compteur, int *tempsPrec, int tempsPause) {	
+int affichageDecompte(SDL_Surface *ecran, Camera *camera, int *compteur, int *tempsPrec, int tempsPause) {	
 	int tempsActuel = 0;
 	char phrase[10];
 	
@@ -147,22 +147,20 @@ int affichageDecompte(SDL_Surface *ecran, Voiture *voiture, Circuit circuit, Cam
 	positionTexte.x = 400;
 	positionTexte.y = 200;
 	
+	//Affichage du decompte
+
+	sprintf(phrase, "%d",*compteur);
+	texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
+	SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
+	
 	
 	tempsActuel = SDL_GetTicks();
 	if(tempsActuel - *tempsPrec - tempsPause > 1000) {	//Attente d'1 seconde entre chaque affichage
-		//Affichage de la voiture et du fond
-		affichage(ecran, voiture, circuit, camera, nbrDeJoueurs);
-
-		//Affichage du decompte
-		sprintf(phrase, "%d",*compteur);
-		texte = TTF_RenderText_Blended(police, phrase, couleurBlanc);
-		SDL_BlitSurface(texte, NULL, ecran, &positionTexte);
-		SDL_Flip(ecran);
-		
 		//decrementation du compteur
 		(*compteur)--;
 		*tempsPrec = SDL_GetTicks() - tempsPause;
 	}
+	
 	
 	
 	

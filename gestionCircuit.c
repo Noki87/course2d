@@ -286,7 +286,9 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie, Scores *scores) {
 		if (tempsActuel - tempsPrecedent > 30){
 			tempsPrecedent = tempsActuel;
 			if(compt != -1) {
-				affichageDecompte(ecran,voitures, circuit, &camera,nbrDeJoueurs, &compt, &tempsDebutCourse,tempsPause);
+				affichage(ecran,voitures,circuit,&camera,nbrDeJoueurs);
+				affichageDecompte(ecran, &camera, &compt, &tempsDebutCourse,tempsPause);
+				SDL_Flip(ecran);
 			}
 			else {
 				for(i=0; i<nbrDeJoueurs; i ++)
@@ -297,6 +299,7 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie, Scores *scores) {
 				else
 					gestion2j(voitures, &camera, &compt, partie, &done);
 				affichage(ecran,voitures,circuit,&camera,nbrDeJoueurs);
+				SDL_Flip(ecran);
 			}
 			if(partie->pause == 1)
 				gestionPause(&event, partie, ecran, &done, &tempsPause, scores);
