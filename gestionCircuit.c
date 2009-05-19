@@ -59,11 +59,14 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 		initialisationVoitures (&voitures[i], partie, circuit, i+1);
 	
 	tab=(char ***)calloc(circuit->nbrImageY,sizeof(char**)); 
+	if(tab==NULL)return 4;
 
 	for(i=0;i<circuit->nbrImageY;i++)  {
 		tab[i]=(char **) calloc( circuit->nbrImageX ,sizeof(char*));
+		if(tab[i]==NULL)return 4;
 		for(j=0;j<circuit->nbrImageX;j++) {
 			tab[i][j]=(char *) calloc( 1024 ,sizeof(char));
+			if(tab[i][j]==NULL)return 4;
 			sprintf(chemin,"Circuit/%s%d%d.bmp",circuit->nomCircuit,i,j);
 			strcpy(tab[i][j],chemin);
 		}
@@ -74,6 +77,7 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	for (i=0; i<4; i++)
 		camera->fond[i] = NULL; 
 	camera->positionVoitures = malloc(nbrDeJoueurs * sizeof(SDL_Rect));
+	if(camera->positionVoitures==NULL)return 4;
 	for (i=0; i<nbrDeJoueurs; i++) {
 		if(i == 0) 
 			camera->positionVoitures[i].y = 300;
@@ -91,9 +95,11 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 	
 	//allocation des voitures	
 	camera->spriteVoiture = malloc(nbrDeJoueurs * sizeof(SDL_Surface **));
-	
+	if(camera->spriteVoiture==NULL)return 4;
+
 	for (i=0; i<nbrDeJoueurs; i++) {
 		camera->spriteVoiture[i] = malloc(32 * sizeof(SDL_Surface *));
+		if(camera->spriteVoiture[i]==NULL)return 4;
 		allocationVoiture(&(camera->spriteVoiture[i]), &voitures[i]);
 	}
 
@@ -118,29 +124,64 @@ int initialisation (Camera *camera, Voiture voitures[], Circuit * circuit, int n
 		if(circuit->tabCheckpoints[i]==NULL)return 4;
 	}
 	chargerMasque(circuit->tabCheckpoints,circuit->largeurImage*circuit->nbrImageX,circuit->hauteurImage*circuit->nbrImageY, surfaceMasque);
+	
+	SDL_FreeSurface(surfaceMasque);
 	return 0;
 }
 
 
-int liberation(SDL_Surface **** sprite, SDL_Surface * fond[4], Circuit *circuit) {
-	int i;
+int liberation(Voiture *voiture, Circuit *circuit, Camera * camera, int nbrDeJoueurs) {
+	int i,j,k;
+	int largeur=96;
+
+	//liberation des voitures 
 	
-	for(i=0; i<32;i++)
-		SDL_FreeSurface((*sprite)[0][i]);
-	
-	for(i=0; i<4;i++)
-		SDL_FreeSurface(fond[i]);
-	
-	
-	for(i=0; i < circuit->largeurImage * circuit->nbrImageX; i++) {
-		free(circuit->tabCheckpoints[i]) ;
+	for(i=0;i<circuit->nbrImageY;i++)  {
+		for(j=0;j<circuit->nbrImageX;j++) {
+			free(circuit->image[i][j]);
+		}
+		free(circuit->image[i]);
 	}
-	free (circuit->tabCheckpoints);
+	free(circuit->image);
 	
-	for(i=0; i < circuit->largeurImage * circuit->nbrImageX; i++) {
-		free(circuit->tabMasque[i]) ;
+	
+	//liberation camera
+	for (i=0; i<4; i++)
+		SDL_FreeSurface(camera->fond[i]); 
+	
+	free(camera->positionVoitures) ;
+	
+	for (i=0; i<nbrDeJoueurs; i++) {
+		
+		for (j=0;j<32;j++) {
+			SDL_FreeSurface(camera->spriteVoiture[i][j]);
+		}
+		free(camera->spriteVoiture[i]);
+		
+		for (j=0;j<32;j++) {
+			for(k=0;k<largeur;k++)
+				free(voiture[i].tabVoiture[j][k]);
+			free(voiture[i].tabVoiture[j]);
+		}
+		free(voiture[i].tabVoiture);
+			
 	}
-	free (circuit->tabMasque);
+	
+	free (camera->spriteVoiture);
+	
+	//liberation du masque collisions
+	for(i=0; i< circuit->largeurImage * circuit->nbrImageX; i++) {
+		free(circuit->tabMasque[i]);
+	}
+	free(circuit->tabMasque);
+	
+	//liberation du masque checkpoints
+	for(i=0; i< circuit->largeurImage * circuit->nbrImageX; i++) {
+		free(circuit->tabCheckpoints[i]);
+	}
+	free(circuit->tabCheckpoints);
+	
+
 	
 	return 0;
 }
@@ -274,11 +315,12 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie, Scores *scores) {
 	//Allocation du tableau des voitures
 	nbrDeJoueurs = partie->nbrDeJoueur;
 	voitures = malloc(nbrDeJoueurs * sizeof(Voiture));
-	
+	if(voitures==NULL)return 4;
+
 	//Chargement des parametress de la course
 	ecranChargement (ecran);
 	if(initialisation(&camera, voitures, &circuit, nbrDeJoueurs, *partie)==1){
-		return 4;
+		return 3;
 	}
 	
 	//Initilaisation de la boucle principale
@@ -328,7 +370,8 @@ int gestionCircuit( SDL_Surface *ecran, Partie *partie, Scores *scores) {
 		}
 	}
 	
-	//liberation(&sprite, fond, &circuit);	
-
+	liberation(voitures, &circuit, &camera, nbrDeJoueurs);	
+	free(voitures);
+	
 	return 0;
 }
