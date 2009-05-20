@@ -28,7 +28,7 @@ int lireCircuits(char buffer[3][10]) {
 
 	return EXIT_SUCCESS;
 } 
-//lit les variable
+//lit les variable de la structure circuit dans le fichier texte associé
 int lireVariables(Circuit *circuit){
 	FILE *file;
 	char chemin[30];
@@ -58,7 +58,7 @@ int lireScores(Partie *partie, Scores *scores) {
 
 	FILE *fp;
 	int i;
-
+	
 	if (partie->circuit==0)
 	fp = fopen("Circuit/scores0.txt","r");
 
