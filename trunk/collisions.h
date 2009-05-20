@@ -1,10 +1,17 @@
 #ifndef COLLISIONS_H
 #define COLLISIONS_H
 #include "gestionCircuit.h"
-//fonction qui teste l'existence de collision et renvoie 0 ou 1
+
+/*teste les collisions, retourne 1 s'il y a collision 
+et déplace la voiture de façon à ce qu'il n'y ait plus collision*/
 int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit);
-int lectureCouleur (char cheminImage[], SDL_Rect position,  unsigned char pixel[3]);
+
+/*remplit un tableau en donnant une valeur à chaque case en fonction de la couleur du pixel
+correspondant dans l'image *surface*/
 int chargerMasque(int **tabMasque,int largeur, int hauteur, SDL_Surface *surface);
-int testerCollision(SDL_Rect position,Voiture *voiture,Circuit circuit);
+
+/*teste la présence de checkpoint entre la position précédente et la position actuelle de la voiture*/
+int testerCheckpoints ( int **tabCheckpoints, int nCheckpoints, SDL_Rect posPrec, Voiture *car);
+
 #endif
  

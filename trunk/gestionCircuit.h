@@ -12,24 +12,27 @@
 typedef struct vecteur{
         double x;
         double y;
-        double val;
-        double alpha;
+        double val; //norme du vecteur
+        double alpha;//angle du vecteur
 } Vecteur;
 
 typedef struct voiture{
-        SDL_Surface     *image;
-        SDL_Rect position,moyCol;
-        double angleR;
-        int angleD;
-        int vitessemax,masse;
-        Vecteur vitesse,acceleration;
-        Vecteur fMoteur,fFrot,frottements;
-        int haut,bas,gauche,droite;
-        int angle;
-        char nom[20];
-        char cheminImage[25];
-		int checkpoints,couleurPrec,couleurPrecPrec;
-		int ***tabVoiture;
+        SDL_Surface *image; //sprite de la voiture en cours
+        SDL_Rect position; //position de la voiture
+		SDL_Rect moyCol;  //position moyenne de l'impact
+        double angleR;	//angle de la voiture en radians
+        int angleD;	//angle de la voiture en degrés
+        int vitessemax,masse; //vitesse maximum et masse de la voiture
+        Vecteur vitesse,acceleration;	//vitesse de la voiture et accélération
+        Vecteur fMoteur,fFrot,frottements; //force moteur, forces frottements
+        int haut,bas,gauche,droite; //état des touches (1=enfoncée)
+        int angle;	//angle de la voiture (de 0 à 32)
+        char nom[20];	//nom du joueur
+        char cheminImage[25];	//chemin de l'image de la voiture
+		int checkpoints;	//compteur des checkpoints
+		int couleurPrec;	//indique la couleur du checkpoint précédent
+		int couleurPrecPrec;//indique la couleur du checkpoint d'avant
+		int ***tabVoiture;	//contient un tableau par image de voiture, masque pour les collisions
 } Voiture;
 
 typedef struct circuit {
